@@ -1,38 +1,107 @@
-.App {
-  text-align: center;
+body {
+  /* margin: 0; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  --darkash: rgba(150, 150, 150, 1);
+  --green: rgba(4, 201, 0, 1);
+  --purple: rgba(84, 73, 158, 1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Sen", sans-serif;
+}
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 60px;
+}
+.content {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+}
+.sub-heading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.content-small {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+.sub-content {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.title-bold {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 60px;
+}
+.title-medium {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 30px;
+  letter-spacing: 0.02em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.card-location {
+  color: var(--darkash);
+}
+
+.MuiCardActionArea-root {
+  padding: 0.5rem 3rem 1.5rem !important;
+}
+.MuiPaper-elevation1 {
+  filter: drop-shadow(0px 4px 9px rgba(0, 0, 0, 0.1));
+  box-shadow: none !important;
+  margin: 15px 0;
+}
+.MuiPaper-rounded {
+  border-radius: 10px !important;
+}
+.MuiToggleButton-root {
+  border-radius: 50% !important;
+  border: 0 !important;
+  box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+  margin: 8px !important;
+}
+
+.MuiButton-root {
+  padding: 11px !important;
+  min-width: 48px !important;
+  border-radius: 50% !important;
+  box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+  margin: 8px !important;
+}
+
+.vertical-align {
+  justify-content: end;
+  display: grid;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.toggle-label-circle {
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  margin-top: 1px;
+  background-color: var(--green);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.availability-label {
+  color: var(--darkash);
+  font-weight: 700;
+  margin: 0 8px;
 }

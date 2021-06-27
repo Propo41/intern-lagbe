@@ -10,10 +10,10 @@
   --red: #d67979;
   --light-purple: #bcb2ff;
   /* Margin dimens */
-  --body-margin-start: 70px;
-  --body-margin-end: 70px;
-  --content-margin-start: 130px;
-  --content-margin-end: 130px;
+  --body-margin-start: 8%;
+  --body-margin-end: 8%;
+  --content-margin-start: 15%;
+  --content-margin-end: 15%;
   --content-margin-top: 55px;
   /* font sizes */
   --font-size-navbar: 1.25rem;
@@ -30,11 +30,17 @@
   --font-size-button-large: 1.563rem;
   --font-size-button-medium: 1.25rem;
   --font-size-button-small: 0.938rem;
+  /* button dimens */
+  --button-padding: 10px;
 }
 
 body {
   background-color: var(--body-color);
   font-family: "Sen", sans-serif;
+}
+
+h1 {
+  color: var(--black);
 }
 
 .root-grid-padding {
@@ -75,6 +81,24 @@ body {
   font-size: var(--font-size-navbar);
   color: var(--black);
   font-family: "Sen", sans-serif;
+}
+
+.section-heading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-section-heading);
+}
+
+.section-heading {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-section-heading);
+}
+
+.content {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-content);
 }
 
 /* [END] Font styles */

@@ -1,60 +1,139 @@
-body {
-  /* margin: 0; */
-}
-
 :root {
-  --darkash: rgba(150, 150, 150, 1);
-  --green: rgba(4, 201, 0, 1);
-  --purple: rgba(84, 73, 158, 1);
+  /* Color codes */
+  --ash: #f3f3f3;
+  --black: #484848;
+  --white: #ffffff;
+  --darkash: #969696;
+  --body-color: #f5faff;
+  --purple: #54499e;
+  --green: #04c900;
+  --red: #d67979;
+  --light-purple: #bcb2ff;
+  /* Margin dimens */
+  --body-margin-start: 70px;
+  --body-margin-end: 70px;
+  --content-margin-start: 130px;
+  --content-margin-end: 130px;
+  --content-margin-top: 55px;
+  /* font sizes */
+  --font-size-navbar: 1.25rem;
+  --font-size-landing-page-title: 5rem;
+  --font-size-landing-page-subtitle: 1.5rem;
+  --font-size-section-heading: 1.563rem;
+  --font-size-sub-heading: 1.25rem;
+  --font-size-textinput-hint: 0.938rem;
+  --font-size-title: 1.875rem;
+  --font-size-title-large: 3.75rem;
+  --font-size-content: 1.25rem;
+  --font-size-content-small: 0.938rem;
+  --font-size-sub-content: 0.875rem;
+  --font-size-button-large: 1.563rem;
+  --font-size-button-medium: 1.25rem;
+  --font-size-button-small: 0.938rem;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
+body {
+  background-color: var(--body-color);
   font-family: "Sen", sans-serif;
 }
+
+.root-grid-padding {
+  margin-left: var(--body-margin-start) !important;
+  margin-right: var(--body-margin-end) !important;
+}
+
+.content-grid-padding {
+  margin-left: var(--content-margin-start) !important;
+  margin-right: var(--content-margin-end) !important;
+}
+
+/* [START] Font styles */
+
+.landing-page-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-landing-page-title);
+}
+
+.landing-page-subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-landing-page-subtitle);
+}
+
+.navbar {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-navbar);
+  color: var(--darkash);
+  font-family: "Sen", sans-serif;
+}
+
+.navbar:hover {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-navbar);
+  color: var(--black);
+  font-family: "Sen", sans-serif;
+}
+
+/* [END] Font styles */
+
+/* [START] button styles */
+.navbar-button {
+  background-color: var(--purple) !important;
+  font-family: "Sen", sans-serif !important;
+  color: var(--white) !important;
+  font-size: var(--font-size-button-medium);
+}
+
+.navbar-button:hover {
+  background-color: var(--light-purple) !important;
+}
+/* [END] button styles */
+
 .title {
   font-style: normal;
   font-weight: normal;
   font-size: 60px;
 }
+
 .content {
   font-style: normal;
   font-weight: normal;
-  font-size: 20px;
+  font-size: var(--font-size-content);
 }
+
 .sub-heading {
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-sub-heading);
   text-transform: uppercase;
 }
+
 .content-small {
   font-style: normal;
   font-weight: normal;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-content-small);
 }
+
 .sub-content {
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-sub-content);
   text-transform: uppercase;
 }
+
 .title-bold {
   font-style: normal;
   font-weight: bold;
-  font-size: 60px;
+  font-size: var(--font-size-title-large);
 }
+
 .title-medium {
   font-style: normal;
   font-weight: bold;
-  font-size: 30px;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-title);
 }
 
 .card-location {
@@ -64,17 +143,21 @@ h5 {
 .MuiCardContent-root {
   padding: 0.5rem 3rem 1rem !important;
 }
+
 .MuiCardActionArea-root {
   padding: 0.5rem 3rem 1.5rem !important;
 }
+
 .MuiPaper-elevation1 {
   filter: drop-shadow(0px 4px 9px rgba(0, 0, 0, 0.1));
   box-shadow: none !important;
   margin: 15px 0;
 }
+
 .MuiPaper-rounded {
   border-radius: 10px !important;
 }
+
 .MuiToggleButton-root {
   border-radius: 50% !important;
   border: 0 !important;
@@ -103,6 +186,7 @@ h5 {
   margin-top: 1px;
   background-color: var(--green);
 }
+
 .availability-label {
   color: var(--darkash);
   font-weight: 700;
@@ -116,6 +200,7 @@ h5 {
 .MuiAccordionSummary-root {
   padding: 0.2rem 3rem 0rem !important;
 }
+
 .MuiAccordionDetails-root {
   display: block !important;
   padding: 0rem 3rem 0rem !important;

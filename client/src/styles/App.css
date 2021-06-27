@@ -61,6 +61,9 @@ h5 {
   color: var(--darkash);
 }
 
+.MuiCardContent-root {
+  padding: 0.5rem 3rem 1rem !important;
+}
 .MuiCardActionArea-root {
   padding: 0.5rem 3rem 1.5rem !important;
 }
@@ -79,7 +82,7 @@ h5 {
   margin: 8px !important;
 }
 
-.MuiButton-root {
+.circular-button {
   padding: 11px !important;
   min-width: 48px !important;
   border-radius: 50% !important;
@@ -104,4 +107,16 @@ h5 {
   color: var(--darkash);
   font-weight: 700;
   margin: 0 8px;
+}
+
+.MuiAvatar-root {
+  margin: 16px 0;
+}
+
+.MuiAccordionSummary-root {
+  padding: 0.2rem 3rem 0rem !important;
+}
+.MuiAccordionDetails-root {
+  display: block !important;
+  padding: 0rem 3rem 0rem !important;
 }

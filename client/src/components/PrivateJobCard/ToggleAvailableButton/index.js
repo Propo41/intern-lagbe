@@ -41,7 +41,7 @@ const ToggleAvailableButton = () => {
       <MyToggleButton color="purple" value="not-available">
         <HourglassFullIcon />
       </MyToggleButton>
-      <Button>
+      <Button className="circular-button">
         <DeleteIcon style={{ color: "#FEB8B8" }} />
       </Button>
     </ToggleButtonGroup>

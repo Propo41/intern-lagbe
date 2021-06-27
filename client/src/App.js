@@ -1,6 +1,7 @@
 import "./styles/App.css";
 import PrivateJobCard from "./components/PrivateJobCard";
 import ApplicantCard from "./components/ApplicantCard";
+import AvailPositionCard from "./components/AvailPositionCard";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       </header> */}
       <PrivateJobCard />
       <ApplicantCard />
+      <AvailPositionCard />
     </div>
   );
 }

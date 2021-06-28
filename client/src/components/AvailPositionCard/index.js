@@ -28,10 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AvailPositionCard = () => {
+const AvailPositionCard = (props) => {
+  const onApplyClick = (event) => {
+    event.preventDefault();
+    console.log("apply clicked");
+  };
+
   const classes = useStyles();
   return (
-    <Accordion>
+    <Accordion expanded={props.expandable}>
       <AccordionSummary
         // expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -45,8 +50,8 @@ const AvailPositionCard = () => {
               className={classes.large}
             />
             <Container>
-              <h1 className="sub-heading">Software Engineer</h1>
-              <h1 className="card-location sub-content">Dhaka, Dhanmondi</h1>
+              <h1 className="sub-heading">{props.company}</h1>
+              <h1 className="card-location sub-content">{props.address}</h1>
             </Container>
           </Grid>
           <Grid
@@ -56,21 +61,26 @@ const AvailPositionCard = () => {
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <Button
-              className="circular-button"
-              aria-label="FlagButton"
-              onClick={(event) => event.stopPropagation()}
-              onFocus={(event) => event.stopPropagation()}
-            >
-              <FlagIcon style={{ color: "#FEB8B8" }} />
-            </Button>
+            {props.expandable ? (
+              <Button
+                className="circular-button"
+                aria-label="FlagButton"
+                onClick={(event) => event.stopPropagation()}
+                onFocus={(event) => event.stopPropagation()}
+              >
+                <FlagIcon style={{ color: "var(--red)" }} />
+              </Button>
+            ) : (
+              ""
+            )}
+
             <Button
               variant="contained"
               aria-label="ApplyButton"
-              onClick={(event) => event.stopPropagation()}
+              onClick={onApplyClick}
               onFocus={(event) => event.stopPropagation()}
               style={{
-                backgroundColor: "#54499E",
+                backgroundColor: "var(--purple)",
                 color: "white",
                 marginLeft: "10px",
               }}
@@ -80,27 +90,22 @@ const AvailPositionCard = () => {
           </Grid>
         </Grid>
       </AccordionSummary>
-      <AccordionDetails>
-        <h1 className="sub-heading">REQUIREMENTS</h1>
-        <h1 className="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a
-          nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit
-          ut pellentesque at in accumsan platea. Ridiculus ulla id nisl. At urna
-          non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in
-          accumsan platea. Ridiculus ulla id nisl. At urna non hendrerit feugiat
-          aliquet. Proin at blandit ut pellentesque at in accumsan platea.
-          Ridiculus ulla id nisl. At urna non hendrerit feugiat aliquet. Proin
-          at blandit ut pellentesque at in accumsan platea. Ridiculus
-        </h1>
-        <Paper className="label vertical-align">
-          <EmailIcon />
-          <h1 className="label-font">microsoft@micro.comcccccccc ccccccccc</h1>
-        </Paper>
-        <Paper className="label vertical-align">
-          <PhoneIcon />
-          <h1 className="label-font">microsoft@micro.com</h1>
-        </Paper>
-      </AccordionDetails>
+      {props.expandable ? (
+        <AccordionDetails>
+          <h1 className="sub-heading">REQUIREMENTS</h1>
+          <h1 className="content">{props.description}</h1>
+          <Paper className="label vertical-align">
+            <EmailIcon />
+            <h1 className="label-font">{props.email}</h1>
+          </Paper>
+          <Paper className="label vertical-align">
+            <PhoneIcon />
+            <h1 className="label-font"> {props.contact}</h1>
+          </Paper>
+        </AccordionDetails>
+      ) : (
+        ""
+      )}
     </Accordion>
   );
 };

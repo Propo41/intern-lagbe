@@ -9,6 +9,179 @@ import FilterBySort from "../../components/FilterBySort";
 import FilterByLocation from "../../components/FilterByLocation";
 import AvailPositionCard from "../../components/AvailPositionCard";
 
+const companies = [
+  {
+    company: "Microsoft",
+    address: "Dhanmondi, Dhaka",
+    jobs: [
+      {
+        title: "SOFTWARE ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "PRODUCTION ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+    ],
+  },
+  {
+    company: "Microsoft",
+    address: "Dhanmondi, Dhaka",
+    jobs: [
+      {
+        title: "SOFTWARE ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "PRODUCTION ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+    ],
+  },
+  {
+    company: "Microsoft",
+    address: "Dhanmondi, Dhaka",
+    jobs: [
+      {
+        title: "SOFTWARE ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "PRODUCTION ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+    ],
+  },
+  {
+    company: "Microsoft",
+    address: "Dhanmondi, Dhaka",
+    jobs: [
+      {
+        title: "SOFTWARE ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "PRODUCTION ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+    ],
+  },
+  {
+    company: "Microsoft",
+    address: "Dhanmondi, Dhaka",
+    jobs: [
+      {
+        title: "SOFTWARE ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "PRODUCTION ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+      {
+        title: "FRONT END ENGINEER",
+        requirements:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
+        contact: "microsoft@aust.edu",
+        mail: "+880 19611156262",
+      },
+    ],
+  },
+];
+
 const LandingPage = () => {
   const useStyles = makeStyles(() => ({
     landingImage: {
@@ -108,9 +281,21 @@ const LandingPage = () => {
               <FilterByLocation />
             </Grid>
           </Grid>
-          <AvailPositionCard />
-          <AvailPositionCard />
-          <AvailPositionCard />
+          <div
+            style={{
+              marginTop: "30px",
+            }}
+          ></div>
+
+          {companies.map((company, index) => {
+            return (
+              <AvailPositionCard
+                expandable={false}
+                company={company.company}
+                address={company.address}
+              />
+            );
+          })}
         </Grid>
 
         <Grid item sm={12} lg={4}>

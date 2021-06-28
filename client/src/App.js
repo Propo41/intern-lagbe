@@ -3,14 +3,18 @@ import PrivateJobCard from "./components/PrivateJobCard";
 import ApplicantCard from "./components/ApplicantCard";
 import AvailPositionCard from "./components/AvailPositionCard";
 import LandingPage from "./containers/LandingPage/LandingPage";
+import FilterBySort from "./components/FilterBySort";
+import FilterByLocation from "./components/FilterByLocation";
 
 function App() {
   return (
     <div className="App">
-    {/*   <PrivateJobCard />
+      {/* <PrivateJobCard />
       <ApplicantCard />
-      <AvailPositionCard /> */}
-      <LandingPage/>
+      <AvailPositionCard />
+      <FilterBySort />
+      <FilterByLocation /> */}
+      <LandingPage />
     </div>
   );
 }

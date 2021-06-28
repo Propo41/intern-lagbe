@@ -43,10 +43,10 @@ h1 {
   color: var(--black);
 }
 
-.root-grid-padding {
+/* .root-grid-padding {
   margin-left: var(--body-margin-start) !important;
   margin-right: var(--body-margin-end) !important;
-}
+} */
 
 .content-grid-padding {
   margin-left: var(--content-margin-start) !important;
@@ -227,5 +227,30 @@ h1 {
 
 .MuiAccordionDetails-root {
   display: block !important;
-  padding: 0rem 3rem 0rem !important;
+  padding: 0rem 3rem 1rem !important;
+}
+
+.label {
+  display: flex;
+  width: fit-content;
+  padding: 0.2rem 1rem;
+}
+.label-font {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.filter-button {
+  background-color: var(--white) !important;
+  color: var(--black) !important;
+  box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
+  border-radius: 10px !important;
+  font-style: normal;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  font-family: "Sen", sans-serif !important;
+  padding: 0.4rem 0.6rem !important;
+  margin-left: 0.8rem !important;
 }

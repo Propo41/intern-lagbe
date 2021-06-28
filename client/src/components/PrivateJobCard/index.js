@@ -10,18 +10,18 @@ import Grid from "@material-ui/core/Grid";
 const PrivateJobCard = () => {
   return (
     <Card>
-      <CardActionArea>
+      <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8}>
-            <h2 className="sub-heading">Software Engineer</h2>
-            <h3 className="card-location sub-content">Dhaka, Dhanmondi</h3>
+            <h1 className="sub-heading">Software Engineer</h1>
+            <h1 className="card-location sub-content">Dhaka, Dhanmondi</h1>
             <ToggleAvailableLabel />
           </Grid>
           <Grid item xs={12} sm={4} className="vertical-align">
             <ToggleAvailableButton />
           </Grid>
         </Grid>
-      </CardActionArea>
+      </CardContent>
     </Card>
   );
 };

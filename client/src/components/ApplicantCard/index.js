@@ -1,12 +1,15 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Grid,
+} from "@material-ui/core";
 
 const ApplicantCard = () => {
   return (
@@ -14,9 +17,9 @@ const ApplicantCard = () => {
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8}>
-            <h2 className="sub-heading">Applicant name</h2>
-            <h3 className="card-location sub-content">Dhaka, Dhanmondi</h3>
-            <h3 className="card-location sub-content">+880 19661 84892</h3>
+            <h1 className="sub-heading">Applicant name</h1>
+            <h1 className="card-location sub-content">Dhaka, Dhanmondi</h1>
+            <h1 className="card-location sub-content">+880 19661 84892</h1>
           </Grid>
           <Grid
             item

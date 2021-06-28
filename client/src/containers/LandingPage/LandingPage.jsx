@@ -5,6 +5,9 @@ import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import LandingPageImage from "../../assets/images/landing_page_image.svg";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import FilterBySort from "../../components/FilterBySort";
+import FilterByLocation from "../../components/FilterByLocation";
+import AvailPositionCard from "../../components/AvailPositionCard";
 
 const LandingPage = () => {
   const useStyles = makeStyles(() => ({
@@ -44,7 +47,7 @@ const LandingPage = () => {
       <PublicNavbar />
       {/* Landing page */}
       <Grid container>
-        <Grid item xs>
+        <Grid item xs={12} sm={6}>
           <h1 className="landing-page-title">Apply for your dream Job</h1>
           <h1 className="landing-page-subtitle">
             A unified platform dedicated to hosting internship job posts in
@@ -54,7 +57,7 @@ const LandingPage = () => {
             completely for free!
           </h1>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={12} sm={6}>
           <img
             src="/assets/images/landing_page_image.svg"
             alt="landing page"
@@ -63,21 +66,54 @@ const LandingPage = () => {
         </Grid>
       </Grid>
       {/* Landing page body */}
-      <Grid container>
-        <Grid item xs>
-          <h1
-            className="section-heading"
-            style={{
-              marginTop: "65px",
-            }}
-          >
-            FIND YOUR DREAM JOB
-          </h1>
-
-          <h1 className="landing-page-subtitle">A unified platfor</h1>
+      <Grid container spacing={5}>
+        <Grid
+          item
+          sm={12}
+          lg={8}
+          style={{
+            marginTop: "65px",
+          }}
+        >
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              sm={5}
+              style={{
+                alignSelf: "center",
+              }}
+            >
+              <h1
+                className="section-heading"
+                style={{
+                  margin: "0",
+                }}
+              >
+                FIND YOUR DREAM JOB
+              </h1>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={7}
+              style={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "flex-end",
+                zIndex: "1000",
+              }}
+            >
+              <FilterBySort />
+              <FilterByLocation />
+            </Grid>
+          </Grid>
+          <AvailPositionCard />
+          <AvailPositionCard />
+          <AvailPositionCard />
         </Grid>
 
-        <Grid item xs>
+        <Grid item sm={12} lg={4}>
           <Paper elevation={2} className={classes.getStartedCard}>
             <h1 className="section-heading">GET STARTED</h1>
             <h1 className="content">Lorem ipsum dolor sit amet, consectetur</h1>

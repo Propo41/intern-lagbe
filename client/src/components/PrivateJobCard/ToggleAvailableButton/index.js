@@ -34,6 +34,8 @@ const ToggleAvailableButton = () => {
       value={color}
       exclusive
       aria-label="text alignment"
+      onClick={(event) => event.stopPropagation()}
+      onFocus={(event) => event.stopPropagation()}
     >
       <MyToggleButton color="green" value="available">
         <HourglassEmptyIcon />

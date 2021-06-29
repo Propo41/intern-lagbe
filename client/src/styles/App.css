@@ -52,10 +52,10 @@ h1 {
   margin-right: var(--body-margin-end) !important;
 } */
 
-.content-grid-padding {
+/* .content-grid-padding {
   margin-left: var(--content-margin-start) !important;
   margin-right: var(--content-margin-end) !important;
-}
+} */
 
 /* [START] Font styles */
 
@@ -275,6 +275,9 @@ h1 {
   margin: 16px 0;
 }
 
+.MuiAccordion-root:before {
+  background-color: var(--body-color) !important;
+}
 .MuiAccordionSummary-root {
   padding: 0.2rem 3rem 0rem !important;
 }

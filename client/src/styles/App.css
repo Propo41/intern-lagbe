@@ -210,6 +210,24 @@ h1 {
   color: var(--darkash);
 }
 
+.semi-rounded-card {
+  border-top-right-radius: 60px !important; 
+  border-bottom-left-radius: 60px !important;
+  text-align: center;
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.rounded-card {
+  border-top-right-radius: 60px !important; 
+  border-bottom-left-radius: 60px !important;
+  text-align: center;
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
 .MuiCardContent-root {
   padding: 0.5rem 3rem 1rem !important;
 }
@@ -219,7 +237,7 @@ h1 {
 }
 
 .MuiPaper-elevation1 {
-  filter: drop-shadow(0px 4px 9px rgba(0, 0, 0, 0.1));
+  filter: var(--card-shadow);
   box-shadow: none !important;
   margin: 15px 0;
 }
@@ -231,7 +249,7 @@ h1 {
 .MuiToggleButton-root {
   border-radius: 50% !important;
   border: 0 !important;
-  box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   margin: 8px !important;
 }
 
@@ -239,7 +257,7 @@ h1 {
   padding: 11px !important;
   min-width: 48px !important;
   border-radius: 50% !important;
-  box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   margin: 8px !important;
 }
 
@@ -291,7 +309,7 @@ h1 {
 .filter-button {
   background-color: var(--white) !important;
   color: var(--black) !important;
-  box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   border-radius: 10px !important;
   font-style: normal;
   font-weight: 700 !important;

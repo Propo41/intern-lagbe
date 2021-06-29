@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
  * A component that returns the Filled Text Input component
  * @param icon bookmark, mail, location, requirements, phone, delete, upload, user, lock, key, company, description
  * @param placeholder A String for the hint text
+ * @param type email, file, date, image, text
  */
 const TextInputLayout = (props) => {
   const classes = useStyles();
@@ -39,6 +40,7 @@ const TextInputLayout = (props) => {
         onChange={(event) => {
           setValues(event.target.value);
         }}
+        type={props.type}
       />
     </Paper>
   );

@@ -61,7 +61,7 @@ const SignInPage = () => {
       <Grid container>
         <Grid item xs={12} sm={6}>
           <div className={classes.root}>
-            <Paper elevation={5} className={classes.card}>
+            <Paper elevation={5} className="semi-rounded-card">
               <h1 className="sub-heading">YOU NEED TO SIGN IN FIRST</h1>
               <div style={{ marginTop: "30px" }}>
                 <TextInputLayout

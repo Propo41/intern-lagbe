@@ -17,21 +17,25 @@
   --content-margin-top: 55px;
   /* font sizes */
   --font-size-navbar: 1.25rem;
-  --font-size-landing-page-title: 5rem;
-  --font-size-landing-page-subtitle: 1.5rem;
-  --font-size-section-heading: 1.563rem;
-  --font-size-sub-heading: 1.25rem;
+  --font-size-landing-page-title: 4rem;
+  --font-size-landing-page-subtitle: 1.3rem;
+  --font-size-section-heading: 1.3rem;
+  --font-size-sub-heading: 1.15rem;
   --font-size-textinput-hint: 0.938rem;
   --font-size-title: 1.875rem;
   --font-size-title-large: 3.75rem;
-  --font-size-content: 1.25rem;
-  --font-size-content-small: 0.938rem;
+  --font-size-content: 1.15rem;
+  --font-size-content-small: 0.8rem;
   --font-size-sub-content: 0.875rem;
-  --font-size-button-large: 1.563rem;
-  --font-size-button-medium: 1.25rem;
+  --font-size-button-large: 1.563rem; /* dont use */
+  --font-size-button-medium: 1.25rem; /* dont use */
   --font-size-button-small: 0.938rem;
   /* button dimens */
   --button-padding: 10px;
+  /* text input dimens */
+  --text-input-padding: 8px;
+  /* Card shadow */
+  --card-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -65,6 +69,18 @@ h1 {
   font-style: normal;
   font-weight: normal;
   font-size: var(--font-size-landing-page-subtitle);
+}
+
+.title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-title-large);
+}
+
+.title-medium {
+  font-style: normal;
+  font-weight: normal;
+  font-size: var(--font-size-title);
 }
 
 .navbar {
@@ -101,7 +117,27 @@ h1 {
   font-size: var(--font-size-content);
 }
 
+.content-small {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-content-small);
+}
+
 /* [END] Font styles */
+
+/* Icons */
+
+.icon-dark {
+  padding: 10px !important;
+  color: var(--darkash) !important;
+}
+
+/* @overriden styles */
+.Mui-disabled {
+  background-color: var(--light-purple) !important;
+  color: var(--white) !important;
+  font-family: "Sen" !important;
+}
 
 /* [START] button styles */
 .navbar-button {
@@ -114,12 +150,28 @@ h1 {
 .navbar-button:hover {
   background-color: var(--light-purple) !important;
 }
+
+.text-button {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-content-small);
+  color: var(--darkash);
+  cursor: pointer;
+}
+
+.text-button:hover {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-content-small);
+  color: var(--black);
+  cursor: pointer;
+}
 /* [END] button styles */
 
 .title {
   font-style: normal;
   font-weight: normal;
-  font-size: 60px;
+  font-size: var(--font-size-title-large);
 }
 
 .content {
@@ -133,12 +185,6 @@ h1 {
   font-weight: bold;
   font-size: var(--font-size-sub-heading);
   text-transform: uppercase;
-}
-
-.content-small {
-  font-style: normal;
-  font-weight: normal;
-  font-size: var(--font-size-content-small);
 }
 
 .sub-content {
@@ -177,7 +223,7 @@ h1 {
   box-shadow: none !important;
   margin: 15px 0;
 }
-
+/* @todo CANT USE THIS HERE. USE INLINE CSS USING useStyles*/
 .MuiPaper-rounded {
   border-radius: 10px !important;
 }
@@ -238,7 +284,7 @@ h1 {
 .label-font {
   font-style: normal;
   font-weight: normal;
-  font-size: 15px;
+  font-size: var(--font-size-content-small);
   margin-left: 10px;
 }
 
@@ -249,7 +295,7 @@ h1 {
   border-radius: 10px !important;
   font-style: normal;
   font-weight: 700 !important;
-  font-size: 15px !important;
+  font-size: var(--font-size-content-small) !important;
   font-family: "Sen", sans-serif !important;
   padding: 0.4rem 0.6rem !important;
   margin-left: 0.8rem !important;

@@ -1,18 +1,18 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
-import EmailIcon from "@material-ui/icons/Email";
-import PhoneIcon from "@material-ui/icons/Phone";
+
 import {
   Avatar,
   Button,
   Container,
   Grid,
-  Paper,
   Accordion,
   AccordionSummary,
   AccordionDetails,
 } from "@material-ui/core";
+
+import Label from "../Label";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -26,6 +26,16 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(7),
     height: theme.spacing(7),
   },
+  disabledButton: {
+    backgroundColor: "var(--light-purple)",
+    color: "white",
+    marginLeft: "10px",
+  },
+  enabledButton: {
+    backgroundColor: "var(--purple)",
+    color: "white",
+    marginLeft: "10px",
+  },
 }));
 
 const AvailPositionCard = (props) => {
@@ -36,7 +46,7 @@ const AvailPositionCard = (props) => {
 
   const classes = useStyles();
   return (
-    <Accordion expanded={props.expandable}>
+    <Accordion>
       <AccordionSummary
         // expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -61,7 +71,7 @@ const AvailPositionCard = (props) => {
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {props.expandable ? (
+            {!props.disabledButton ? (
               <Button
                 className="circular-button"
                 aria-label="FlagButton"
@@ -79,11 +89,12 @@ const AvailPositionCard = (props) => {
               aria-label="ApplyButton"
               onClick={onApplyClick}
               onFocus={(event) => event.stopPropagation()}
-              style={{
-                backgroundColor: "var(--purple)",
-                color: "white",
-                marginLeft: "10px",
-              }}
+              disabled={props.disabledButton}
+              className={
+                props.disabledButton
+                  ? classes.disabledButton
+                  : classes.enabledButton
+              }
             >
               APPLY
             </Button>
@@ -93,15 +104,9 @@ const AvailPositionCard = (props) => {
       {props.expandable ? (
         <AccordionDetails>
           <h1 className="sub-heading">REQUIREMENTS</h1>
-          <h1 className="content">{props.description}</h1>
-          <Paper className="label vertical-align">
-            <EmailIcon />
-            <h1 className="label-font">{props.email}</h1>
-          </Paper>
-          <Paper className="label vertical-align">
-            <PhoneIcon />
-            <h1 className="label-font"> {props.contact}</h1>
-          </Paper>
+          <h1 className="content">{props.more.requirements}</h1>
+          <Label text={props.more.mail} icon={"mail"} color={"black"} />
+          <Label text={props.more.contact} icon={"phone"} color={"black"} />
         </AccordionDetails>
       ) : (
         ""

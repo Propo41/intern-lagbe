@@ -13,7 +13,7 @@ import {
 
 const ApplicantCard = () => {
   return (
-    <Card>
+    <Card className="rounded-card">
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8}>

@@ -211,21 +211,15 @@ h1 {
 }
 
 .semi-rounded-card {
-  border-top-right-radius: 60px !important; 
+  border-top-right-radius: 60px !important;
   border-bottom-left-radius: 60px !important;
   text-align: center;
-  padding-left: 50px !important;
-  padding-right: 50px !important;
+  padding: 3rem 6rem 5rem;
   box-shadow: var(--card-shadow) !important;
 }
 
 .rounded-card {
-  border-top-right-radius: 60px !important; 
-  border-bottom-left-radius: 60px !important;
-  text-align: center;
-  padding-left: 50px !important;
-  padding-right: 50px !important;
-  box-shadow: var(--card-shadow) !important;
+  border-radius: 10px !important;
 }
 
 .MuiCardContent-root {
@@ -240,10 +234,6 @@ h1 {
   filter: var(--card-shadow);
   box-shadow: none !important;
   margin: 15px 0;
-}
-/* @todo CANT USE THIS HERE. USE INLINE CSS USING useStyles*/
-.MuiPaper-rounded {
-  border-radius: 10px !important;
 }
 
 .MuiToggleButton-root {
@@ -317,4 +307,50 @@ h1 {
   font-family: "Sen", sans-serif !important;
   padding: 0.4rem 0.6rem !important;
   margin-left: 0.8rem !important;
+}
+
+/* Common for horizontal lines in signin page- starts*/
+.divider-custom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 2%;
+}
+
+.divider-custom .divider-custom-line {
+  width: 100%;
+  height: 1px;
+  border-radius: 2rem;
+  border: 1px solid #f3f3f3;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+/* Common for horizontal lines in signin page- ends */
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 361px) and (max-width: 600px) {
+  .semi-rounded-card {
+    padding: 2.5rem 2rem 4.5rem;
+  }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 601px) and (max-width: 768px) {
+  .semi-rounded-card {
+    padding: 3rem 4rem 5rem;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .semi-rounded-card {
+    padding: 3rem 5rem 5rem;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1500px) {
+  .semi-rounded-card {
+    padding: 3rem 4.5rem 5rem;
+  }
 }

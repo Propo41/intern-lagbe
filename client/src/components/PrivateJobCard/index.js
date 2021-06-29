@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 
 const PrivateJobCard = () => {
   return (
-    <Card>
+    <Card className="rounded-card">
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8}>

@@ -16,7 +16,7 @@ function App() {
       <AvailPositionCard />
       <FilterBySort />
       <FilterByLocation /> */}
-      {/*  <LandingPage /> */}
+      {/* <LandingPage /> */}
       {/*    <CompanyPage /> */}
       {/*    <TextInputLayout /> */}
       <SignInPage />

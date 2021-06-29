@@ -46,82 +46,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignInPage = () => {
+const VerifyYourselfPage = () => {
   const classes = useStyles();
 
   return (
     <div className="content-grid-padding">
       <PublicNavbar />
-      <Grid container spacing={10} className={classes.root}>
-        <Grid item xs={12} lg={6} style={{ textAlign: "center" }}>
+      <Grid container spacing={5} className={classes.root}>
+        <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
           <Paper elevation={5} className="semi-rounded-card">
-            <h1 className="title-medium">YOU NEED TO SIGN IN FIRST</h1>
-            <div style={{ marginTop: "30px" }}>
-              <TextInputLayout
-                icon="mail"
-                placeholder="Enter your email"
-                type="email"
-              />
-            </div>
-            <div style={{ marginTop: "10px" }}>
+            <h1 className="title-medium">VERIFY YOURSELF</h1>
+            <h1 className="content" style={{ color: "var(--darkash)" }}>
+              A verification code has been sent to your email. Please enter the
+              code down below to verify yourself.
+            </h1>
+            <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
               <TextInputLayout
                 icon="lock"
-                placeholder="Enter your password"
-                type="password"
+                placeholder="Enter the verification code"
+                type="text"
               />
             </div>
-
-            <div style={{ marginTop: "10px" }}>
+            <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
               <Button
                 variant="contained"
                 fullWidth={true}
                 className={classes.buttonPurple}
               >
-                SIGN IN
+                VERIFY
               </Button>
             </div>
-            <div>
-              <h1
-                className="text-button"
-                style={{ display: "flex", justifyContent: "flex-end" }}
-              >
-                FORGOT PASSWORD?
-              </h1>
-            </div>
-            <div className="divider-custom">
-              <div className="divider-custom-line"></div>
-              <h1
-                style={{
-                  margin: "0 10px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "normal",
-                  fontSize: "var(--font-size-navbar)",
-                  color: "var(--darkash)",
-                }}
-              >
-                OR
-              </h1>
-              <div className="divider-custom-line"></div>
-            </div>
-
-            <Button
-              variant="contained"
-              fullWidth={true}
-              className={classes.buttonRed}
-              style={{ marginTop: "10px" }}
-            >
-              REGISTER
-            </Button>
           </Paper>
         </Grid>
+
         <Grid
           item
           xs={12}
-          lg={6}
+          lg={5}
           style={{ display: "flex", justifyContent: "center" }}
         >
           <img
-            src="/assets/images/login_blob.svg"
+            src="/assets/images/security_blob.svg"
             alt="landing page"
             className={classes.image}
           />
@@ -130,4 +95,4 @@ const SignInPage = () => {
     </div>
   );
 };
-export default SignInPage;
+export default VerifyYourselfPage;

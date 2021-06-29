@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     backgroundColor: "var(--ash)",
+    borderRadius: 4,
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -41,6 +42,7 @@ const TextInputLayout = (props) => {
           setValues(event.target.value);
         }}
         type={props.type}
+        multiline={props.icon === "description" ? true : false}
       />
     </Paper>
   );

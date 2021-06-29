@@ -29,8 +29,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -39,8 +39,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -49,8 +49,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
   ],

@@ -242,7 +242,7 @@ const LandingPage = () => {
       <Grid container spacing={5}>
         <Grid
           item
-          sm={12}
+          xs={12}
           lg={8}
           style={{
             marginTop: "65px",
@@ -298,7 +298,7 @@ const LandingPage = () => {
           })}
         </Grid>
 
-        <Grid item sm={12} lg={4}>
+        <Grid item xs={12} lg={4}>
           <Paper elevation={2} className={classes.getStartedCard}>
             <h1 className="section-heading">GET STARTED</h1>
             <h1 className="content">Lorem ipsum dolor sit amet, consectetur</h1>

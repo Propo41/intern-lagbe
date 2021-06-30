@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -8,6 +8,7 @@ import FilterBySort from "../../components/FilterBySort";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import Label from "../../components/Label";
 import Footer from "../../components/Footer";
+import useStyles from "../../styles/company_page";
 
 const companies = {
   company: "Microsoft",
@@ -28,8 +29,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -38,8 +39,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -48,47 +49,13 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
   ],
 };
 const CompanyPage = () => {
-  const useStyles = makeStyles(() => ({
-    landingImage: {
-      marginLeft: 50,
-      width: "90%",
-      height: "90%",
-    },
-
-    getStartedCard: {
-      padding: 30,
-      textAlign: "center",
-      marginTop: "65px",
-    },
-
-    buttonSmallPurple: {
-      backgroundColor: "var(--purple)",
-      color: "white",
-      fontFamily: "Sen",
-      marginTop: 10,
-      padding: "var(--button-padding)",
-    },
-
-    buttonSmallRed: {
-      backgroundColor: "var(--red)",
-      color: "white",
-      fontFamily: "Sen",
-      marginTop: 10,
-      padding: "var(--button-padding)",
-    },
-
-    c: {
-      borderRadius: 10,
-    },
-  }));
-
   const classes = useStyles();
 
   return (

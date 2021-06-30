@@ -9,6 +9,7 @@ import FilterByLocation from "../../components/FilterByLocation";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
+import useStyles from "../../styles/landing_page";
 
 const companies = [
   {
@@ -34,46 +35,6 @@ const companies = [
 ];
 
 const LandingPage = () => {
-  const useStyles = makeStyles((theme) => ({
-    landingImage: {
-      marginLeft: 50,
-      width: "90%",
-      height: "90%",
-    },
-
-    getStartedCard: {
-      padding: 30,
-      textAlign: "center",
-      marginTop: "65px",
-    },
-    subscriptionCard: {
-      padding: 30,
-      textAlign: "center",
-      marginTop: "30px",
-    },
-
-    buttonSmallPurple: {
-      backgroundColor: "var(--purple)",
-      color: "white",
-      fontFamily: "Sen",
-      marginTop: 10,
-      padding: "var(--button-padding)",
-    },
-
-    buttonSmallRed: {
-      backgroundColor: "var(--red)",
-      color: "white",
-      fontFamily: "Sen",
-      marginTop: 10,
-      padding: "var(--button-padding)",
-    },
-    footer: {
-      padding: theme.spacing(3, 2),
-      marginTop: "auto",
-      backgroundColor: "var(--purple)",
-    },
-  }));
-
   const classes = useStyles();
 
   return (

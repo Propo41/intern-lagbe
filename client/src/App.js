@@ -12,7 +12,7 @@ import OrganisationCreateJob from "./containers/OrganisationCreateJob";
 import OrganisationJobPost from "./containers/OrganisationJobPost";
 import OrganisationJobPostEdit from "./containers/OrganisationJobPostEdit";
 import OrganisationApplicants from "./containers/OrganisationApplicants";
-
+import AboutPage from "./containers/AboutPage";
 function App() {
   return (
     <div className="App">
@@ -21,20 +21,21 @@ function App() {
       <AvailPositionCard />
       <FilterBySort />
       <FilterByLocation /> */}
-      {/* <LandingPage /> */}
-      {/*  <CompanyPage /> */}
-      {/*   <SignInPage /> */}
-      {/* <ForgotPassword /> */}
-      {/* <ChangePassword /> */}
-      {/*  <RegisterPage /> */}
-      {/* <VerifyYourselfPage/> */}
-      {/*   <OrganisationProfilePage /> */}
-      {/* <OrganisationApplicants /> */}
+      {/*  <LandingPage /> */}
+      {/* <CompanyPage /> */}
+      {/*  <SignInPage /> */}
+      {/*  <ForgotPassword /> */}
+      {/*  <ChangePassword /> */}
+      {/*    <RegisterPage /> */}
+      {/*  <VerifyYourselfPage/> */}
+      {/*    <OrganisationProfilePage /> */}
+      {/*  <OrganisationApplicants /> */}
       {/*  <OrganisationCreateJob /> */}
-      {/*  <OrganisationJobPost /> */}
+      {/*   <OrganisationJobPost /> */}
       {/*  <OrganisationJobPostEdit /> */}
+      <AboutPage />
 
-      <OrganisationHomepage />
+   {/*    <OrganisationHomepage /> */}
     </div>
   );
 }

@@ -3,12 +3,12 @@ import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect } from "react";
 import PrivateJobCard from "../../components/PrivateJobCard";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
+import useStyles from "../../styles/organisation_homepage";
 
 const jobsPosted = [
   {
@@ -37,78 +37,6 @@ const jobsPosted = [
     status: "true",
   },
 ];
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: "var(--content-margin-top)",
-    flexWrap: "wrap",
-    alignItems: "center",
-  },
-  alertStyle: {
-    fontFamily: "Sen",
-    fontSize: "var(--font-size-content-small)",
-    color: "var(--black)",
-    fontWeight: "bold",
-    padding: 10,
-    paddingLeft: "var(--content-margin-start)",
-    paddingRight: "var(--content-margin-end)",
-  },
-  alertMessage: {
-    margin: 10,
-    paddingLeft: 10,
-  },
-
-  alertButton: {
-    fontFamily: "Sen",
-    fontSize: "var(--font-size-content-small)",
-    color: "var(--purple)",
-    fontWeight: "bold",
-    margin: 10,
-  },
-
-  alertIcon: {
-    margin: 10,
-  },
-  card: {
-    borderTopRightRadius: 60,
-    borderBottomLeftRadius: 60,
-    textAlign: "center",
-    paddingLeft: 50,
-    paddingRight: 50,
-    boxShadow: "var(--card-shadow)",
-  },
-
-  image: {
-    width: "80%",
-    height: "80%",
-    position: "relative",
-    top: "50%",
-    transform: "translateY(-85%)",
-  },
-
-  imagePlaceholder: {
-    width: "50%",
-    height: "50%",
-  },
-
-  buttonPurple: {
-    backgroundColor: "var(--purple)",
-    color: "white",
-    fontFamily: "Sen",
-    marginTop: 10,
-    padding: "var(--button-padding)",
-    fontSize: "var(--font-size-button-small)",
-  },
-
-  buttonRed: {
-    backgroundColor: "var(--red)",
-    color: "white",
-    fontFamily: "Sen",
-    marginTop: 10,
-    padding: "var(--button-padding)",
-    fontSize: "var(--font-size-button-small)",
-  },
-}));
 
 const OrganisationHomepage = () => {
   const classes = useStyles();
@@ -144,7 +72,6 @@ const OrganisationHomepage = () => {
             PLEASE SETUP YOUR PROFILE TO START POSTING JOBS.
           </Alert>
         </Collapse>
-
         <div className="content-grid-padding">
           <div className={classes.root}>
             <Paper elevation={5} className="semi-rounded-card">

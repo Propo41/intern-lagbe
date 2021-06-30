@@ -9,6 +9,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useMediaQuery } from "@material-ui/core";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import Footer from "../../components/Footer";
+import useStyles from "../../styles/orginsation_job_post";
 
 const jobPost = {
   id: "1238959134914asd14",
@@ -18,48 +19,6 @@ const jobPost = {
   mail: "microsoft@gmail.com",
   contact: "+88915151 515",
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: "var(--content-margin-top)",
-    flexWrap: "wrap",
-    alignItems: "center",
-  },
-  card: {
-    borderTopRightRadius: 60,
-    borderBottomLeftRadius: 60,
-    textAlign: "center",
-    paddingLeft: 50,
-    paddingRight: 50,
-    boxShadow: "var(--card-shadow)",
-  },
-
-  image: {
-    justifyContent: "center",
-    width: "80%",
-    height: "80%",
-    position: "relative",
-    top: "50%",
-    transform: "translateY(-50%)",
-  },
-
-  buttonPurple: {
-    backgroundColor: "var(--purple)",
-    color: "white",
-    fontFamily: "Sen",
-    marginTop: 10,
-    padding: "var(--button-padding)",
-    fontSize: "var(--font-size-button-small)",
-  },
-  buttonRed: {
-    backgroundColor: "var(--red)",
-    color: "white",
-    fontFamily: "Sen",
-    marginTop: 10,
-    padding: "var(--button-padding)",
-    fontSize: "var(--font-size-button-small)",
-  },
-}));
 
 const OrganisationJobPost = () => {
   const classes = useStyles();

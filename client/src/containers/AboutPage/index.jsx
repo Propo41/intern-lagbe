@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
@@ -7,9 +6,9 @@ import Button from "@material-ui/core/Button";
 import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
-import useStyles from "../../styles/forgot_password";
+import useStyles from "../../styles/verify_yourself";
 
-const ForgotPassword = () => {
+const AboutPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
 
@@ -18,34 +17,18 @@ const ForgotPassword = () => {
       <PublicNavbar />
       <div className="content-grid-padding">
         <Grid container spacing={5} className={classes.root}>
-          <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
+          <Grid item xs={12} lg={7} style={{ textAlign: "left" }}>
             <Paper elevation={5} className="semi-rounded-card">
-              <h1 className="title-medium">FORGOT PASSWORD?</h1>
+              <h1 className="title-medium">ABOUT</h1>
               <h1 className="content" style={{ color: "var(--darkash)" }}>
-                Please enter your company email. We’ll send a redirect link to
-                the given email address if you have an account associated with
-                us. Simply follow the email to change your password.
+                A unified platform dedicated to hosting internship job posts in
+                Bangladesh. Apply for your dream job directly from our website
+                without any hassle of searching everywhere. Simply search for
+                your desired job and apply to the job you like with your resume
+                completely for free!
               </h1>
-
-              <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                <TextInputLayout
-                  icon="mail"
-                  placeholder="Enter your company email"
-                  type="email"
-                />
-              </div>
-              <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                <Button
-                  variant="contained"
-                  fullWidth={true}
-                  className={classes.buttonPurple}
-                >
-                  SEND
-                </Button>
-              </div>
             </Paper>
           </Grid>
-
           <Grid
             item
             xs={12}
@@ -54,7 +37,7 @@ const ForgotPassword = () => {
           >
             {mobileViewBreakpoint ? (
               <img
-                src="/assets/images/forgot_password_blob.svg"
+                src="/assets/images/about_blob.svg"
                 alt="landing page"
                 className={classes.image}
               />
@@ -74,4 +57,4 @@ const ForgotPassword = () => {
     </>
   );
 };
-export default ForgotPassword;
+export default AboutPage;

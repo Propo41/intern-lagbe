@@ -8,6 +8,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import LogoutComponent from "../LogoutComponent";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
@@ -18,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginRight: 50,
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       flexGrow: 1,
     },
   },
@@ -35,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PublicNavbar = () => {
+const PrivateNavbar = () => {
   const theme = useTheme();
   const classes = useStyles();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -48,6 +56,11 @@ const PublicNavbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const [openNestedList, setOpenNestedList] = React.useState(true);
+
+  const handleClick = () => {
+    setOpenNestedList(!openNestedList);
   };
 
   return (
@@ -95,14 +108,57 @@ const PublicNavbar = () => {
               <MenuItem className="navbar-button" onClick={handleClose}>
                 POST A JOB
               </MenuItem>
+              {/* <LogoutComponent /> */}
+              <List
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                style={{ backgroundColor: "var(--ash)" }}
+              >
+                <ListItem button onClick={handleClick}>
+                  <ListItemText>
+                    <img
+                      style={{
+                        width: "45px",
+                        height: "45px",
+                      }}
+                      alt="company logo"
+                      src="/assets/images/dummy_logo.png"
+                    />
+                  </ListItemText>
+                  {openNestedList ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={openNestedList} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem
+                      style={{ display: "grid", justifyContent: "center" }}
+                    >
+                      <ListItemText primary="microapplesoft@micro.com" />
+                    </ListItem>
+                    <Divider
+                      style={{
+                        backgroundColor: "var(--darkash)",
+                        margin: "0 15px",
+                      }}
+                    />
+                    <ListItem
+                      button
+                      style={{ display: "grid", justifyContent: "center" }}
+                      onClick={handleClose}
+                    >
+                      <ListItemText primary="Logout" />
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </List>
             </Menu>
           </>
         ) : (
           <div className={classes.headerOptions}>
-            <Button className="navbar">HOME</Button>
-            <Button className="navbar">ABOUT</Button>
+            <Button className="navbar">MY POSTINGS</Button>
+            <Button className="navbar">APPLICANTS</Button>
+            <Button className="navbar">PROFILE</Button>
             <div className={classes.rightToolbar}>
-              <Button className="navbar-button">POST A JOB</Button>
+              <LogoutComponent />
             </div>
           </div>
         )}
@@ -111,4 +167,4 @@ const PublicNavbar = () => {
   );
 };
 
-export default PublicNavbar;
+export default PrivateNavbar;

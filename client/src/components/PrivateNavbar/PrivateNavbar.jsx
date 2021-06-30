@@ -107,13 +107,13 @@ const PrivateNavbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">HOME</h1>
+                <h1 className="navbar">MY POSTINGS</h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">ABOUT</h1>
+                <h1 className="navbar">APPLICANTS</h1>
               </MenuItem>
-              <MenuItem className="navbar-button" onClick={handleClose}>
-                POST A JOB
+              <MenuItem onClick={handleClose}>
+                <h1 className="navbar">PROFILE</h1>
               </MenuItem>
               <List
                 component="nav"

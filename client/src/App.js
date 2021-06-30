@@ -21,7 +21,7 @@ function App() {
       <AvailPositionCard />
       <FilterBySort />
       <FilterByLocation /> */}
-      <LandingPage />
+      {/* <LandingPage /> */}
       {/*  <CompanyPage /> */}
       {/*   <SignInPage /> */}
       {/* <ForgotPassword /> */}
@@ -34,7 +34,7 @@ function App() {
       {/*  <OrganisationJobPost /> */}
       {/*  <OrganisationJobPostEdit /> */}
 
-      {/* <OrganisationHomepage /> */}
+      <OrganisationHomepage />
     </div>
   );
 }

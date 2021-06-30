@@ -16,19 +16,25 @@ import OrganisationApplicants from "./containers/OrganisationApplicants";
 function App() {
   return (
     <div className="App">
-       <LandingPage />
+      {/* <PrivateJobCard />
+      <ApplicantCard />
+      <AvailPositionCard />
+      <FilterBySort />
+      <FilterByLocation /> */}
+      <LandingPage />
       {/*  <CompanyPage /> */}
-      {/* <SignInPage /> */}
+      {/*   <SignInPage /> */}
       {/* <ForgotPassword /> */}
       {/* <ChangePassword /> */}
       {/*  <RegisterPage /> */}
       {/* <VerifyYourselfPage/> */}
-      {/*  <OrganisationProfilePage /> */}
-      {/*  <OrganisationApplicants /> */}
+      {/*   <OrganisationProfilePage /> */}
+      {/* <OrganisationApplicants /> */}
       {/*  <OrganisationCreateJob /> */}
       {/*  <OrganisationJobPost /> */}
       {/*  <OrganisationJobPostEdit /> */}
-     {/*  <OrganisationHomepage /> */}
+
+      {/* <OrganisationHomepage /> */}
     </div>
   );
 }

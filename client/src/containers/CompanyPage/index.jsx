@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -28,8 +28,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -38,8 +38,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -48,8 +48,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
   ],
@@ -126,7 +126,7 @@ const CompanyPage = () => {
         <Grid container spacing={5}>
           <Grid
             item
-            sm={12}
+            xs={12}
             lg={8}
             style={{
               marginTop: "65px",
@@ -182,7 +182,7 @@ const CompanyPage = () => {
               );
             })}
           </Grid>
-          <Grid item sm={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             <Paper elevation={2} className={classes.getStartedCard}>
               <h1 className="section-heading">GET STARTED</h1>
               <h1 className="content">

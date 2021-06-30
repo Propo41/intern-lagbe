@@ -115,7 +115,6 @@ const PrivateNavbar = () => {
               <MenuItem className="navbar-button" onClick={handleClose}>
                 POST A JOB
               </MenuItem>
-              {/* <LogoutComponent /> */}
               <List
                 component="nav"
                 aria-labelledby="nested-list-subheader"
@@ -125,8 +124,8 @@ const PrivateNavbar = () => {
                   <ListItemText>
                     <img
                       style={{
-                        width: "45px",
-                        height: "45px",
+                        width: "35px",
+                        height: "35px",
                       }}
                       alt="company logo"
                       src="/assets/images/dummy_logo.png"

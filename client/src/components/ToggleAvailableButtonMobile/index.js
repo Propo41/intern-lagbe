@@ -72,16 +72,16 @@ const ToggleAvailableButtonMobile = () => {
         >
           <MyToggleButton
             onClick={handleClose}
-            color="purple"
+            color="var(--purple)"
             value="not-available"
           >
             UN-AVAILABLE
           </MyToggleButton>
-          <MyToggleButton onClick={handleClose} color="green" value="available">
+          <MyToggleButton onClick={handleClose} color="var(--green)" value="available">
             AVAILABLE
           </MyToggleButton>
 
-          <Button onClick={handleClose} style={{ color: "var(--red)" }}>
+          <Button onClick={handleClose} style={{ color: "var(--red)", fontWeight: 'bold' }}>
             DELETE
           </Button>
         </ToggleButtonGroup>

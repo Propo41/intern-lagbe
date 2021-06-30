@@ -154,6 +154,18 @@ h1 {
 .MuiButton-contained {
   box-shadow: var(--card-shadow) !important;
 }
+
+.MuiMenu-paper {
+  box-shadow: var(--card-shadow) !important;
+}
+
+.MuiToggleButton-label {
+  font-family: "Sen" !important;
+}
+
+.MuiButton-label {
+  font-family: "Sen" !important;
+}
 /* [END] @overriden styles */
 
 /* [START] button styles */

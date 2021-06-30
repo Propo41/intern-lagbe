@@ -4,35 +4,28 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
-import TextInputLayout from "../../components/TextInputLayout";
-import { Divider } from "@material-ui/core";
-import PrivateJobCard from "../../components/PrivateJobCard";
+import ApplicantCard from "../../components/ApplicantCard";
 
-const jobsPosted = [
+const applicants = [
   {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
+    name: "Matcovic",
+    mail: "tashfiqnahiyan@gmail.com",
+    contact: "+9910 122 5645",
   },
   {
-    title: "PRODUCTION ENGINEER IN AHSANULLAH UNIVERSITY",
-    location: "DHAKA, DHANMONDI",
-    status: "false",
+    name: "Tashfiq Nahiyan Khan",
+    mail: "tashfiqnahiyan@gmail.com",
+    contact: "+9910 122 5645",
   },
   {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "false",
+    name: "Zunayed Rahim Ahmed",
+    mail: "tashfiqnahiyan@gmail.com",
+    contact: "+9910 122 5645",
   },
   {
-    title: "FRONT END ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
-  },
-  {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
+    name: "Mustofa Ahmed",
+    mail: "tashfiqnahiyan@gmail.com",
+    contact: "+9910 122 5645",
   },
 ];
 
@@ -56,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: "80%",
     position: "relative",
     top: "50%",
-    transform: "translateY(-85%)",
+    transform: "translateY(-80%)",
   },
 
   imagePlaceholder: {
@@ -82,10 +75,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrganisationHomepage = () => {
+const OrganisationApplicants = () => {
   const classes = useStyles();
 
-  if (jobsPosted.length > 0) {
+  if (applicants.length > 0) {
     return (
       <div className="content-grid-padding">
         <PublicNavbar />
@@ -94,48 +87,38 @@ const OrganisationHomepage = () => {
           <Paper elevation={5} className="semi-rounded-card">
             <Grid container spacing={5}>
               <Grid item xs={12} lg={8} style={{ textAlign: "left" }}>
-                <h1 className="title-medium">MY JOB POSTINGS</h1>
+                <h1 className="title-medium">APPLICANTS</h1>
 
-                {jobsPosted.map((job, index) => {
+                {applicants.map((applicant, index) => {
                   if (index === 0) {
                     return (
                       <div
                         style={{ marginTop: "var(--margin-item-spacing-lg)" }}
                       >
-                        <PrivateJobCard
-                          title={job.title}
-                          location={job.location}
-                          status={job.status}
+                        <ApplicantCard
+                          name={applicant.name}
+                          mail={applicant.mail}
+                          contact={applicant.contact}
                         />
                       </div>
                     );
                   } else {
                     return (
                       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                        <PrivateJobCard
-                          title={job.title}
-                          location={job.location}
-                          status={job.status}
+                        <ApplicantCard
+                          name={applicant.name}
+                          mail={applicant.mail}
+                          contact={applicant.contact}
                         />
                       </div>
                     );
                   }
                 })}
-
-                <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
-                  <Button
-                    variant="contained"
-                    fullWidth={true}
-                    className={classes.buttonPurple}
-                  >
-                    POST MORE JOBS
-                  </Button>
-                </div>
               </Grid>
 
               <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
                 <img
-                  src="/assets/images/job_posting_blob.svg"
+                  src="/assets/images/applicants_blob.svg"
                   alt="landing page"
                   className={classes.image}
                 />
@@ -153,11 +136,11 @@ const OrganisationHomepage = () => {
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">
             <div style={{ textAlign: "left" }}>
-              <h1 className="title-medium">MY JOB POSTINGS</h1>
+              <h1 className="title-medium">APPLICANTS</h1>
             </div>
 
             <img
-              src="/assets/images/job_posting_blob.svg"
+              src="/assets/images/applicants_blob.svg"
               alt="landing page"
               className={classes.imagePlaceholder}
               style={{ marginTop: "var(--margin-item-spacing-lg)" }}
@@ -174,4 +157,4 @@ const OrganisationHomepage = () => {
     );
   }
 };
-export default OrganisationHomepage;
+export default OrganisationApplicants;

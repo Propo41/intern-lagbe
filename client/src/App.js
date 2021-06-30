@@ -14,6 +14,10 @@ import RegisterPage from "./containers/RegisterPage";
 import VerifyYourselfPage from "./containers/VerifyYourselfPage";
 import OrganisationProfilePage from "./containers/OrganisationProfilePage";
 import OrganisationHomepage from "./containers/OrganisationHomepage";
+import OrganisationApplicants from "./containers/OrganisationApplicants";
+import OrganisationCreateJob from "./containers/OrganisationCreateJob";
+import OrganisationJobPost from "./containers/OrganisationJobPost";
+import OrganisationJobPostEdit from "./containers/OrganisationJobPostEdit";
 function App() {
   return (
     <div className="App">
@@ -30,7 +34,11 @@ function App() {
       {/*    <RegisterPage /> */}
       {/* <VerifyYourselfPage/> */}
       {/*  <OrganisationProfilePage /> */}
-      <OrganisationHomepage />
+      {/* <OrganisationHomepage /> */}
+      {/*  <OrganisationApplicants /> */}
+      {/* <OrganisationCreateJob /> */}
+      {/*  <OrganisationJobPost /> */}
+      <OrganisationJobPostEdit />
     </div>
   );
 }

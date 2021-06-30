@@ -3,6 +3,7 @@ import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import iconMapper from "../../utils/icon_mapper";
 import { useState } from "react";
+import { FormHelperText } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,10 +27,13 @@ const useStyles = makeStyles((theme) => ({
  * @param icon bookmark, mail, location, requirements, phone, delete, upload, user, lock, key, company, description
  * @param placeholder A String for the hint text
  * @param type email, file, date, image, text
+ * @param  readOnly true or false
+ * @param rowsMax integer value (optional)
+ * @param value String: default value on the input layout
  */
 const TextInputLayout = (props) => {
   const classes = useStyles();
-  const [value, setValues] = useState("");
+  const [value, setValues] = useState(props.value ? props.value : "");
 
   return (
     <Paper component="form" className={classes.root} elevation={0}>
@@ -42,7 +46,14 @@ const TextInputLayout = (props) => {
           setValues(event.target.value);
         }}
         type={props.type}
-        multiline={props.icon === "description" ? true : false}
+        defaultValue={value}
+        multiline={
+          props.icon === "description" || props.icon === "requirements"
+            ? true
+            : false
+        }
+        rowsMax={10}
+        readOnly={props.readOnly}
       />
     </Paper>
   );

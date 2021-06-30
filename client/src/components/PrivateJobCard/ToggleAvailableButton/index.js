@@ -37,14 +37,15 @@ const ToggleAvailableButton = () => {
       onClick={(event) => event.stopPropagation()}
       onFocus={(event) => event.stopPropagation()}
     >
-      <MyToggleButton color="green" value="available">
-        <HourglassEmptyIcon />
-      </MyToggleButton>
       <MyToggleButton color="purple" value="not-available">
         <HourglassFullIcon />
       </MyToggleButton>
+      <MyToggleButton color="green" value="available">
+        <HourglassEmptyIcon />
+      </MyToggleButton>
+
       <Button className="circular-button">
-        <DeleteIcon style={{ color: "#FEB8B8" }} />
+        <DeleteIcon style={{ color: "var(--red)" }} />
       </Button>
     </ToggleButtonGroup>
   );

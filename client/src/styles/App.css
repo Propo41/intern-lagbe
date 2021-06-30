@@ -10,8 +10,6 @@
   --red: #d67979;
   --light-purple: #bcb2ff;
   /* Margin dimens */
-  --body-margin-start: 8%;
-  --body-margin-end: 8%;
   --content-margin-start: 15%;
   --content-margin-end: 15%;
   --content-margin-top: 55px;
@@ -39,6 +37,9 @@
   /* item spacings */
   --margin-item-spacing: 15px;
   --margin-item-spacing-lg: 30px;
+  --margin-item-spacing-xlg: 50px;
+
+  --margin-footer-spacing: 100px;
 }
 
 body {
@@ -139,12 +140,21 @@ h1 {
   color: var(--darkash) !important;
 }
 
-/* @overriden styles */
+/* [START] @overriden styles */
 .Mui-disabled {
   background-color: var(--light-purple) !important;
   color: var(--white) !important;
   font-family: "Sen" !important;
 }
+.MuiButton-contained:hover {
+  box-shadow: var(--card-shadow) !important;
+  background-color: #9c8dfd !important;
+}
+
+.MuiButton-contained {
+  box-shadow: var(--card-shadow) !important;
+}
+/* [END] @overriden styles */
 
 /* [START] button styles */
 .navbar-button {

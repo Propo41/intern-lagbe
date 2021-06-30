@@ -1,14 +1,14 @@
-import {useMediaQuery} from "@material-ui/core";
+import { useMediaQuery } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import {makeStyles} from "@material-ui/core/styles";
-import {Alert} from "@material-ui/lab";
-import React, {useEffect} from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
+import React, { useEffect } from "react";
 import PrivateJobCard from "../../components/PrivateJobCard";
-import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
-
+import Footer from "../../components/Footer";
+import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 
 const jobsPosted = [
   {
@@ -43,8 +43,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "var(--content-margin-top)",
     flexWrap: "wrap",
     alignItems: "center",
-    marginLeft: "var(--content-margin-start)",
-    marginRight: "var(--content-margin-start)",
   },
   alertStyle: {
     fontFamily: "Sen",
@@ -52,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
     color: "var(--black)",
     fontWeight: "bold",
     padding: 10,
+    paddingLeft: "var(--content-margin-start)",
+    paddingRight: "var(--content-margin-end)",
   },
   alertMessage: {
     margin: 10,
@@ -121,8 +121,8 @@ const OrganisationHomepage = () => {
 
   if (jobsPosted.length > 0) {
     return (
-      <div>
-        <PublicNavbar />
+      <>
+        <PrivateNavbar />
         <Collapse in={alertOpen}>
           <Alert
             severity="warning"
@@ -144,94 +144,114 @@ const OrganisationHomepage = () => {
             PLEASE SETUP YOUR PROFILE TO START POSTING JOBS.
           </Alert>
         </Collapse>
-        <div className={classes.root}>
-          <Paper elevation={5} className="semi-rounded-card">
-            <Grid container spacing={5}>
-              <Grid item xs={12} lg={8} style={{ textAlign: "left" }}>
-                <h1 className="title-medium">MY JOB POSTINGS</h1>
 
-                {jobsPosted.map((job, index) => {
-                  if (index === 0) {
-                    return (
-                      <div
-                        style={{ marginTop: "var(--margin-item-spacing-lg)" }}
-                      >
-                        <PrivateJobCard
-                          title={job.title}
-                          location={job.location}
-                          status={job.status}
-                        />
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                        <PrivateJobCard
-                          title={job.title}
-                          location={job.location}
-                          status={job.status}
-                        />
-                      </div>
-                    );
-                  }
-                })}
+        <div className="content-grid-padding">
+          <div className={classes.root}>
+            <Paper elevation={5} className="semi-rounded-card">
+              <Grid container spacing={5}>
+                <Grid item xs={12} lg={8} style={{ textAlign: "left" }}>
+                  <h1 className="title-medium">MY JOB POSTINGS</h1>
 
-                <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
-                  <Button
-                    variant="contained"
-                    fullWidth={true}
-                    className={classes.buttonPurple}
-                  >
-                    POST MORE JOBS
-                  </Button>
-                </div>
+                  {jobsPosted.map((job, index) => {
+                    if (index === 0) {
+                      return (
+                        <div
+                          style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+                        >
+                          <PrivateJobCard
+                            title={job.title}
+                            location={job.location}
+                            status={job.status}
+                          />
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          style={{ marginTop: "var(--margin-item-spacing)" }}
+                        >
+                          <PrivateJobCard
+                            title={job.title}
+                            location={job.location}
+                            status={job.status}
+                          />
+                        </div>
+                      );
+                    }
+                  })}
+
+                  <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
+                    <Button
+                      variant="contained"
+                      fullWidth={true}
+                      className={classes.buttonPurple}
+                    >
+                      POST MORE JOBS
+                    </Button>
+                  </div>
+                </Grid>
+
+                <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
+                  {mobileViewBreakpoint ? (
+                    <img
+                      src="/assets/images/job_posting_blob.svg"
+                      alt="landing page"
+                      className={classes.image}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Grid>
               </Grid>
-
-              <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
-                {mobileViewBreakpoint ? (
-                  <img
-                    src="/assets/images/job_posting_blob.svg"
-                    alt="landing page"
-                    className={classes.image}
-                  />
-                ) : (
-                  ""
-                )}
-              </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          </div>
         </div>
-      </div>
+        <div
+          style={{
+            marginTop: "var(--margin-footer-spacing)",
+          }}
+        >
+          <Footer />
+        </div>
+      </>
     );
   } else {
     return (
-      <div className="content-grid-padding">
-        <PublicNavbar />
+      <>
+        <PrivateNavbar />
+        <div className="content-grid-padding">
+          <div className={classes.root}>
+            <Paper elevation={5} className="semi-rounded-card">
+              <div style={{ textAlign: "left" }}>
+                <h1 className="title-medium">MY JOB POSTINGS</h1>
+              </div>
 
-        <div className={classes.root}>
-          <Paper elevation={5} className="semi-rounded-card">
-            <div style={{ textAlign: "left" }}>
-              <h1 className="title-medium">MY JOB POSTINGS</h1>
-            </div>
+              <img
+                src="/assets/images/job_posting_blob.svg"
+                alt="landing page"
+                className={classes.imagePlaceholder}
+                style={{
+                  marginTop: "var(--margin-item-spacing-lg)",
+                }}
+              />
 
-            <img
-              src="/assets/images/job_posting_blob.svg"
-              alt="landing page"
-              className={classes.imagePlaceholder}
-              style={{
-                marginTop: "var(--margin-item-spacing-lg)",
-              }}
-            />
-
-            <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
-              <h1 className="content" style={{ color: "var(--darkash)" }}>
-                You don't have any postings listed.
-                <span className="text-button-lg"> Create a new posting.</span>
-              </h1>
-            </div>
-          </Paper>
+              <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
+                <h1 className="content" style={{ color: "var(--darkash)" }}>
+                  You don't have any postings listed.
+                  <span className="text-button-lg"> Create a new posting.</span>
+                </h1>
+              </div>
+            </Paper>
+          </div>
         </div>
-      </div>
+        <div
+          style={{
+            marginTop: "var(--margin-footer-spacing)",
+          }}
+        >
+          <Footer />
+        </div>
+      </>
     );
   }
 };

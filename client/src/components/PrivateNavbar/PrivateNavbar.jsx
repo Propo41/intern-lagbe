@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       flexGrow: 1,
     },
+    fontFamily: "Sen",
   },
   logoSize: {
     width: 60,
@@ -82,7 +83,13 @@ const PrivateNavbar = () => {
               aria-label="menu"
               onClick={handleMenu}
             >
-              <MenuIcon style={{ width: "1.4em", height: "1.4em" }} />
+              <MenuIcon
+                style={{
+                  width: "1.4em",
+                  height: "1.4em",
+                  color: "var(--black)",
+                }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"

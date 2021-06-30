@@ -8,6 +8,7 @@ import FilterBySort from "../../components/FilterBySort";
 import FilterByLocation from "../../components/FilterByLocation";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import TextInputLayout from "../../components/TextInputLayout";
+import Footer from "../../components/Footer";
 
 const companies = [
   {
@@ -33,7 +34,7 @@ const companies = [
 ];
 
 const LandingPage = () => {
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
     landingImage: {
       marginLeft: 50,
       width: "90%",
@@ -44,6 +45,11 @@ const LandingPage = () => {
       padding: 30,
       textAlign: "center",
       marginTop: "65px",
+    },
+    subscriptionCard: {
+      padding: 30,
+      textAlign: "center",
+      marginTop: "30px",
     },
 
     buttonSmallPurple: {
@@ -60,6 +66,11 @@ const LandingPage = () => {
       fontFamily: "Sen",
       marginTop: 10,
       padding: "var(--button-padding)",
+    },
+    footer: {
+      padding: theme.spacing(3, 2),
+      marginTop: "auto",
+      backgroundColor: "var(--purple)",
     },
   }));
 
@@ -137,7 +148,7 @@ const LandingPage = () => {
               style={{
                 marginTop: "30px",
               }}
-            ></div>
+            />
 
             {companies.map((company, index) => {
               return (
@@ -195,6 +206,13 @@ const LandingPage = () => {
             </Paper>
           </Grid>
         </Grid>
+      </div>
+      <div
+        style={{
+          marginTop: "var(--margin-footer-spacing)",
+        }}
+      >
+        <Footer />
       </div>
     </>
   );

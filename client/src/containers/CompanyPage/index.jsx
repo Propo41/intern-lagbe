@@ -1,12 +1,13 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import FilterBySort from "../../components/FilterBySort";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import Label from "../../components/Label";
+import Footer from "../../components/Footer";
 
 const companies = {
   company: "Microsoft",
@@ -27,8 +28,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -37,8 +38,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -47,8 +48,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-        mail: "microsoft@aust.edu",
-        contact: "+880 19611156262",
+      mail: "microsoft@aust.edu",
+      contact: "+880 19611156262",
       status: "true",
     },
   ],
@@ -91,118 +92,129 @@ const CompanyPage = () => {
   const classes = useStyles();
 
   return (
-    <div className="content-grid-padding">
+    <>
       <PublicNavbar />
-      {/* Landing page */}
-      <Grid container>
-        <Grid item xs={12} sm={6}>
-          <h1 className="title">Microsoft</h1>
-          <h1 className="content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a
-            nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at
-            blandit ut pellentesque at in accumsan platea. Ridiculus urna non
-            hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in
-            accumsan platea. Ridiculus
-          </h1>
-          <div
+      <div className="content-grid-padding">
+        {/* Landing page */}
+        <Grid container>
+          <Grid item xs={12} sm={6}>
+            <h1 className="title">Microsoft</h1>
+            <h1 className="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis
+              a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at
+              blandit ut pellentesque at in accumsan platea. Ridiculus urna non
+              hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in
+              accumsan platea. Ridiculus
+            </h1>
+            <div
+              style={{
+                marginTop: "35px",
+              }}
+            >
+              <Label text={"Dhaka"} icon={"location"} color={"black"} />
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <img
+              src="/assets/images/circular_blob.svg"
+              alt="landing page"
+              className={classes.landingImage}
+            />
+          </Grid>
+        </Grid>
+        {/* Landing page body */}
+        <Grid container spacing={5}>
+          <Grid
+            item
+            sm={12}
+            lg={8}
             style={{
-              marginTop: "35px",
+              marginTop: "65px",
             }}
           >
-            <Label text={"Dhaka"} icon={"location"} color={"black"} />
-          </div>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <img
-            src="/assets/images/circular_blob.svg"
-            alt="landing page"
-            className={classes.landingImage}
-          />
-        </Grid>
-      </Grid>
-      {/* Landing page body */}
-      <Grid container spacing={5}>
-        <Grid
-          item
-          sm={12}
-          lg={8}
-          style={{
-            marginTop: "65px",
-          }}
-        >
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-              sm={5}
-              style={{
-                alignSelf: "center",
-              }}
-            >
-              <h1
-                className="section-heading"
+            <Grid container>
+              <Grid
+                item
+                xs={12}
+                sm={5}
                 style={{
-                  margin: "0",
+                  alignSelf: "center",
                 }}
               >
-                AVAILABLE POSITIONS
-              </h1>
+                <h1
+                  className="section-heading"
+                  style={{
+                    margin: "0",
+                  }}
+                >
+                  AVAILABLE POSITIONS
+                </h1>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={7}
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  zIndex: "1000",
+                }}
+              >
+                <FilterBySort />
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={7}
+            <div
               style={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "flex-end",
-                zIndex: "1000",
+                marginTop: "30px",
               }}
-            >
-              <FilterBySort />
-            </Grid>
+            ></div>
+
+            {companies.jobs.map((job, index) => {
+              return (
+                <AvailPositionCard
+                  expandable={job.status === "true" ? true : false}
+                  company={job.title}
+                  address={job.address}
+                  more={job}
+                  disabledButton={job.status === "true" ? false : true}
+                />
+              );
+            })}
           </Grid>
-          <div
-            style={{
-              marginTop: "30px",
-            }}
-          ></div>
+          <Grid item sm={12} lg={4}>
+            <Paper elevation={2} className={classes.getStartedCard}>
+              <h1 className="section-heading">GET STARTED</h1>
+              <h1 className="content">
+                Lorem ipsum dolor sit amet, consectetur
+              </h1>
+              <Button
+                variant="contained"
+                fullWidth={true}
+                className={classes.buttonSmallPurple}
+              >
+                CREATE A RESUME
+              </Button>
 
-          {companies.jobs.map((job, index) => {
-            return (
-              <AvailPositionCard
-                expandable={job.status === "true" ? true : false}
-                company={job.title}
-                address={job.address}
-                more={job}
-                disabledButton={job.status === "true" ? false : true}
-              />
-            );
-          })}
+              <Button
+                variant="contained"
+                fullWidth={true}
+                className={classes.buttonSmallRed}
+              >
+                APPLYING TIPS
+              </Button>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item sm={12} lg={4}>
-          <Paper elevation={2} className={classes.getStartedCard}>
-            <h1 className="section-heading">GET STARTED</h1>
-            <h1 className="content">Lorem ipsum dolor sit amet, consectetur</h1>
-            <Button
-              variant="contained"
-              fullWidth={true}
-              className={classes.buttonSmallPurple}
-            >
-              CREATE A RESUME
-            </Button>
-
-            <Button
-              variant="contained"
-              fullWidth={true}
-              className={classes.buttonSmallRed}
-            >
-              APPLYING TIPS
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+      <div
+        style={{
+          marginTop: "var(--margin-footer-spacing)",
+        }}
+      >
+        <Footer />
+      </div>
+    </>
   );
 };
 

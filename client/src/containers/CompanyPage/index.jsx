@@ -1,12 +1,10 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
-import LandingPageImage from "../../assets/images/landing_page_image.svg";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import FilterBySort from "../../components/FilterBySort";
-import FilterByLocation from "../../components/FilterByLocation";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import Label from "../../components/Label";
 
@@ -29,8 +27,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -39,8 +37,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
     {
@@ -49,8 +47,8 @@ const companies = {
 
       requirements:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      contact: "microsoft@aust.edu",
-      mail: "+880 19611156262",
+        mail: "microsoft@aust.edu",
+        contact: "+880 19611156262",
       status: "true",
     },
   ],

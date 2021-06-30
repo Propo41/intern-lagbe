@@ -39,13 +39,13 @@ const iconMapper = (iconName, color, parent) => {
     case "lock":
       return <LockIcon style={style(color, parent)} />;
     case "key":
-      return <VpnKeyIcon style={style(color)} />;
+      return <VpnKeyIcon style={style(color, parent)} />;
     case "company":
-      return <BusinessIcon style={style(color)} />;
-    case "desciption":
-      return <DescriptionIcon style={style(color)} />;
+      return <BusinessIcon style={style(color, parent)} />;
+    case "description":
+      return <DescriptionIcon style={style(color, parent)} />;
     default:
-      return <BookmarkIcon style={style(color)} />;
+      return <BookmarkIcon style={style(color, parent)} />;
   }
 };
 

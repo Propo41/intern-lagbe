@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Button,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuItem,
-  MenuList,
-} from "@material-ui/core";
+import {Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper,} from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 const FilterBySort = () => {

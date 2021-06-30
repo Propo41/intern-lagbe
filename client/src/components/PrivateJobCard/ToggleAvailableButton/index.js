@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { Button } from "@material-ui/core";
+import {Button} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: (props) => {
@@ -37,14 +37,15 @@ const ToggleAvailableButton = () => {
       onClick={(event) => event.stopPropagation()}
       onFocus={(event) => event.stopPropagation()}
     >
-      <MyToggleButton color="green" value="available">
-        <HourglassEmptyIcon />
-      </MyToggleButton>
       <MyToggleButton color="purple" value="not-available">
         <HourglassFullIcon />
       </MyToggleButton>
+      <MyToggleButton color="green" value="available">
+        <HourglassEmptyIcon />
+      </MyToggleButton>
+
       <Button className="circular-button">
-        <DeleteIcon style={{ color: "#FEB8B8" }} />
+        <DeleteIcon style={{ color: "var(--red)" }} />
       </Button>
     </ToggleButtonGroup>
   );

@@ -1,13 +1,6 @@
 import "./styles/App.css";
-import PrivateJobCard from "./components/PrivateJobCard";
-import ApplicantCard from "./components/ApplicantCard";
-import AvailPositionCard from "./components/AvailPositionCard";
-import LandingPage from "./containers/LandingPage/index";
-import FilterBySort from "./components/FilterBySort";
-import FilterByLocation from "./components/FilterByLocation";
-import CompanyPage from "./containers/CompanyPage";
-import TextInputLayout from "./components/TextInputLayout";
-import SignInPage from "./containers/SignInPage";
+import OrganisationHomepage from "./containers/OrganisationHomepage";
+
 function App() {
   return (
     <div className="App">
@@ -16,10 +9,20 @@ function App() {
       <AvailPositionCard />
       <FilterBySort />
       <FilterByLocation /> */}
-      <LandingPage />
-      {/*    <CompanyPage /> */}
-      {/*    <TextInputLayout /> */}
-      {/* <SignInPage /> */}
+      {/* <LandingPage /> */}
+      {/*  <CompanyPage /> */}
+      {/*   <SignInPage /> */}
+      {/* <ForgotPassword /> */}
+      {/* <ChangePassword /> */}
+      {/*  <RegisterPage /> */}
+      {/* <VerifyYourselfPage/> */}
+      {/*   <OrganisationProfilePage /> */}
+      {/* <OrganisationApplicants /> */}
+     {/*  <OrganisationCreateJob /> */}
+      {/*  <OrganisationJobPost /> */}
+      {/*  <OrganisationJobPostEdit /> */}
+
+       <OrganisationHomepage />
     </div>
   );
 }

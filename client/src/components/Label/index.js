@@ -1,4 +1,4 @@
-import { Paper } from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import iconMapper from "../../utils/icon_mapper";
 
 const Label = (props) => {

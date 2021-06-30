@@ -22,7 +22,7 @@
   --font-size-section-heading: 1.3rem;
   --font-size-sub-heading: 1.15rem;
   --font-size-textinput-hint: 0.938rem;
-  --font-size-title: 1.875rem;
+  --font-size-title: 1.6rem;
   --font-size-title-large: 3.75rem;
   --font-size-content: 1.15rem;
   --font-size-content-small: 0.8rem;
@@ -36,11 +36,15 @@
   --text-input-padding: 8px;
   /* Card shadow */
   --card-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
+  /* item spacings */
+  --margin-item-spacing: 15px;
+  --margin-item-spacing-lg: 30px;
 }
 
 body {
   background-color: var(--body-color);
   font-family: "Sen", sans-serif;
+  margin: 0px;
 }
 
 h1 {
@@ -111,12 +115,7 @@ h1 {
   font-style: normal;
   font-weight: bold;
   font-size: var(--font-size-section-heading);
-}
-
-.section-heading {
-  font-style: normal;
-  font-weight: bold;
-  font-size: var(--font-size-section-heading);
+  margin: 0px;
 }
 
 .content {
@@ -169,6 +168,22 @@ h1 {
   cursor: pointer;
 }
 
+.text-button-lg {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-content);
+  color: var(--darkash);
+  cursor: pointer;
+}
+
+.text-button-lg:hover {
+  font-style: normal;
+  font-weight: bold;
+  font-size: var(--font-size-content);
+  color: var(--black);
+  cursor: pointer;
+}
+
 .text-button:hover {
   font-style: normal;
   font-weight: bold;
@@ -201,7 +216,6 @@ h1 {
   font-style: normal;
   font-weight: normal;
   font-size: var(--font-size-sub-content);
-  text-transform: uppercase;
 }
 
 .title-bold {
@@ -229,7 +243,8 @@ h1 {
 }
 
 .rounded-card {
-  border-radius: 10px !important;
+  border-radius: 15px !important;
+  box-shadow: var(--card-shadow) !important;
 }
 
 .MuiCardContent-root {
@@ -242,8 +257,15 @@ h1 {
 
 .MuiPaper-elevation1 {
   filter: var(--card-shadow);
-  box-shadow: none !important;
+  box-shadow: var(--card-shadow) !important;
   margin: 15px 0;
+}
+
+.MuiPaper-elevation2 {
+  filter: var(--card-shadow);
+  box-shadow: var(--card-shadow) !important;
+  margin: 15px 0;
+  border-radius: 15px !important;
 }
 
 .MuiToggleButton-root {
@@ -267,12 +289,20 @@ h1 {
   align-items: center;
 }
 
-.toggle-label-circle {
+.toggle-label-circle-green {
   border-radius: 50%;
   width: 13px;
   height: 13px;
   margin-top: 1px;
   background-color: var(--green);
+}
+
+.toggle-label-circle-purple {
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  margin-top: 1px;
+  background-color: var(--purple);
 }
 
 .availability-label {
@@ -301,12 +331,14 @@ h1 {
   display: flex;
   width: fit-content;
   padding: 0.2rem 1rem;
+  border-radius: 10px !important;
 }
 .label-font {
   font-style: normal;
   font-weight: normal;
   font-size: var(--font-size-content-small);
   margin-left: 10px;
+  color: var(--black);
 }
 
 .filter-button {
@@ -337,6 +369,7 @@ h1 {
   border: 1px solid #f3f3f3;
   background-color: rgba(0, 0, 0, 0.08);
 }
+
 /* Common for horizontal lines in signin page- ends */
 
 .MuiPaper-rounded {
@@ -372,9 +405,16 @@ h1 {
   }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 361px) and (max-width: 600px) {
+@media only screen and (min-width: 360px) and (max-width: 600px) {
+  :root {
+    /* Margin dimens */
+    --content-margin-start: 5%;
+    --content-margin-end: 5%;
+    /* font sizes */
+    --font-size-title: 1.4rem;
+  }
   .semi-rounded-card {
-    padding: 2.5rem 2rem 4.5rem;
+    padding: 2.5rem 1.5rem 4.5rem;
   }
   .MuiToolbar-root {
     padding: 0 2.5rem !important;

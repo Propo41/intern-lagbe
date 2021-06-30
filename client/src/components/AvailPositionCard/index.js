@@ -1,16 +1,8 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 
-import {
-  Avatar,
-  Button,
-  Container,
-  Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from "@material-ui/core";
+import {Accordion, AccordionDetails, AccordionSummary, Avatar, Button, Container, Grid,} from "@material-ui/core";
 
 import Label from "../Label";
 

@@ -1,9 +1,8 @@
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import iconMapper from "../../utils/icon_mapper";
-import { useState } from "react";
-import { FormHelperText } from "@material-ui/core";
+import {useState} from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {

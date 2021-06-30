@@ -1,13 +1,13 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
-import LandingPageImage from "../../assets/images/landing_page_image.svg";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import FilterBySort from "../../components/FilterBySort";
 import FilterByLocation from "../../components/FilterByLocation";
 import AvailPositionCard from "../../components/AvailPositionCard";
+import TextInputLayout from "../../components/TextInputLayout";
 
 const companies = [
   {
@@ -46,6 +46,12 @@ const LandingPage = () => {
       marginTop: "65px",
     },
 
+    subscriptionCard: {
+      padding: 30,
+      textAlign: "center",
+      marginTop: "20px",
+    },
+
     buttonSmallPurple: {
       backgroundColor: "var(--purple)",
       color: "white",
@@ -61,6 +67,7 @@ const LandingPage = () => {
       marginTop: 10,
       padding: "var(--button-padding)",
     },
+
   }));
 
   const classes = useStyles();
@@ -157,6 +164,7 @@ const LandingPage = () => {
               variant="contained"
               fullWidth={true}
               className={classes.buttonSmallPurple}
+              style={{ marginTop: "var(--margin-item-spacing-lg)" }}
             >
               CREATE A RESUME
             </Button>
@@ -167,6 +175,25 @@ const LandingPage = () => {
               className={classes.buttonSmallRed}
             >
               APPLYING TIPS
+            </Button>
+          </Paper>
+
+          <Paper elevation={2} className={classes.subscriptionCard}>
+            <h1 className="section-heading">SUBSCRIBE TO NEWSLETTER</h1>
+            <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
+              <TextInputLayout
+                icon="mail"
+                placeholder="Enter your email"
+                type="mail"
+              />
+            </div>
+            <Button
+              variant="contained"
+              fullWidth={true}
+              className={classes.buttonSmallPurple}
+              style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+            >
+              SUBSCRIBE
             </Button>
           </Paper>
         </Grid>

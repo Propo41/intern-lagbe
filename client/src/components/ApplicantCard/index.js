@@ -1,15 +1,7 @@
 import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import {
-  Button,
-  Container,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  Grid,
-} from "@material-ui/core";
+import {Button, Card, CardContent, Grid,} from "@material-ui/core";
 
 const ApplicantCard = (props) => {
   return (

@@ -1,12 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
+import {useMediaQuery} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import TextInputLayout from "../../components/TextInputLayout";
-import { Divider } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import {makeStyles} from "@material-ui/core/styles";
+import {Alert} from "@material-ui/lab";
+import React, {useEffect} from "react";
 import PrivateJobCard from "../../components/PrivateJobCard";
+import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
+
 
 const jobsPosted = [
   {
@@ -41,6 +43,31 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "var(--content-margin-top)",
     flexWrap: "wrap",
     alignItems: "center",
+    marginLeft: "var(--content-margin-start)",
+    marginRight: "var(--content-margin-start)",
+  },
+  alertStyle: {
+    fontFamily: "Sen",
+    fontSize: "var(--font-size-content-small)",
+    color: "var(--black)",
+    fontWeight: "bold",
+    padding: 10,
+  },
+  alertMessage: {
+    margin: 10,
+    paddingLeft: 10,
+  },
+
+  alertButton: {
+    fontFamily: "Sen",
+    fontSize: "var(--font-size-content-small)",
+    color: "var(--purple)",
+    fontWeight: "bold",
+    margin: 10,
+  },
+
+  alertIcon: {
+    margin: 10,
   },
   card: {
     borderTopRightRadius: 60,
@@ -72,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "var(--button-padding)",
     fontSize: "var(--font-size-button-small)",
   },
+
   buttonRed: {
     backgroundColor: "var(--red)",
     color: "white",
@@ -84,12 +112,38 @@ const useStyles = makeStyles((theme) => ({
 
 const OrganisationHomepage = () => {
   const classes = useStyles();
+  const [alertOpen, alertSetOpen] = React.useState(false);
+  const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+
+  useEffect(() => {
+    alertSetOpen(true);
+  }, []);
 
   if (jobsPosted.length > 0) {
     return (
-      <div className="content-grid-padding">
+      <div>
         <PublicNavbar />
-
+        <Collapse in={alertOpen}>
+          <Alert
+            severity="warning"
+            className={classes.alertStyle}
+            classes={{
+              icon: classes.alertIcon,
+              message: classes.alertMessage,
+            }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                className={classes.alertButton}
+              >
+                SETUP PROFILE
+              </Button>
+            }
+          >
+            PLEASE SETUP YOUR PROFILE TO START POSTING JOBS.
+          </Alert>
+        </Collapse>
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">
             <Grid container spacing={5}>
@@ -134,11 +188,15 @@ const OrganisationHomepage = () => {
               </Grid>
 
               <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
-                <img
-                  src="/assets/images/job_posting_blob.svg"
-                  alt="landing page"
-                  className={classes.image}
-                />
+                {mobileViewBreakpoint ? (
+                  <img
+                    src="/assets/images/job_posting_blob.svg"
+                    alt="landing page"
+                    className={classes.image}
+                  />
+                ) : (
+                  ""
+                )}
               </Grid>
             </Grid>
           </Paper>
@@ -160,8 +218,11 @@ const OrganisationHomepage = () => {
               src="/assets/images/job_posting_blob.svg"
               alt="landing page"
               className={classes.imagePlaceholder}
-              style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+              style={{
+                marginTop: "var(--margin-item-spacing-lg)",
+              }}
             />
+
             <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
               <h1 className="content" style={{ color: "var(--darkash)" }}>
                 You don't have any postings listed.

@@ -1,10 +1,10 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
-import Button from "@material-ui/core/Button";
 import ApplicantCard from "../../components/ApplicantCard";
+import {useMediaQuery} from "@material-ui/core";
 
 const applicants = [
   {
@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrganisationApplicants = () => {
   const classes = useStyles();
+  const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
 
   if (applicants.length > 0) {
     return (
@@ -117,11 +118,13 @@ const OrganisationApplicants = () => {
               </Grid>
 
               <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
-                <img
-                  src="/assets/images/applicants_blob.svg"
-                  alt="landing page"
-                  className={classes.image}
-                />
+                {mobileViewBreakpoint && (
+                  <img
+                    src="/assets/images/applicants_blob.svg"
+                    alt="landing page"
+                    className={classes.image}
+                  />
+                )}
               </Grid>
             </Grid>
           </Paper>

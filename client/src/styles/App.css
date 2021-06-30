@@ -44,6 +44,7 @@
 body {
   background-color: var(--body-color);
   font-family: "Sen", sans-serif;
+  margin: 0px;
 }
 
 h1 {
@@ -106,12 +107,7 @@ h1 {
   font-style: normal;
   font-weight: bold;
   font-size: var(--font-size-section-heading);
-}
-
-.section-heading {
-  font-style: normal;
-  font-weight: bold;
-  font-size: var(--font-size-section-heading);
+  margin: 0px;
 }
 
 .content {
@@ -363,6 +359,7 @@ h1 {
   border: 1px solid #f3f3f3;
   background-color: rgba(0, 0, 0, 0.08);
 }
+
 /* Common for horizontal lines in signin page- ends */
 
 /* Small devices (portrait tablets and large phones, 600px and up) */

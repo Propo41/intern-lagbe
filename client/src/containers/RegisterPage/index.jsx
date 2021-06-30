@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
 import TextInputLayout from "../../components/TextInputLayout";
-import { Divider } from "@material-ui/core";
+import {useMediaQuery} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterPage = () => {
   const classes = useStyles();
+  const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
 
   return (
     <div className="content-grid-padding">
@@ -96,11 +97,15 @@ const RegisterPage = () => {
           lg={5}
           style={{ display: "flex", justifyContent: "center" }}
         >
-          <img
-            src="/assets/images/register_blob.svg"
-            alt="landing page"
-            className={classes.image}
-          />
+          {mobileViewBreakpoint ? (
+            <img
+              src="/assets/images/register_blob.svg"
+              alt="landing page"
+              className={classes.image}
+            />
+          ) : (
+            ""
+          )}
         </Grid>
       </Grid>
     </div>

@@ -275,6 +275,15 @@ h1 {
   margin: 8px !important;
 }
 
+@media only screen and (max-width: 1279px) {
+  .MuiToggleButton-root {
+    border-radius: 0% !important;
+    border: 0 !important;
+    box-shadow: none;
+    margin: 0 !important;
+  }
+}
+
 .circular-button {
   padding: 11px !important;
   min-width: 48px !important;

@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       flexGrow: 1,
     },
+    fontFamily: "Sen",
   },
   logoSize: {
     width: 60,
@@ -82,7 +83,13 @@ const PrivateNavbar = () => {
               aria-label="menu"
               onClick={handleMenu}
             >
-              <MenuIcon style={{ width: "1.4em", height: "1.4em" }} />
+              <MenuIcon
+                style={{
+                  width: "1.4em",
+                  height: "1.4em",
+                  color: "var(--black)",
+                }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -108,7 +115,6 @@ const PrivateNavbar = () => {
               <MenuItem className="navbar-button" onClick={handleClose}>
                 POST A JOB
               </MenuItem>
-              {/* <LogoutComponent /> */}
               <List
                 component="nav"
                 aria-labelledby="nested-list-subheader"
@@ -118,8 +124,8 @@ const PrivateNavbar = () => {
                   <ListItemText>
                     <img
                       style={{
-                        width: "45px",
-                        height: "45px",
+                        width: "35px",
+                        height: "35px",
                       }}
                       alt="company logo"
                       src="/assets/images/dummy_logo.png"

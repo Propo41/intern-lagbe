@@ -65,8 +65,8 @@ const LogoutComponent = () => {
       >
         <img
           style={{
-            width: "45px",
-            height: "45px",
+            width: "35px",
+            height: "35px",
             margin: "2px 10px",
           }}
           alt="company logo"
@@ -80,6 +80,7 @@ const LogoutComponent = () => {
         role={undefined}
         transition
         disablePortal
+        style={{ zIndex: 500 }}
       >
         {({ TransitionProps, placement }) => (
           <Grow

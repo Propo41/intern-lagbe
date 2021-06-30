@@ -1,10 +1,22 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 
-import {Accordion, AccordionDetails, AccordionSummary, Avatar, Button, Container, Grid,} from "@material-ui/core";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Button,
+  Container,
+  Grid,
+} from "@material-ui/core";
 
 import Label from "../Label";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import ApplyJobModal from "../ApplyJobModal";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -28,15 +40,28 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     marginLeft: "10px",
   },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 const AvailPositionCard = (props) => {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
   const onApplyClick = (event) => {
+    event.stopPropagation();
+    setOpen(true);
     event.preventDefault();
     console.log("apply clicked");
   };
 
-  const classes = useStyles();
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Accordion className="rounded-card">
       <AccordionSummary
@@ -90,6 +115,30 @@ const AvailPositionCard = (props) => {
             >
               APPLY
             </Button>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={classes.modal}
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              hideBackdrop={false}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={open}>
+                {/* <div className={classes.paper}>
+                  <Button>egeg</Button>
+                  <h2 id="transition-modal-title">Transition modal</h2>
+                  <p id="transition-modal-description">
+                    react-transition-group animates me.
+                  </p>
+                </div> */}
+                <ApplyJobModal />
+              </Fade>
+            </Modal>
           </Grid>
         </Grid>
       </AccordionSummary>

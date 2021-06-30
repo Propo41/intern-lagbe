@@ -1,14 +1,14 @@
-import {useMediaQuery} from "@material-ui/core";
+import { useMediaQuery } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import {makeStyles} from "@material-ui/core/styles";
-import {Alert} from "@material-ui/lab";
-import React, {useEffect} from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
+import React, { useEffect } from "react";
 import PrivateJobCard from "../../components/PrivateJobCard";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
-
+import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 
 const jobsPosted = [
   {
@@ -122,7 +122,7 @@ const OrganisationHomepage = () => {
   if (jobsPosted.length > 0) {
     return (
       <div>
-        <PublicNavbar />
+        <PrivateNavbar />
         <Collapse in={alertOpen}>
           <Alert
             severity="warning"

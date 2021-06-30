@@ -1,6 +1,7 @@
 import "./styles/App.css";
 import OrganisationHomepage from "./containers/OrganisationHomepage";
 import LandingPage from "./containers/LandingPage";
+import CompanyPage from "./containers/CompanyPage";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <AvailPositionCard />
       <FilterBySort />
       <FilterByLocation /> */}
-      <LandingPage />
+      {/* <LandingPage /> */}
       {/*  <CompanyPage /> */}
       {/*   <SignInPage /> */}
       {/* <ForgotPassword /> */}
@@ -23,7 +24,8 @@ function App() {
       {/*  <OrganisationJobPost /> */}
       {/*  <OrganisationJobPostEdit /> */}
 
-      {/* <OrganisationHomepage /> */}
+      <OrganisationHomepage />
+      {/* <CompanyPage /> */}
     </div>
   );
 }

@@ -16,7 +16,7 @@
   --content-margin-end: 15%;
   --content-margin-top: 55px;
   /* font sizes */
-  --font-size-navbar: 1.25rem;
+  --font-size-navbar: 0.938rem;
   --font-size-landing-page-title: 4rem;
   --font-size-landing-page-subtitle: 1.3rem;
   --font-size-section-heading: 1.3rem;
@@ -86,21 +86,29 @@ h1 {
   font-weight: normal;
   font-size: var(--font-size-title);
 }
+.MuiToolbar-root {
+  padding: 0 6rem !important;
+}
+
+.MuiMenuItem-root {
+  justify-content: center !important;
+}
 
 .navbar {
   font-style: normal;
   font-weight: normal;
-  font-size: var(--font-size-navbar);
-  color: var(--darkash);
-  font-family: "Sen", sans-serif;
+  font-size: var(--font-size-navbar) !important;
+  color: var(--darkash) !important;
+  font-family: "Sen", sans-serif !important;
+  margin: 0 0.5rem !important;
 }
 
 .navbar:hover {
   font-style: normal;
   font-weight: normal;
-  font-size: var(--font-size-navbar);
-  color: var(--black);
-  font-family: "Sen", sans-serif;
+  font-size: var(--font-size-navbar) !important;
+  color: var(--black) !important;
+  font-family: "Sen", sans-serif !important;
 }
 
 .section-heading {
@@ -144,6 +152,8 @@ h1 {
   font-family: "Sen", sans-serif !important;
   color: var(--white) !important;
   font-size: var(--font-size-button-medium);
+  margin: 0 2rem;
+  padding: 0.5rem 1rem !important;
 }
 
 .navbar-button:hover {
@@ -362,6 +372,38 @@ h1 {
 
 /* Common for horizontal lines in signin page- ends */
 
+.MuiPaper-rounded {
+  border-radius: 10px !important;
+}
+.MuiList-root {
+  border-radius: 10px !important;
+  box-shadow: var(--card-shadow);
+}
+.MuiListItem-root {
+  font-size: var(--font-size-content) !important;
+  font-weight: normal !important;
+  font-family: "Sen", sans-serif !important;
+}
+.MuiListItemText-root {
+  margin: 0 !important;
+}
+.MuiListItemText-primary {
+  font-size: var(--font-size-content) !important;
+  font-weight: normal !important;
+  font-family: "Sen", sans-serif !important;
+}
+.MuiList-padding {
+  padding: 0 !important;
+}
+.MuiList-padding {
+  margin: 0 !important;
+}
+
+@media only screen and (max-width: 360px) {
+  .MuiToolbar-root {
+    padding: 0 1.5rem !important;
+  }
+}
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 360px) and (max-width: 600px) {
   :root {
@@ -374,11 +416,17 @@ h1 {
   .semi-rounded-card {
     padding: 2.5rem 1.5rem 4.5rem;
   }
+  .MuiToolbar-root {
+    padding: 0 2.5rem !important;
+  }
 }
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 601px) and (max-width: 768px) {
   .semi-rounded-card {
     padding: 3rem 4rem 5rem;
+  }
+  .MuiToolbar-root {
+    padding: 0 4rem !important;
   }
 }
 

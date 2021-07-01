@@ -39,7 +39,7 @@
   --margin-item-spacing-lg: 30px;
   --margin-item-spacing-xlg: 50px;
 
-  --margin-footer-spacing: 100px;
+  --margin-footer-spacing: 0px;
 }
 
 body {
@@ -50,6 +50,11 @@ body {
 
 h1 {
   color: var(--black);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 /* .root-grid-padding {
@@ -436,11 +441,11 @@ h1 {
   }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 360px) and (max-width: 600px) {
+@media only screen and (min-width: 320px) and (max-width: 600px) {
   :root {
     /* Margin dimens */
-    --content-margin-start: 5%;
-    --content-margin-end: 5%;
+    --content-margin-start: 7%;
+    --content-margin-end: 7%;
     /* font sizes */
     --font-size-title: 1.4rem;
   }

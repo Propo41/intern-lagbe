@@ -8,6 +8,7 @@ import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/signin_page";
+import { Link } from "react-router-dom";
 
 const SignInPage = () => {
   const classes = useStyles();
@@ -50,7 +51,7 @@ const SignInPage = () => {
                   className="text-button"
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  FORGOT PASSWORD?
+                  <Link to="/forgot-password">FORGOT PASSWORD?</Link>
                 </h1>
               </div>
               <div className="divider-custom">
@@ -75,7 +76,7 @@ const SignInPage = () => {
                 className={classes.buttonRed}
                 style={{ marginTop: "var(--margin-item-spacing)" }}
               >
-                REGISTER
+                <Link to="/register">REGISTER</Link>
               </Button>
             </Paper>
           </Grid>

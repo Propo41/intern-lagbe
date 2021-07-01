@@ -3,12 +3,11 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
-import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/verify_yourself";
 
-const VerifyYourselfPage = () => {
+const VerifedPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
 
@@ -19,25 +18,19 @@ const VerifyYourselfPage = () => {
         <Grid container spacing={5} className={classes.root}>
           <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
             <Paper elevation={5} className="semi-rounded-card">
-              <h1 className="title-medium">VERIFY YOURSELF</h1>
+              <h1 className="title-medium">VERIFICATION SUCCESS</h1>
               <h1 className="content" style={{ color: "var(--darkash)" }}>
-                A verification code has been sent to your email. Please enter
-                the code down below to verify yourself.
+                You have been successfully verified. Please log into your
+                account.
               </h1>
-              <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
-                <TextInputLayout
-                  icon="lock"
-                  placeholder="Enter the verification code"
-                  type="text"
-                />
-              </div>
+
               <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                 <Button
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonPurple}
                 >
-                  VERIFY
+                  REDIRECT
                 </Button>
               </div>
             </Paper>
@@ -71,4 +64,4 @@ const VerifyYourselfPage = () => {
     </>
   );
 };
-export default VerifyYourselfPage;
+export default VerifedPage;

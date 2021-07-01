@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
@@ -49,7 +48,7 @@ const RegisterPage = () => {
                   fullWidth={true}
                   className={classes.buttonPurple}
                 >
-                  CHANGE
+                  REGISTER
                 </Button>
               </div>
             </Paper>
@@ -73,13 +72,8 @@ const RegisterPage = () => {
           </Grid>
         </Grid>
       </div>
-      <div
-        style={{
-          marginTop: "var(--margin-footer-spacing)",
-        }}
-      >
-        <Footer />
-      </div>
+
+      <Footer />
     </>
   );
 };

@@ -15,22 +15,27 @@ const companies = [
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
+    id: '12334d4x'
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
+    id: '12334d4y'
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
+    id: '12334d4z'
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
+    id: '12334d4a'
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
+    id: '12334d4b'
   },
 ];
 
@@ -114,6 +119,7 @@ const LandingPage = () => {
             {companies.map((company, index) => {
               return (
                 <AvailPositionCard
+                  key={company.id}
                   expandable={false}
                   company={company.company}
                   address={company.address}

@@ -16,33 +16,10 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-
+import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    marginRight: 50,
-    [theme.breakpoints.down("sm")]: {
-      flexGrow: 1,
-    },
-    fontFamily: "Sen",
-  },
-  logoSize: {
-    width: 60,
-    height: 60,
-  },
-  headerOptions: {
-    display: "contents",
-  },
-  rightToolbar: {
-    display: "flex",
-    marginLeft: "auto",
-  },
-}));
+import useStyles from "../../styles/private_navbar";
 
 const PrivateNavbar = () => {
   const theme = useTheme();
@@ -69,11 +46,13 @@ const PrivateNavbar = () => {
       <Toolbar>
         {/* Place brand logo here */}
         <Typography variant="h6" className={classes.title}>
-          <Avatar
-            alt="brand logo"
-            className={classes.logoSize}
-            src="/assets/images/brand_logo.svg"
-          />
+          <Link to="/home">
+            <Avatar
+              alt="brand logo"
+              className={classes.logoSize}
+              src="/assets/images/brand_logo.svg"
+            />
+          </Link>
         </Typography>
         {isMobile ? (
           <>
@@ -107,13 +86,19 @@ const PrivateNavbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">MY POSTINGS</h1>
+                <h1 className="navbar">
+                  <Link to="/home">MY POSTINGS</Link>
+                </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">APPLICANTS</h1>
+                <h1 className="navbar">
+                  <Link to="/home/applicants">APPLICANTS</Link>
+                </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">PROFILE</h1>
+                <h1 className="navbar">
+                  <Link to="/home/profile">PROFILE</Link>
+                </h1>
               </MenuItem>
               <List
                 component="nav"
@@ -160,9 +145,15 @@ const PrivateNavbar = () => {
           </>
         ) : (
           <div className={classes.headerOptions}>
-            <Button className="navbar">MY POSTINGS</Button>
-            <Button className="navbar">APPLICANTS</Button>
-            <Button className="navbar">PROFILE</Button>
+            <Button className="navbar">
+              <Link to="/home">MY POSTINGS</Link>
+            </Button>
+            <Button className="navbar">
+              <Link to="/home/applicants">APPLICANTS</Link>
+            </Button>
+            <Button className="navbar">
+              <Link to="/home/profile">PROFILE</Link>
+            </Button>
             <div className={classes.rightToolbar}>
               <LogoutComponent />
             </div>

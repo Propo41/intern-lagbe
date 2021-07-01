@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
@@ -28,16 +27,16 @@ const ChangePassword = () => {
               </h1>
               <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                 <TextInputLayout
-                  icon="mail"
+                  icon="lock"
                   placeholder="Enter your password"
-                  type="email"
+                  type="password"
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                 <TextInputLayout
-                  icon="mail"
+                  icon="lock"
                   placeholder="Confirm your password"
-                  type="email"
+                  type="password"
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>

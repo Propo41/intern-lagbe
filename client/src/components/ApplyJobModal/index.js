@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(3, 6, 4),
     textAlign: "center",
+    borderRadius: 10,
   },
   buttonPurple: {
     backgroundColor: "var(--purple)",

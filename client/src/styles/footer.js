@@ -12,10 +12,53 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "calc(30% - 0px)",
     bottom: 0,
   },
-  green: {
-    color: "white",
-    backgroundColor: "#2E89FF",
+  copyrightContainer: {
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.between("xs", "sm")]: {
+      justifyContent: "center",
+    },
+  },
+  linksContainer: {
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.only("xs")]: {
+      display: "grid",
+    },
+    [theme.breakpoints.between("xs", "sm")]: {
+      justifyContent: "center",
+    },
+  },
+  socialContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    [theme.breakpoints.between("xs", "sm")]: {
+      justifyContent: "center",
+    },
+  },
+  copyrightFont: {
+    color: "var(--white)",
+    fontSize: "var(--font-size-content)",
+    fontWeight: 400,
+  },
+  linksFont: {
+    color: "var(--white)",
+    fontSize: "var(--font-size-content)",
+    fontWeight: 700,
+    [theme.breakpoints.between("sm", "xl")]: {
+      marginRight: "4.5rem",
+    },
     cursor: "pointer",
+    "&:hover": {
+      color: "var(--darkash)",
+    },
+  },
+  socialButton: {
+    color: "white",
+    backgroundColor: "#FFB4C4",
+    cursor: "pointer",
+    marginLeft: "10px",
+    marginRight: "10px",
     "&:hover": {
       backgroundColor: "var(--darkash)",
     },

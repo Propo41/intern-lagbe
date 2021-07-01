@@ -64,11 +64,7 @@ const AvailPositionCard = (props) => {
 
   return (
     <Accordion className="rounded-card">
-      <AccordionSummary
-        // expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
+      <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8} className={classes.flex}>
             <Avatar
@@ -121,6 +117,8 @@ const AvailPositionCard = (props) => {
               className={classes.modal}
               open={open}
               onClose={handleClose}
+              onClick={(event) => event.stopPropagation()}
+              onFocus={(event) => event.stopPropagation()}
               closeAfterTransition
               BackdropComponent={Backdrop}
               hideBackdrop={false}
@@ -129,13 +127,6 @@ const AvailPositionCard = (props) => {
               }}
             >
               <Fade in={open}>
-                {/* <div className={classes.paper}>
-                  <Button>egeg</Button>
-                  <h2 id="transition-modal-title">Transition modal</h2>
-                  <p id="transition-modal-description">
-                    react-transition-group animates me.
-                  </p>
-                </div> */}
                 <ApplyJobModal />
               </Fade>
             </Modal>

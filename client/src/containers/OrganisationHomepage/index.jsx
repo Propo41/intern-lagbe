@@ -9,32 +9,38 @@ import PrivateJobCard from "../../components/PrivateJobCard";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_homepage";
+import { Link } from "react-router-dom";
 
 const jobsPosted = [
   {
     title: "SOFTWARE ENGINEER",
     location: "DHAKA, DHANMONDI",
     status: "true",
+    id: "abcde1",
   },
   {
     title: "PRODUCTION ENGINEER IN AHSANULLAH UNIVERSITY",
     location: "DHAKA, DHANMONDI",
     status: "false",
+    id: "abcde2",
   },
   {
     title: "SOFTWARE ENGINEER",
     location: "DHAKA, DHANMONDI",
     status: "false",
+    id: "abcde3",
   },
   {
     title: "FRONT END ENGINEER",
     location: "DHAKA, DHANMONDI",
     status: "true",
+    id: "abcde4",
   },
   {
     title: "SOFTWARE ENGINEER",
     location: "DHAKA, DHANMONDI",
     status: "true",
+    id: "abcde5",
   },
 ];
 
@@ -65,7 +71,7 @@ const OrganisationHomepage = () => {
                 size="small"
                 className={classes.alertButton}
               >
-                SETUP PROFILE
+                <Link to="/home/profile">SETUP PROFILE</Link>
               </Button>
             }
           >
@@ -86,9 +92,11 @@ const OrganisationHomepage = () => {
                           style={{ marginTop: "var(--margin-item-spacing-lg)" }}
                         >
                           <PrivateJobCard
+                            key={job.id}
                             title={job.title}
                             location={job.location}
                             status={job.status}
+                            id={job.id}
                           />
                         </div>
                       );
@@ -98,9 +106,11 @@ const OrganisationHomepage = () => {
                           style={{ marginTop: "var(--margin-item-spacing)" }}
                         >
                           <PrivateJobCard
+                            key={job.id}
                             title={job.title}
                             location={job.location}
                             status={job.status}
+                            id={job.id}
                           />
                         </div>
                       );
@@ -113,20 +123,18 @@ const OrganisationHomepage = () => {
                       fullWidth={true}
                       className={classes.buttonPurple}
                     >
-                      POST MORE JOBS
+                      <Link to="/home/create-job">POST MORE JOBS</Link>
                     </Button>
                   </div>
                 </Grid>
 
                 <Grid item xs={12} lg={4} style={{ textAlign: "right" }}>
-                  {mobileViewBreakpoint ? (
+                  {mobileViewBreakpoint && (
                     <img
                       src="/assets/images/job_posting_blob.svg"
                       alt="landing page"
                       className={classes.image}
                     />
-                  ) : (
-                    ""
                   )}
                 </Grid>
               </Grid>

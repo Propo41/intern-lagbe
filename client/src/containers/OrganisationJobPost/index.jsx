@@ -10,6 +10,7 @@ import { useMediaQuery } from "@material-ui/core";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/orginsation_job_post";
+import { Link } from "react-router-dom";
 
 const jobPost = {
   id: "1238959134914asd14",
@@ -20,9 +21,12 @@ const jobPost = {
   contact: "+88915151 515",
 };
 
-const OrganisationJobPost = () => {
+const OrganisationJobPost = (props) => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  console.log(props.match.params.jobid);
+  const jobId = props.match.params.jobid;
+  const jobUrl = `/home/job/${jobId}/edit`;
 
   return (
     <>
@@ -34,9 +38,11 @@ const OrganisationJobPost = () => {
               <Grid item xs={12} lg={7} style={{ textAlign: "left" }}>
                 <div style={{ display: "flex" }}>
                   <h1 className="title-medium">JOB POST</h1>
-                  <Button className="circular-button">
-                    <EditIcon style={{ color: "var(--red)" }} />
-                  </Button>
+                  <Link to={jobUrl}>
+                    <Button className="circular-button">
+                      <EditIcon style={{ color: "var(--red)" }} />
+                    </Button>
+                  </Link>
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>

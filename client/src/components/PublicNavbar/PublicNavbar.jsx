@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-
+import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   logoSize: {
     width: 60,
     height: 60,
+    cursor: "pointer",
   },
   headerOptions: {
     display: "contents",
@@ -55,11 +56,13 @@ const PublicNavbar = () => {
       <Toolbar>
         {/* Place brand logo here */}
         <Typography variant="h6" className={classes.title}>
-          <Avatar
-            alt="brand logo"
-            className={classes.logoSize}
-            src="/assets/images/brand_logo.svg"
-          />
+          <Link to="/">
+            <Avatar
+              alt="brand logo"
+              className={classes.logoSize}
+              src="/assets/images/brand_logo.svg"
+            />
+          </Link>
         </Typography>
         {isMobile ? (
           <>
@@ -87,10 +90,14 @@ const PublicNavbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">HOME</h1>
+                <h1 className="navbar">
+                  <Link to="/">HOME</Link>
+                </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">ABOUT</h1>
+                <h1 className="navbar">
+                  <Link to="/about">ABOUT</Link>
+                </h1>
               </MenuItem>
               <MenuItem className="navbar-button" onClick={handleClose}>
                 POST A JOB
@@ -99,10 +106,16 @@ const PublicNavbar = () => {
           </>
         ) : (
           <div className={classes.headerOptions}>
-            <Button className="navbar">HOME</Button>
-            <Button className="navbar">ABOUT</Button>
+            <Button className="navbar">
+              <Link to="/">HOME</Link>
+            </Button>
+            <Button className="navbar">
+              <Link to="/about">ABOUT</Link>
+            </Button>
             <div className={classes.rightToolbar}>
-              <Button className="navbar-button">POST A JOB</Button>
+              <Button className="navbar-button">
+                <Link to="/sign-in">POST A JOB</Link>
+              </Button>
             </div>
           </div>
         )}

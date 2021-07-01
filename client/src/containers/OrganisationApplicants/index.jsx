@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ApplicantCard from "../../components/ApplicantCard";
@@ -10,21 +9,25 @@ import useStyles from "../../styles/organisation_applicants";
 
 const applicants = [
   {
+    id: "abc1",
     name: "Matcovic",
     mail: "tashfiqnahiyan@gmail.com",
     contact: "+9910 122 5645",
   },
   {
+    id: "abc2",
     name: "Tashfiq Nahiyan Khan",
     mail: "tashfiqnahiyan@gmail.com",
     contact: "+9910 122 5645",
   },
   {
+    id: "abc3",
     name: "Zunayed Rahim Ahmed",
     mail: "tashfiqnahiyan@gmail.com",
     contact: "+9910 122 5645",
   },
   {
+    id: "abc4",
     name: "Mustofa Ahmed",
     mail: "tashfiqnahiyan@gmail.com",
     contact: "+9910 122 5645",
@@ -51,6 +54,7 @@ const OrganisationApplicants = () => {
                       return (
                         <div
                           style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+                          key={applicant.id}
                         >
                           <ApplicantCard
                             name={applicant.name}
@@ -63,6 +67,7 @@ const OrganisationApplicants = () => {
                       return (
                         <div
                           style={{ marginTop: "var(--margin-item-spacing)" }}
+                          key={applicant.id}
                         >
                           <ApplicantCard
                             name={applicant.name}

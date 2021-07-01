@@ -1,28 +1,20 @@
 import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import FacebookIcon from "@material-ui/icons/Facebook";
+import useStyles from "../../styles/footer";
+import { useMediaQuery } from "@material-ui/core";
+
 const Footer = () => {
-  const useStyles = makeStyles((theme) => ({
-    footer: {
-      padding: theme.spacing(0, 5),
-      marginTop: "auto",
-      backgroundColor: "var(--purple)",
-    },
-    green: {
-      color: "white",
-      backgroundColor: "#2E89FF",
-      cursor: "pointer",
-      "&:hover": {
-        backgroundColor: "var(--darkash)",
-      },
-    },
-  }));
   const classes = useStyles();
+  const mobileViewBreakpoint = useMediaQuery("(min-width: 601px)");
 
   return (
-    <footer className={classes.footer}>
+    <footer
+      className={
+        mobileViewBreakpoint ? classes.footer : classes.footerMobileView
+      }
+    >
       <Container>
         <Grid
           item

@@ -17,7 +17,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import ApplyJobModal from "../ApplyJobModal";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   flex: {
     display: "flex",
@@ -50,12 +50,12 @@ const useStyles = makeStyles((theme) => ({
 const AvailPositionCard = (props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const applyUrl = !props.expandable && `/company/${props.company}`;
 
   const onApplyClick = (event) => {
-    event.stopPropagation();
-    setOpen(true);
     event.preventDefault();
-    console.log("apply clicked");
+    event.stopPropagation();
+    props.expandable && setOpen(true);
   };
 
   const handleClose = () => {
@@ -113,7 +113,7 @@ const AvailPositionCard = (props) => {
                   : classes.enabledButton
               }
             >
-              APPLY
+              <Link to={applyUrl}>APPLY</Link>
             </Button>
             <Modal
               aria-labelledby="transition-modal-title"

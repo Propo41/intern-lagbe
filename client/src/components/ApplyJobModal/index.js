@@ -44,21 +44,21 @@ const ApplyJobModal = () => {
       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
         <TextInputLayout
           icon="user"
-          placeholder="ENTER YOUR NAME"
+          placeholder="Enter your name*"
           type="text"
         />
       </div>
       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
         <TextInputLayout
           icon="mail"
-          placeholder="ENTER YOUR EMAIL"
+          placeholder="Enter your email*"
           type="email"
         />
       </div>
       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
         <TextInputLayout
           icon="phone"
-          placeholder="ENTER YOUR CONTACT"
+          placeholder="Enter your contact*"
           type="phone"
         />
       </div>

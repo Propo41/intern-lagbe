@@ -10,37 +10,52 @@ import AvailPositionCard from "../../components/AvailPositionCard";
 import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/landing_page";
+import { useEffect } from "react";
+import axios from "axios";
 
 const companies = [
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
-    id: '12334d4x'
+    id: "12334d4x",
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
-    id: '12334d4y'
+    id: "12334d4y",
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
-    id: '12334d4z'
+    id: "12334d4z",
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
-    id: '12334d4a'
+    id: "12334d4a",
   },
   {
     company: "Microsoft",
     address: "Dhanmondi, Dhaka",
-    id: '12334d4b'
+    id: "12334d4b",
   },
 ];
 
 const LandingPage = () => {
   const classes = useStyles();
+
+  // fetch some data from a api using axios
+  useEffect(() => {
+    // fetch data from an api using axios
+    axios
+      .get("https://localhost:5001/api/weatherforecast")
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>

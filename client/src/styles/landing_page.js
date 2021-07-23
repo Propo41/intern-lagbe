@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     width: "90%",
     height: "90%",
   },
-
+  
   getStartedCard: {
     padding: 30,
     textAlign: "center",

@@ -68,9 +68,8 @@ const FilterBySort = () => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  <MenuItem onClick={handleClose}>Alphabetically</MenuItem>
+                  <MenuItem onClick={handleClose}>Jobs Posted</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

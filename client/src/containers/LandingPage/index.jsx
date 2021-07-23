@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -11,50 +10,21 @@ import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/landing_page";
 import { useEffect } from "react";
-import axios from "axios";
+import { getCompanyList } from "../../api/get.js";
 
-const companies = [
-  {
-    company: "Microsoft",
-    address: "Dhanmondi, Dhaka",
-    id: "12334d4x",
-  },
-  {
-    company: "Microsoft",
-    address: "Dhanmondi, Dhaka",
-    id: "12334d4y",
-  },
-  {
-    company: "Microsoft",
-    address: "Dhanmondi, Dhaka",
-    id: "12334d4z",
-  },
-  {
-    company: "Microsoft",
-    address: "Dhanmondi, Dhaka",
-    id: "12334d4a",
-  },
-  {
-    company: "Microsoft",
-    address: "Dhanmondi, Dhaka",
-    id: "12334d4b",
-  },
-];
+//https://material-ui.com/components/chips/  use chips after selecting locations
 
 const LandingPage = () => {
   const classes = useStyles();
+  const [companies, setCompanies] = React.useState(null);
+  const [filteredLocations, setFilteredLocations] = React.useState([]);
 
-  // fetch some data from a api using axios
   useEffect(() => {
-    // fetch data from an api using axios
-    axios
-      .get("https://localhost:5001/api/weatherforecast")
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getCompanyList("api/landingpage/companies").then((response) => {
+      setCompanies(response.data);
+      console.log(response.data);
+      /*  setFilteredLocations(["Dhaka"]); */
+    });
   }, []);
 
   return (
@@ -131,17 +101,44 @@ const LandingPage = () => {
               }}
             />
 
-            {companies.map((company, index) => {
-              return (
-                <AvailPositionCard
-                  key={company.id}
-                  expandable={false}
-                  company={company.company}
-                  address={company.address}
-                  disabledButton={false}
-                />
-              );
-            })}
+            {
+              /* select those companies which are in filteredLocation */
+              filteredLocations.length > 0 &&
+                companies &&
+                companies.map((company) => {
+                  if (filteredLocations.includes(company.district)) {
+                    return (
+                      <AvailPositionCard
+                        key={company.id}
+                        expandable={false}
+                        company={company.name}
+                        address={company.officeAddress}
+                        disabledButton={
+                          company.availableJobCount === 0 ? true : false
+                        }
+                      />
+                    );
+                  } else {
+                    return null;
+                  }
+                })
+            }
+
+            {filteredLocations.length === 0 &&
+              companies &&
+              companies.map((company) => {
+                return (
+                  <AvailPositionCard
+                    key={company.id}
+                    expandable={false}
+                    company={company.name}
+                    address={company.officeAddress}
+                    disabledButton={
+                      company.availableJobCount === 0 ? true : false
+                    }
+                  />
+                );
+              })}
           </Grid>
 
           <Grid item xs={12} lg={4}>

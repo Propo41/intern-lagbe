@@ -1,5 +1,13 @@
 import React from "react";
-import {Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper,} from "@material-ui/core";
+import {
+  Button,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+} from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 const FilterByLocation = () => {
@@ -68,8 +76,8 @@ const FilterByLocation = () => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleClose}>Dhaka</MenuItem>
+                  <MenuItem onClick={handleClose}>Khulna</MenuItem>
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </MenuList>
               </ClickAwayListener>

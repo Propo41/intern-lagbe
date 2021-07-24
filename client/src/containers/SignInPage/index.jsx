@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
@@ -8,11 +7,45 @@ import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/signin_page";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { POST } from "../../api/api.js";
 
 const SignInPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [form, setForm] = React.useState(null);
+  const history = useHistory();
+
+  const onInput = (event) => {
+    const { value, name } = event.target;
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(form);
+    try {
+      const { data } = await POST("auth/user/login", {
+        email: form.email,
+        password: form.password,
+      });
+      console.log(data);
+      if (data.statusCode === 200) {
+        console.log("Logged in successfully.");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("uid", data.uid);
+
+        history.push({
+          pathname: "/",
+        });
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
+  };
 
   return (
     <>
@@ -27,6 +60,8 @@ const SignInPage = () => {
                   icon="mail"
                   placeholder="Enter your email"
                   type="email"
+                  name="email"
+                  onInputChange={onInput}
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
@@ -34,6 +69,8 @@ const SignInPage = () => {
                   icon="lock"
                   placeholder="Enter your password"
                   type="password"
+                  name="password"
+                  onInputChange={onInput}
                 />
               </div>
 
@@ -42,6 +79,7 @@ const SignInPage = () => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonPurple}
+                  onClick={onSubmit}
                 >
                   SIGN IN
                 </Button>

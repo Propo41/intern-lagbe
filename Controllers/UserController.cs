@@ -31,6 +31,7 @@ namespace dotnet_web_api_demo.Controllers
         [Route("register")]
         public ActionResult Create(User user)
         {
+
             if (!Util.isDomainValid(user.Email))
             {
                 return BadRequest(new ResponseStatus { StatusCode = 400, StatusDescription = "Please enter an organizational email address." });
@@ -38,6 +39,7 @@ namespace dotnet_web_api_demo.Controllers
             ResponseStatus res = userService.isUserExist(user.Email);
             if (res.User == null)
             {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
                 userService.Create(user);
                 Console.WriteLine(user.Id);
                 ResponseStatus responseStatus = emailService.Service(user.Email, user.Id, "confirmation");
@@ -82,9 +84,9 @@ namespace dotnet_web_api_demo.Controllers
                     return Ok(new ResponseStatus { StatusCode = 200, StatusDescription = "Login success.", Token = res.Token, Uid = res.User.Id });
                 case 403:
                     ResponseStatus responseStatus = emailService.Service(res.User.Email, res.User.Id, "confirmation");
-                    return Ok(new { statusDescription = "A verification email has been sent to your account. Please verify your account first before continuing.", Uid = res.User.Id });
+                    return Unauthorized(new { statusDescription = res.StatusDescription, Uid = res.User.Id });
                 default:
-                    return Unauthorized();
+                    return Unauthorized(res);
             }
 
         }

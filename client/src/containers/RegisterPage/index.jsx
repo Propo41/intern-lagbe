@@ -7,10 +7,42 @@ import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/register_page";
+import { POST } from "../../api/api.js";
 
 const RegisterPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [form, setForm] = React.useState(null);
+
+  const onInput = (event) => {
+    const { value, name } = event.target;
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(form);
+    try {
+      const { data } = await POST("auth/user/register", {
+        email: form.email,
+        password: form.password,
+      });
+      console.log(data);
+      if (data.responseStatus.statusCode === 200) {
+        console.log(
+          "We have sent a verification email to your account. Please verify yourself first before continuing."
+        );
+        setTimeout(() => {
+          window.location.href = "/sign-in";
+        }, 1000);
+      }
+    } catch (e) {
+      console.log(e.response.data.statusDescription);
+    }
+  };
 
   return (
     <>
@@ -26,6 +58,8 @@ const RegisterPage = () => {
                   icon="mail"
                   placeholder="Enter your company email"
                   type="email"
+                  onInputChange={onInput}
+                  name="email"
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
@@ -33,6 +67,8 @@ const RegisterPage = () => {
                   icon="lock"
                   placeholder="Enter your password"
                   type="password"
+                  onInputChange={onInput}
+                  name="password"
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
@@ -40,6 +76,8 @@ const RegisterPage = () => {
                   icon="lock"
                   placeholder="Confirm your password"
                   type="password"
+                  onInputChange={onInput}
+                  name="confirmPassword"
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
@@ -47,6 +85,7 @@ const RegisterPage = () => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonPurple}
+                  onClick={onSubmit}
                 >
                   REGISTER
                 </Button>

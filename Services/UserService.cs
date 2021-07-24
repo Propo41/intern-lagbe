@@ -44,37 +44,48 @@ namespace dotnet_web_api_demo.Services
         */
         public ResponseStatus Authenticate(string email, string password)
         {
-            var user = users.Find(u => u.Email == email && u.Password == password).FirstOrDefault();
+            var user = users.Find(u => u.Email == email).FirstOrDefault();
             // user doesn't exist
             if (user == null)
             {
+                Console.WriteLine(email + " doesnt exist");
                 return new ResponseStatus { StatusCode = 404, StatusDescription = "User doesn't exist." };
             }
             else
             {
+                bool verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
+                if (!verified)
+                {
+                    Console.WriteLine("Password is incorrect");
+                    return new ResponseStatus { StatusCode = 403, StatusDescription = "Password is incorrect. Did you forget your password?", User = user };
+
+                }
+
                 if (user.IsVerified)
                 {
+
                     // create token
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var tokenKey = Encoding.ASCII.GetBytes(key);
                     var tokenDescriptor = new SecurityTokenDescriptor()
                     {
                         Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Email, email), }),
-                        Expires = DateTime.UtcNow.AddMinutes(tokenExpiryTime),
+                        Expires = DateTime.UtcNow.AddYears(tokenExpiryTime),
                         SigningCredentials = new SigningCredentials(
                             new SymmetricSecurityKey(tokenKey),
                             SecurityAlgorithms.HmacSha256Signature
                         )
                     };
-
+                    Console.WriteLine(email + " is  verified");
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     return new ResponseStatus { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = tokenHandler.WriteToken(token), User = user };
                 }
                 else
                 {
+                    Console.WriteLine(email + " is not verified");
                     // user is not verified
                     // prompt user to verify their account
-                    return new ResponseStatus { StatusCode = 403, StatusDescription = "User is not verified. Verify the user.", User = user };
+                    return new ResponseStatus { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process.", User = user };
                 }
             }
 
@@ -123,18 +134,6 @@ namespace dotnet_web_api_demo.Services
                 return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
-
-        public List<User> GetAllCompanies() => users.Find(user => true).ToList();
-
-      /*   async public List<User> Get()
-        {
-            var projection = Builders<User>.Projection.Exclude(u => u.Password);
-            var companies = await users.Find(user => true).
-                                    Project(projection).
-                                    ToListAsync();
-
-            return companies;
-        } */
 
         public User GetUser(string id) => users.Find<User>(user => user.Id == id).FirstOrDefault();
 

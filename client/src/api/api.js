@@ -1,8 +1,14 @@
 import axios from "axios";
 const apiBaseURL = "https://localhost:5001";
 
-export const getCompanyList = async (url) => {
+export const GET = async (url) => {
   return await axios.get(`${apiBaseURL}/${url}`);
+};
+
+
+
+export const POST = async (url, payload) => {
+  return await axios.post(`${apiBaseURL}/${url}`, payload);
 };
 
 

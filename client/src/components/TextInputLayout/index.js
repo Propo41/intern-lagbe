@@ -1,8 +1,8 @@
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import iconMapper from "../../utils/icon_mapper";
-import {useState} from "react";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
  * @param  readOnly true or false
  * @param rowsMax integer value (optional)
  * @param value String: default value on the input layout
+ * @param name String: name of the input, ie email or password
+ * @param onInputChange a function passed that handles the input change event
  */
 const TextInputLayout = (props) => {
   const classes = useStyles();
@@ -38,12 +40,11 @@ const TextInputLayout = (props) => {
     <Paper component="form" className={classes.root} elevation={0}>
       {iconMapper(props.icon, "darkash", "textinputlayout")}
       <InputBase
+        name={props.name}
         className={classes.input}
         placeholder={props.placeholder}
         fullWidth={true}
-        onChange={(event) => {
-          setValues(event.target.value);
-        }}
+        onChange={props.onInputChange}
         type={props.type}
         defaultValue={value}
         multiline={

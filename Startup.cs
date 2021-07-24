@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using dotnet_web_api_demo.Database;
 using dotnet_web_api_demo.Services;
+using InternFinder.Services;
 
 namespace server
 {
@@ -35,10 +36,11 @@ namespace server
                 // ignores null values during the default serialization
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
-            
+
             services.AddSingleton<IDatabaseSettings>(db => db.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             services.AddScoped<UserService>();
             services.AddScoped<EmailService>();
+            services.AddScoped<GeneralService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

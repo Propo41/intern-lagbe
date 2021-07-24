@@ -1,5 +1,9 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace InternFinder.Services
 {
@@ -42,5 +46,43 @@ namespace InternFinder.Services
             return false;
         }
 
+        // @bug: this method is not used. It doesn't work.
+        // https://jasonwatmore.com/post/2020/07/21/aspnet-core-3-create-and-validate-jwt-tokens-use-custom-jwt-middleware 
+        public static bool isJwtTokenValid(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("[enter secret key here]")),
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateLifetime = true
+
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var accountEmail = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.Email).Value);
+                Console.WriteLine("token valid!");
+
+                Console.WriteLine(accountEmail);
+                return true;
+            }
+            catch
+            {
+                Console.WriteLine("token invalid!!");
+
+                // return null if validation fails
+                return false;
+            }
+
+        }
+
+
     }
+
 }

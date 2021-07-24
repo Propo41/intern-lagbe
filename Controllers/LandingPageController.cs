@@ -16,11 +16,11 @@ namespace InternFinder.Controllers
     public class LandingPageController : Controller
     {
         private readonly EmailService emailService;
-        private readonly UserService userService;
+        private readonly GeneralService generalService;
 
-        public LandingPageController(UserService userService, EmailService emailService)
+        public LandingPageController(GeneralService service, EmailService emailService)
         {
-            this.userService = userService;
+            this.generalService = service;
             this.emailService = emailService;
         }
 
@@ -29,19 +29,22 @@ namespace InternFinder.Controllers
         [Route("companies")]
         public ActionResult GetCompanyList()
         {
-            return Ok(userService.GetAllCompanies());
+            return Ok(generalService.GetAllCompanies());
         }
-
 
         // fetch landing page content
         [HttpGet]
-        public ActionResult Get()
-        {
-            return Ok(userService.GetAllCompanies());
-        }
+        public ActionResult GetLandingPageContent() => Ok(generalService.GetLandingPageContent());
 
+        [HttpGet]
+        [Route("about")]
+        public ActionResult GetAboutUs() => Ok(generalService.GetAboutUs());
 
-
+        // create landing page content
+        // @ FOR ADMINS ONLY
+        // @ Role based authentication
+        [HttpPost]
+        public ActionResult Create(About about) => Ok(generalService.Create(about));
 
     }
 }

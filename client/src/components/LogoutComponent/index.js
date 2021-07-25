@@ -31,6 +31,9 @@ const LogoutComponent = () => {
   };
 
   const handleClose = (event) => {
+    localStorage.clear();
+    window.location.reload();
+
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }

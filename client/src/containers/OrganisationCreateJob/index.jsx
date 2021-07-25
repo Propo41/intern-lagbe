@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -9,10 +9,43 @@ import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_create_job";
+import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [error, setError] = React.useState(false);
+  const [form, setFormInput] = React.useState(null);
+
+  const onInputChange = (event) => {
+    const { value, name } = event.target;
+    console.log("deleting");
+    console.log(value, name);
+    setFormInput((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    console.log(form);
+  };
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await POST_AUTH(`api/company/job`, {
+        companyId: localStorage.getItem("uid"),
+        ...form,
+      });
+      setError(false);
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+      setError(true);
+    }
+  };
+
+  if (error) {
+    return <div>Error</div>;
+  }
 
   return (
     <>
@@ -29,27 +62,55 @@ const OrganisationCreateJob = () => {
                     icon="bookmark"
                     placeholder="Enter job title"
                     type="text"
+                    onInputChange={onInputChange}
+                    name="title"
                   />
                 </div>
-                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="requirements"
-                    placeholder="Enter job requirements"
-                    type="text"
-                  />
-                </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
                     icon="mail"
-                    placeholder="Enter email (optional)"
-                    type="text"
+                    placeholder="Enter email"
+                    type="email"
+                    onInputChange={onInputChange}
+                    name="contactEmail"
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
                     icon="phone"
-                    placeholder="Enter contact number (optional)"
+                    placeholder="Enter contact number"
                     type="text"
+                    onInputChange={onInputChange}
+                    name="contactPhone"
+                  />
+                </div>
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <TextInputLayout
+                    icon="location"
+                    placeholder="Enter district"
+                    type="text"
+                    onInputChange={onInputChange}
+                    name="district"
+                  />
+                </div>
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <TextInputLayout
+                    icon="location"
+                    placeholder="Enter address"
+                    type="text"
+                    onInputChange={onInputChange}
+                    name="address"
+                  />
+                </div>
+
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <TextInputLayout
+                    icon="requirements"
+                    placeholder="Enter job requirements"
+                    type="text"
+                    onInputChange={onInputChange}
+                    name="requirements"
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
@@ -57,6 +118,8 @@ const OrganisationCreateJob = () => {
                     variant="contained"
                     fullWidth={true}
                     className={classes.buttonPurple}
+                    onClick={submitForm}
+                    disabled={form === null || Object.keys(form).length < 6}
                   >
                     CREATE NEW LISTING
                   </Button>

@@ -7,6 +7,7 @@ import Footer from "../../components/Footer";
 import useStyles from "../../styles/verify_yourself";
 import { GET } from "../../api/api.js";
 import { useEffect } from "react";
+import LoadingAnimation from "../../components/LoadingAnimation";
 
 const AboutPage = () => {
   const classes = useStyles();
@@ -29,11 +30,7 @@ const AboutPage = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingAnimation />;
   } else {
     return (
       <>
@@ -54,14 +51,12 @@ const AboutPage = () => {
               lg={5}
               style={{ display: "flex", justifyContent: "center" }}
             >
-              {mobileViewBreakpoint ? (
+              {mobileViewBreakpoint && (
                 <img
                   src="/assets/images/about_blob.svg"
                   alt="landing page"
                   className={classes.image}
                 />
-              ) : (
-                ""
               )}
             </Grid>
           </Grid>

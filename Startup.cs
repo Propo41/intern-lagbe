@@ -40,6 +40,7 @@ namespace server
             services.AddSingleton<IDatabaseSettings>(db => db.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             services.AddScoped<UserService>();
             services.AddScoped<EmailService>();
+            services.AddScoped<CompanyService>();
             services.AddScoped<GeneralService>();
 
             // In production, the React files will be served from this directory

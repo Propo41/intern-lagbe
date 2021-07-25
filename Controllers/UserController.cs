@@ -91,12 +91,5 @@ namespace dotnet_web_api_demo.Controllers
 
         }
 
-        [HttpGet("{id:length(24)}")]
-        public ActionResult<List<User>> GetUser(string id)
-        {
-            var user = userService.GetUser(id);
-            return Json(user); // try removing Json and see what happens
-        }
-
     }
 }

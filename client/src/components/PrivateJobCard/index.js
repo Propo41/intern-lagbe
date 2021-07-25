@@ -11,14 +11,9 @@ import { Link } from "react-router-dom";
 const PrivateJobCard = (props) => {
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const jobUrl = `/home/job/${props.id}`;
+  console.log(props.status);
   return (
-    <Card
-      className="rounded-card"
-      style={{ cursor: "pointer" }}
-      onClick={(event) => {
-        console.log(event);
-      }}
-    >
+    <Card className="rounded-card" style={{ cursor: "pointer" }}>
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={7}>
@@ -28,18 +23,11 @@ const PrivateJobCard = (props) => {
           </Grid>
           <Grid item xs={5} className="vertical-align">
             {mobileViewBreakpoint ? (
-              <ToggleAvailableButton
-                status={props.status}
-                onClick={(event) => {
-                  console.log(event);
-                }}
-              />
+              <ToggleAvailableButton status={props.status} id={props.id} />
             ) : (
               <ToggleAvailableButtonMobile
                 status={props.status}
-                onClick={(event) => {
-                  console.log(event);
-                }}
+                id={props.id}
               />
             )}
           </Grid>

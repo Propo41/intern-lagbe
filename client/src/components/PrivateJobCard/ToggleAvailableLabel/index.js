@@ -5,13 +5,13 @@ const ToggleAvailableLabel = (props) => {
     <div style={{ display: "flex" }}>
       <div
         className={
-          props.status === "true"
+          props.status === true
             ? "toggle-label-circle-green"
             : "toggle-label-circle-purple"
         }
       ></div>
       <h3 className="availability-label sub-content">
-        {props.status === "true" ? "AVAILABLE" : "NOT AVAILABLE"}
+        {props.status === true ? "AVAILABLE" : "NOT AVAILABLE"}
       </h3>
     </div>
   );

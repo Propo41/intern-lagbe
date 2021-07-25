@@ -19,6 +19,7 @@ namespace dotnet_web_api_demo.Services
         private readonly IMongoCollection<User> users;
         private readonly string key;
         private readonly int tokenExpiryTime;
+        
         public UserService(IConfiguration config)
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
@@ -34,7 +35,6 @@ namespace dotnet_web_api_demo.Services
             var userDoc = users.Find(filter).FirstOrDefaultAsync();
             return new ResponseStatus { User = userDoc.Result };
         }
-
 
         /*  
         This method will take email and password passed from 
@@ -110,32 +110,6 @@ namespace dotnet_web_api_demo.Services
             }
 
         }
-
-
-        public ResponseStatus UpdateUserProfile(User user)
-        {
-            try
-            {
-                var filter = Builders<User>.Filter.Eq("Id", user.Id);
-                var update = Builders<User>.Update.
-                        Set("Name", user.Name).
-                        Set("CompanyDescription", user.CompanyDescription).
-                        Set("Contact", user.Contact).
-                        Set("OfficeAddress", user.OfficeAddress).
-                        Set("District", user.District);
-                var res = users.UpdateOneAsync(filter, update);
-                Console.WriteLine(res.Result);
-                return new ResponseStatus { StatusCode = 200, StatusDescription = "Company profile updated successfully." };
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
-            }
-        }
-
-        public User GetUser(string id) => users.Find<User>(user => user.Id == id).FirstOrDefault();
 
         public User Create(User user)
         {

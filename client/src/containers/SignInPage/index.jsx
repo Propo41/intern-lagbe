@@ -38,9 +38,10 @@ const SignInPage = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("uid", data.uid);
 
-        history.push({
+        window.location.href = "/";
+       /*  history.push({
           pathname: "/",
-        });
+        }); */
       }
     } catch (e) {
       console.log(e.response);
@@ -88,8 +89,11 @@ const SignInPage = () => {
                 <h1
                   className="text-button"
                   style={{ display: "flex", justifyContent: "flex-end" }}
+                  onClick={() => {
+                    history.push("/forgot-password");
+                  }}
                 >
-                  <Link to="/forgot-password">FORGOT PASSWORD?</Link>
+                  FORGOT PASSWORD?
                 </h1>
               </div>
               <div className="divider-custom">
@@ -112,9 +116,12 @@ const SignInPage = () => {
                 variant="contained"
                 fullWidth={true}
                 className={classes.buttonRed}
+                onClick={() => {
+                  history.push("/register");
+                }}
                 style={{ marginTop: "var(--margin-item-spacing)" }}
               >
-                <Link to="/register">REGISTER</Link>
+                REGISTER
               </Button>
             </Paper>
           </Grid>

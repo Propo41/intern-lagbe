@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -46,7 +45,7 @@ const PrivateNavbar = () => {
       <Toolbar>
         {/* Place brand logo here */}
         <Typography variant="h6" className={classes.title}>
-          <Link to="/home">
+          <Link to="/">
             <Avatar
               alt="brand logo"
               className={classes.logoSize}
@@ -87,17 +86,17 @@ const PrivateNavbar = () => {
             >
               <MenuItem onClick={handleClose}>
                 <h1 className="navbar">
-                  <Link to="/home">MY POSTINGS</Link>
+                  <Link to="/">MY POSTINGS</Link>
                 </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
                 <h1 className="navbar">
-                  <Link to="/home/applicants">APPLICANTS</Link>
+                  <Link to="/applicants">APPLICANTS</Link>
                 </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
                 <h1 className="navbar">
-                  <Link to="/home/profile">PROFILE</Link>
+                  <Link to="/profile">PROFILE</Link>
                 </h1>
               </MenuItem>
               <List
@@ -136,7 +135,13 @@ const PrivateNavbar = () => {
                       style={{ display: "grid", justifyContent: "center" }}
                       onClick={handleClose}
                     >
-                      <ListItemText primary="Logout" />
+                      <ListItemText
+                        primary="Logout"
+                        onClick={() => {
+                          localStorage.clear();
+                          window.location.reload();
+                        }}
+                      />
                     </ListItem>
                   </List>
                 </Collapse>
@@ -146,13 +151,13 @@ const PrivateNavbar = () => {
         ) : (
           <div className={classes.headerOptions}>
             <Button className="navbar">
-              <Link to="/home">MY POSTINGS</Link>
+              <Link to="/">MY POSTINGS</Link>
             </Button>
             <Button className="navbar">
-              <Link to="/home/applicants">APPLICANTS</Link>
+              <Link to="/applicants">APPLICANTS</Link>
             </Button>
             <Button className="navbar">
-              <Link to="/home/profile">PROFILE</Link>
+              <Link to="/profile">PROFILE</Link>
             </Button>
             <div className={classes.rightToolbar}>
               <LogoutComponent />

@@ -28,7 +28,21 @@ namespace InternFinder.Services
             aboutCollection = db.GetCollection<About>("About");
         }
 
-        public List<User> GetAllCompanies() => usersCollection.Find(user => true).ToList();
+        public List<User> GetAllCompanies()
+        {
+            var projection = Builders<User>.Projection.
+                Include("Name").
+                Include("OfficeAddress").
+                Include("District").
+                Include("IsVerified").
+                Include("IsProfileComplete");
+            var result = usersCollection.Find(user => true && user.IsVerified == true && user.IsProfileComplete == true).Project(projection).ToList();
+            // deserialize all items of result
+            List<User> companies = new List<User>();
+            foreach (var item in result)
+                companies.Add(BsonSerializer.Deserialize<User>(item));
+            return companies;
+        }
 
         public About GetLandingPageContent()
         {
@@ -38,7 +52,7 @@ namespace InternFinder.Services
             return BsonSerializer.Deserialize<About>(result);
         }
 
-        public About GetAboutUs() 
+        public About GetAboutUs()
         {
             var filter = Builders<About>.Filter.Eq("Id", "60fbe7a19b54db5f15dc8855");
             var projection = Builders<About>.Projection.Include("AboutUs").Exclude("Id");

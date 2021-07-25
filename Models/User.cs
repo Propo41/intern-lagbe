@@ -14,11 +14,7 @@ namespace InternFinder.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [BsonRequired]
-        [BsonElement("Email")]
         public string Email { get; set; }
-        [BsonRequired]
-        [BsonElement("Password")]
         public string Password { get; set; }
 
         public string Name { get; set; }
@@ -31,6 +27,9 @@ namespace InternFinder.Models
         public string OfficeAddress { get; set; }
         [BsonDefaultValue(false)]
         public bool IsVerified { get; set; }
+
+        [BsonDefaultValue(false)]
+        public bool IsProfileComplete { get; set; }
 
         [BsonDefaultValue(0)]
         public int AvailableJobCount { get; set; }

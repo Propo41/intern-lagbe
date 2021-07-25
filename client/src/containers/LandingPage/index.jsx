@@ -11,7 +11,7 @@ import Footer from "../../components/Footer";
 import useStyles from "../../styles/landing_page";
 import { useEffect } from "react";
 import { GET } from "../../api/api.js";
-
+import LoadingAnimation from "../../components/LoadingAnimation";
 //https://material-ui.com/components/chips/  use chips after selecting locations
 
 const LandingPage = () => {
@@ -71,11 +71,7 @@ const LandingPage = () => {
       </div>
     );
   } else if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingAnimation />;
   } else {
     return (
       <>

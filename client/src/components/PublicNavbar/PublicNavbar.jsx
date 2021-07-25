@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +43,7 @@ const PublicNavbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +51,7 @@ const PublicNavbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    history.push("/sign-in");
   };
 
   return (
@@ -90,13 +93,13 @@ const PublicNavbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">
-                  <Link to="/">HOME</Link>
+                <h1 className="navbar" onClick={() => history.push("/")}>
+                  HOME
                 </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar">
-                  <Link to="/about">ABOUT</Link>
+                <h1 className="navbar" onClick={() => history.push("/about")}>
+                  ABOUT
                 </h1>
               </MenuItem>
               <MenuItem className="navbar-button" onClick={handleClose}>
@@ -113,8 +116,11 @@ const PublicNavbar = () => {
               <Link to="/about">ABOUT</Link>
             </Button>
             <div className={classes.rightToolbar}>
-              <Button className="navbar-button">
-                <Link to="/sign-in">POST A JOB</Link>
+              <Button
+                className="navbar-button"
+                onClick={() => history.push("/sign-in")}
+              >
+                POST A JOB
               </Button>
             </div>
           </div>

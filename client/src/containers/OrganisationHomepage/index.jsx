@@ -10,54 +10,82 @@ import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_homepage";
 import { Link } from "react-router-dom";
-
-const jobsPosted = [
-  {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
-    id: "abcde1",
-  },
-  {
-    title: "PRODUCTION ENGINEER IN AHSANULLAH UNIVERSITY",
-    location: "DHAKA, DHANMONDI",
-    status: "false",
-    id: "abcde2",
-  },
-  {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "false",
-    id: "abcde3",
-  },
-  {
-    title: "FRONT END ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
-    id: "abcde4",
-  },
-  {
-    title: "SOFTWARE ENGINEER",
-    location: "DHAKA, DHANMONDI",
-    status: "true",
-    id: "abcde5",
-  },
-];
+import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import LoadingAnimation from "../../components/LoadingAnimation";
 
 const OrganisationHomepage = () => {
   const classes = useStyles();
-  const [alertOpen, alertSetOpen] = React.useState(false);
+  const [profileStatus, setProfileStatus] = React.useState(false);
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [jobsPosted, setJobsPosted] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
   useEffect(() => {
-    alertSetOpen(true);
+    // fetch all jobs posted
+    const promise1 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET_AUTH(
+            `api/company/${localStorage.getItem("uid")}`
+          );
+
+          setJobsPosted(data);
+          console.log(data);
+          resolve();
+        } catch (e) {
+          console.log(e);
+          reject();
+        }
+      };
+      exe();
+    });
+
+    // fetch profile completion
+    const promise2 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET_AUTH(
+            `api/company/profile-completion/${localStorage.getItem("uid")}`
+          );
+          console.log(data);
+          setProfileStatus(data);
+          resolve();
+        } catch (e) {
+          console.log(e);
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2])
+      .then((values) => {
+        console.log("all promises resolved");
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setError(true);
+      });
   }, []);
+
+  if (loading) {
+    return <LoadingAnimation />;
+  }
+  if (error) {
+    return (
+      <div>
+        <Alert color="error"></Alert>
+      </div>
+    );
+  }
 
   if (jobsPosted.length > 0) {
     return (
       <>
         <PrivateNavbar />
-        <Collapse in={alertOpen}>
+        <Collapse in={!profileStatus}>
           <Alert
             severity="warning"
             className={classes.alertStyle}
@@ -71,7 +99,7 @@ const OrganisationHomepage = () => {
                 size="small"
                 className={classes.alertButton}
               >
-                <Link to="/home/profile">SETUP PROFILE</Link>
+                <Link to="/profile">SETUP PROFILE</Link>
               </Button>
             }
           >
@@ -86,35 +114,24 @@ const OrganisationHomepage = () => {
                   <h1 className="title-medium">MY JOB POSTINGS</h1>
 
                   {jobsPosted.map((job, index) => {
-                    if (index === 0) {
-                      return (
-                        <div
-                          style={{ marginTop: "var(--margin-item-spacing-lg)" }}
-                        >
-                          <PrivateJobCard
-                            key={job.id}
-                            title={job.title}
-                            location={job.location}
-                            status={job.status}
-                            id={job.id}
-                          />
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div
-                          style={{ marginTop: "var(--margin-item-spacing)" }}
-                        >
-                          <PrivateJobCard
-                            key={job.id}
-                            title={job.title}
-                            location={job.location}
-                            status={job.status}
-                            id={job.id}
-                          />
-                        </div>
-                      );
-                    }
+                    return (
+                      <div
+                        key={job.id}
+                        style={{
+                          marginTop:
+                            index === 0
+                              ? "var(--margin-item-spacing-lg)"
+                              : "var(--margin-item-spacing)",
+                        }}
+                      >
+                        <PrivateJobCard
+                          title={job.title}
+                          location={job.address}
+                          status={job.isAvailable}
+                          id={job.id}
+                        />
+                      </div>
+                    );
                   })}
 
                   <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
@@ -122,8 +139,9 @@ const OrganisationHomepage = () => {
                       variant="contained"
                       fullWidth={true}
                       className={classes.buttonPurple}
+                      disabled={profileStatus ? false : true}
                     >
-                      <Link to="/home/create-job">POST MORE JOBS</Link>
+                      <Link to="/create-job">POST MORE JOBS</Link>
                     </Button>
                   </div>
                 </Grid>

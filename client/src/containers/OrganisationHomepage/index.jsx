@@ -9,7 +9,7 @@ import PrivateJobCard from "../../components/PrivateJobCard";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_homepage";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 
@@ -20,6 +20,7 @@ const OrganisationHomepage = () => {
   const [jobsPosted, setJobsPosted] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     // fetch all jobs posted
@@ -140,8 +141,11 @@ const OrganisationHomepage = () => {
                       fullWidth={true}
                       className={classes.buttonPurple}
                       disabled={profileStatus ? false : true}
+                      onClick={() => {
+                        history.push("/create-job");
+                      }}
                     >
-                      <Link to="/create-job">POST MORE JOBS</Link>
+                      POST MORE JOBS
                     </Button>
                   </div>
                 </Grid>
@@ -191,7 +195,14 @@ const OrganisationHomepage = () => {
               <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                 <h1 className="content" style={{ color: "var(--darkash)" }}>
                   You don't have any postings listed.
-                  <span className="text-button-lg"> Create a new posting.</span>
+                  <span
+                    className="text-button-lg"
+                    onClick={() => {
+                      history.push("/create-job");
+                    }}
+                  >
+                    Create a new posting.
+                  </span>
                 </h1>
               </div>
             </Paper>

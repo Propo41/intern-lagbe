@@ -171,6 +171,13 @@ a {
 .MuiButton-label {
   font-family: "Sen" !important;
 }
+
+.markdown-area-style {
+  background-color: var(--ash) !important;
+  color: var(--darkash) !important;
+  font-family: "Sen" !important;
+}
+
 /* [END] @overriden styles */
 
 /* [START] button styles */

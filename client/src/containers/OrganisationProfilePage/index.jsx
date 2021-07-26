@@ -10,14 +10,16 @@ import Footer from "../../components/Footer";
 import useStyles from "../../styles/organisation_profile_page";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import MDEditor from "@uiw/react-md-editor";
 
-const OrganisationProfilePage = () => {
+const OrganisationProfilePage = () => { 
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [profileInfo, setProfileInfo] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [form, setFormInput] = React.useState(null);
+  const [description, setDescription] = React.useState(null);
 
   useEffect(() => {
     const exe = async () => {
@@ -29,6 +31,9 @@ const OrganisationProfilePage = () => {
         setFormInput(data);
         console.log(data);
         setLoading(false);
+        data.companyDescription
+          ? setDescription(data.companyDescription)
+          : setDescription("Enter your company description");
       } catch (e) {
         console.log(e);
         setError(true);
@@ -39,13 +44,17 @@ const OrganisationProfilePage = () => {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
-    /*    try {
-      const { data } = await POST_AUTH(`api/company/profile`, form);
+    try {
+      const { data } = await POST_AUTH(`api/company/profile`, {
+        ...form,
+        companyDescription: description,
+      });
       console.log(data);
+      window.location.reload();
     } catch (e) {
       console.log(e);
       setError(true);
-    } */
+    }
   };
 
   const onInputChange = (event) => {
@@ -111,14 +120,14 @@ const OrganisationProfilePage = () => {
                     name="officeAddress"
                   />
                 </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="description"
-                    placeholder="Enter company description"
-                    type="text"
-                    value={profileInfo.companyDescription}
-                    onInputChange={onInputChange}
-                    name="companyDescription"
+                  <MDEditor
+                    height={200}
+                    value={description}
+                    onChange={setDescription}
+                    preview="preview"
+                    className="markdown-area-style"
                   />
                 </div>
 
@@ -136,14 +145,12 @@ const OrganisationProfilePage = () => {
               </Grid>
 
               <Grid item xs={12} lg={5} style={{ textAlign: "right" }}>
-                {mobileViewBreakpoint ? (
+                {mobileViewBreakpoint && (
                   <img
                     src="/assets/images/profile_blob.svg"
                     alt="landing page"
                     className={classes.image}
                   />
-                ) : (
-                  ""
                 )}
               </Grid>
             </Grid>

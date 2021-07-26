@@ -43,8 +43,10 @@ const ToggleAvailableButton = (props) => {
         isAvailable: false,
       });
       console.log(data);
+      window.location.reload();
     } catch (e) {
       console.log(e);
+      window.location.reload();
     }
   };
 
@@ -59,12 +61,14 @@ const ToggleAvailableButton = (props) => {
         isAvailable: true,
       });
       console.log(data);
+      window.location.reload();
     } catch (e) {
       console.log(e);
+      window.location.reload();
     }
   };
 
-  return ( 
+  return (
     <ToggleButtonGroup
       onChange={handleColor}
       value={color}

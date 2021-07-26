@@ -71,6 +71,7 @@ const ToggleAvailableButtonMobile = (props) => {
       console.log(data);
     } catch (e) {
       console.log(e);
+      window.location.reload();
     }
   };
 
@@ -89,6 +90,7 @@ const ToggleAvailableButtonMobile = (props) => {
       console.log(data);
     } catch (e) {
       console.log(e);
+      window.location.reload();
     }
   };
 

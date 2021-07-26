@@ -10,12 +10,16 @@ import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_create_job";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import MDEditor from "@uiw/react-md-editor";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [error, setError] = React.useState(false);
   const [form, setFormInput] = React.useState(null);
+  const [description, setDescription] = React.useState(
+    "Enter your job requirements in details"
+  );
 
   const onInputChange = (event) => {
     const { value, name } = event.target;
@@ -25,6 +29,7 @@ const OrganisationCreateJob = () => {
       ...prevState,
       [name]: value,
     }));
+
     console.log(form);
   };
 
@@ -34,9 +39,11 @@ const OrganisationCreateJob = () => {
       const { data } = await POST_AUTH(`api/company/job`, {
         companyId: localStorage.getItem("uid"),
         ...form,
+        requirements: description,
       });
       setError(false);
       console.log(data);
+      window.location.reload();
     } catch (e) {
       console.log(e);
       setError(true);
@@ -105,12 +112,12 @@ const OrganisationCreateJob = () => {
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="requirements"
-                    placeholder="Enter job requirements"
-                    type="text"
-                    onInputChange={onInputChange}
-                    name="requirements"
+                  <MDEditor
+                    height={200}
+                    value={description}
+                    onChange={setDescription}
+                    preview="preview"
+                    className="markdown-area-style"
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
@@ -119,7 +126,11 @@ const OrganisationCreateJob = () => {
                     fullWidth={true}
                     className={classes.buttonPurple}
                     onClick={submitForm}
-                    disabled={form === null || Object.keys(form).length < 6}
+                    disabled={
+                      form === null ||
+                      Object.keys(form).length < 5 ||
+                      description === null
+                    }
                   >
                     CREATE NEW LISTING
                   </Button>

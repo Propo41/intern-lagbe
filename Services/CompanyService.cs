@@ -172,9 +172,54 @@ namespace InternFinder.Services
             }
         }
 
+        public Job GetJobDetails(string jobId)
+        {
+            try
+            {
+                var filter = Builders<Job>.Filter.Eq("Id", jobId);
+                var projection = Builders<Job>.Projection.
+                    Include("Title").
+                    Include("Address").
+                    Include("District").
+                    Include("Requirements").
+                    Include("ContactEmail").
+                    Include("ContactPhone");
+                var result = jobPostings.Find(filter).Project(projection).FirstOrDefault();
+                return BsonSerializer.Deserialize<Job>(result);
 
-
-
-
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+        public Job UpdateJobDetails(Job job, string jobId)
+        {
+            try
+            {
+                if(jobId == job.Id) {
+                    var filter = Builders<Job>.Filter.Eq("Id", jobId);
+                    var update = Builders<Job>.Update.
+                            Set("Title", job.Title).
+                            Set("Address", job.Address).
+                            Set("District", job.District).
+                            Set("Requirements", job.Requirements).
+                            Set("ContactEmail", job.ContactEmail).
+                            Set("ContactPhone", job.ContactPhone);
+                    var res = jobPostings.UpdateOne(filter, update);
+                    Console.WriteLine(res);
+                    return job;
+                } else {
+                    Console.WriteLine("job id did't match");
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
     }
 }

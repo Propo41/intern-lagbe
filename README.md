@@ -12,3 +12,6 @@ To install a package using the dotnet CLI:  `dotnet add package <package-name>`
 - `System.IdentityModel.Tokens.Jwt`
 - `SendGrid`
 - `BCrypt.Net-Next`
+
+### Potential Security issues
+- password is directly sent from client to server which is then encoded. This increases the possibility of man-in-the-middle attacks

@@ -126,8 +126,38 @@ namespace InternFinder.Controllers
             return res != null ? Ok(res) : BadRequest(new { error = "Couldn't delete job" });
         }
 
+        
+        // GET api/company/job/{jobId}
+        // fetches individual job's detail
+        [HttpGet("job/{jobId}")]
+        public ActionResult GetJobDetails(string jobId)
+        {
+            if (jobId != null && jobId != "")
+            {
+                Job res = companyService.GetJobDetails(jobId);
+                return res != null ? Ok(res) : BadRequest(new { error = "Job doesn't exist or there could be a problem. Please refresh the page" });
+            }
+            else
+            {
+                return BadRequest(new { error = "Job ID is invalid" });
+            }
+        }
 
-
+        // POST api/company/job/{jobId}/edit 
+        // updates individual job's detail
+        [HttpPost("job/{jobId}/edit")]
+        public ActionResult UpdateJobDetails(Job job, string jobId)
+        {
+            if (jobId != null && jobId != "")
+            {
+                Job res = companyService.UpdateJobDetails(job, jobId);
+                return res != null ? Ok(res) : BadRequest(new { error = "Failed to edit job post. Please try again" });
+            }
+            else
+            {
+                return BadRequest(new { error = "Cannot edit. Job ID is invalid" });
+            }
+        }
 
     }
 }

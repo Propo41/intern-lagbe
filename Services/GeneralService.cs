@@ -10,10 +10,21 @@ using System.Security.Claims;
 using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using InternFinder.Helpers;
+
 
 namespace InternFinder.Services
 {
-    public class GeneralService
+
+    public interface IGeneralService
+    {
+        List<User> GetAllCompanies();
+        About GetLandingPageContent();
+        About GetAboutUs();
+        About Create(About about);
+    }
+
+    public class GeneralService: IGeneralService
     {
 
         private readonly IMongoCollection<User> usersCollection;
@@ -59,7 +70,6 @@ namespace InternFinder.Services
             var result = aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
             return BsonSerializer.Deserialize<About>(result);
         }
-
 
         public About Create(About about)
         {

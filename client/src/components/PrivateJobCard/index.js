@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const PrivateJobCard = (props) => {
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const jobUrl = `/home/job/${props.id}`;
-  console.log(props.status);
+  
   return (
     <Card className="rounded-card" style={{ cursor: "pointer" }}>
       <CardContent>

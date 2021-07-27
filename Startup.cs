@@ -13,9 +13,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
-using dotnet_web_api_demo.Database;
-using dotnet_web_api_demo.Services;
+using InternFinder.Database;
 using InternFinder.Services;
+using InternFinder.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace server
 {
@@ -37,11 +38,15 @@ namespace server
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
+            // dependency injections
             services.AddSingleton<IDatabaseSettings>(db => db.GetRequiredService<IOptions<DatabaseSettings>>().Value);
-            services.AddScoped<UserService>();
-            services.AddScoped<EmailService>();
-            services.AddScoped<CompanyService>();
-            services.AddScoped<GeneralService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // used for injecting the HttpContext into the controllers
+
+            // configure Dependency Injection for the following application services
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IGeneralService, GeneralService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -66,8 +71,6 @@ namespace server
                       ValidateIssuer = false,
                       ValidateIssuerSigningKey = true,
                       ValidateAudience = false,
-                      /* ValidAudience = Configuration["JWT:ValidAudience"], */
-                      /*  ValidIssuer = Configuration["JWT:ValidIssuer"], */
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
                       ClockSkew = TimeSpan.Zero,
                       ValidateLifetime = true
@@ -95,6 +98,8 @@ namespace server
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

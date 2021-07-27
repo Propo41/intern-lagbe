@@ -1,4 +1,4 @@
-namespace dotnet_web_api_demo.Database
+namespace InternFinder.Database
 {
     public class IDatabaseSettings
     {

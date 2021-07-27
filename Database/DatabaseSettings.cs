@@ -1,4 +1,4 @@
-namespace dotnet_web_api_demo.Database
+namespace InternFinder.Database
 {
     /* In general we need these above 3 information to describe our 
     connection to Database, as well as collection itself. 

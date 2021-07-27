@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using InternFinder.Models;
 using System.Linq;
-using InternFinder.Services;
+using InternFinder.Helpers;
 
-namespace dotnet_web_api_demo.Services
+namespace InternFinder.Services
 {
 
     class TemplateData
@@ -21,7 +21,13 @@ namespace dotnet_web_api_demo.Services
 
     }
 
-    public class EmailService
+    public interface IEmailService
+    {
+        ResponseStatus Service(string email, string uid, string type);
+        Task SendVerificationEmail(string email, string token, string uid);
+    }
+
+    public class EmailService : IEmailService
     {
         private readonly string apiKey;
         private readonly string emailFromName;
@@ -48,14 +54,12 @@ namespace dotnet_web_api_demo.Services
                     Console.WriteLine(e.Message);
                     return new ResponseStatus { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
                 }
-
-
             }
             return null;
 
         }
 
-        async Task SendVerificationEmail(string email, string token, string uid)
+        public async Task SendVerificationEmail(string email, string token, string uid)
         {
             // print to console
             Console.WriteLine($"Sending email to {email}");

@@ -8,31 +8,44 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using InternFinder.Helpers;
+using MongoDB.Bson.Serialization;
+
 
 
 /* Note that here we are hardcoding collection name etc.
 Like I mentioned, in real life you’d be getting these from appsettings.json file. */
-namespace dotnet_web_api_demo.Services
+namespace InternFinder.Services
 {
-    public class UserService
+    public interface IUserService
     {
-        private readonly IMongoCollection<User> users;
-        private readonly string key;
-        private readonly int tokenExpiryTime;
-        
+        ResponseStatus Authenticate(string email, string password);
+        ResponseStatus isUserExist(string email);
+        ResponseStatus VerifyUser(string uid);
+        User GetById(string uid);
+        User Create(User user);
+    }
+
+
+    public class UserService: IUserService
+    {
+        private readonly IMongoCollection<User> _users;
+        private readonly string _secretKey;
+        private readonly int _tokenExpiryTime;
+
         public UserService(IConfiguration config)
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            users = db.GetCollection<User>("Users");
-            key = config["JWT:Secret"];
-            tokenExpiryTime = Int32.Parse(config["JWT:ExpiresIn"]);
+            _users = db.GetCollection<User>("Users");
+            _secretKey = config["JWT:Secret"];
+            _tokenExpiryTime = Int32.Parse(config["JWT:ExpiresIn"]);
         }
 
         public ResponseStatus isUserExist(string email)
         {
             var filter = Builders<User>.Filter.Eq("Email", email);
-            var userDoc = users.Find(filter).FirstOrDefaultAsync();
+            var userDoc = _users.Find(filter).FirstOrDefaultAsync();
             return new ResponseStatus { User = userDoc.Result };
         }
 
@@ -44,7 +57,7 @@ namespace dotnet_web_api_demo.Services
         */
         public ResponseStatus Authenticate(string email, string password)
         {
-            var user = users.Find(u => u.Email == email).FirstOrDefault();
+            var user = _users.Find(u => u.Email == email).FirstOrDefault();
             // user doesn't exist
             if (user == null)
             {
@@ -57,35 +70,23 @@ namespace dotnet_web_api_demo.Services
                 if (!verified)
                 {
                     Console.WriteLine("Password is incorrect");
-                    return new ResponseStatus { StatusCode = 403, StatusDescription = "Password is incorrect. Did you forget your password?", User = user };
+                    return new ResponseStatus { StatusCode = 403, StatusDescription = "Password is incorrect. Did you forget your password?" };
 
                 }
 
                 if (user.IsVerified)
                 {
-
-                    // create token
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var tokenKey = Encoding.ASCII.GetBytes(key);
-                    var tokenDescriptor = new SecurityTokenDescriptor()
-                    {
-                        Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Email, email), }),
-                        Expires = DateTime.UtcNow.AddYears(tokenExpiryTime),
-                        SigningCredentials = new SigningCredentials(
-                            new SymmetricSecurityKey(tokenKey),
-                            SecurityAlgorithms.HmacSha256Signature
-                        )
-                    };
                     Console.WriteLine(email + " is  verified");
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-                    return new ResponseStatus { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = tokenHandler.WriteToken(token), User = user };
+                    // create token
+                    string token = Util.GenerateToken(user, _secretKey, "Company", _tokenExpiryTime);
+                    return new ResponseStatus { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = token };
                 }
                 else
                 {
                     Console.WriteLine(email + " is not verified");
                     // user is not verified
                     // prompt user to verify their account
-                    return new ResponseStatus { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process.", User = user };
+                    return new ResponseStatus { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
                 }
             }
 
@@ -98,7 +99,7 @@ namespace dotnet_web_api_demo.Services
             {
                 var filter = Builders<User>.Filter.Eq("Id", uid);
                 var update = Builders<User>.Update.Set("IsVerified", true);
-                var res = users.UpdateOneAsync(filter, update);
+                var res = _users.UpdateOneAsync(filter, update);
                 Console.WriteLine(res.Result);
 
                 return new ResponseStatus { StatusCode = 200, StatusDescription = "User verified." };
@@ -111,9 +112,25 @@ namespace dotnet_web_api_demo.Services
 
         }
 
+        /* return user or null */
+        public User GetById(string uid)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.Eq("Id", uid);
+                return _users.Find(filter).FirstOrDefault();
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+        }
+
         public User Create(User user)
         {
-            users.InsertOne(user);
+            _users.InsertOne(user);
             return user;
         }
     }

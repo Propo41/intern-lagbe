@@ -10,10 +10,25 @@ using System.Security.Claims;
 using System.Text;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
+using InternFinder.Helpers;
+
 
 namespace InternFinder.Services
 {
-    public class CompanyService
+    public interface ICompanyService
+    {
+        ResponseStatus UpdateCompanyProfile(User user);
+        User GetCompanyProfile(string companyId);
+        bool GetProfileStatus(string companyId);
+        List<Job> FetchJobPostings(string companyId);
+        Job CreateJobPosting(Job job);
+        ResponseStatus UpdateJobStatus(string jobId, bool status);
+        ResponseStatus DeleteJob(string jobId);
+        Job GetJobDetails(string jobId);
+        Job UpdateJobDetails(Job job, string jobId);
+    }
+
+    public class CompanyService: ICompanyService
     {
 
         private readonly IMongoCollection<User> users;
@@ -137,7 +152,6 @@ namespace InternFinder.Services
             }
         }
 
-
         public ResponseStatus UpdateJobStatus(string jobId, bool status)
         {
             try
@@ -154,7 +168,6 @@ namespace InternFinder.Services
                 return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
-
 
         public ResponseStatus DeleteJob(string jobId)
         {
@@ -194,11 +207,13 @@ namespace InternFinder.Services
                 return null;
             }
         }
+
         public Job UpdateJobDetails(Job job, string jobId)
         {
             try
             {
-                if(jobId == job.Id) {
+                if (jobId == job.Id)
+                {
                     var filter = Builders<Job>.Filter.Eq("Id", jobId);
                     var update = Builders<Job>.Update.
                             Set("Title", job.Title).
@@ -210,7 +225,9 @@ namespace InternFinder.Services
                     var res = jobPostings.UpdateOne(filter, update);
                     Console.WriteLine(res);
                     return job;
-                } else {
+                }
+                else
+                {
                     Console.WriteLine("job id did't match");
                     return null;
                 }

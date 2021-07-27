@@ -37,7 +37,6 @@ const OrganisationCreateJob = () => {
     e.preventDefault();
     try {
       const { data } = await POST_AUTH(`api/company/job`, {
-        companyId: localStorage.getItem("uid"),
         ...form,
         requirements: description,
       });

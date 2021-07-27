@@ -11,8 +11,11 @@ import useStyles from "../../styles/organisation_profile_page";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import MDEditor from "@uiw/react-md-editor";
+import Avatar from "@material-ui/core/Avatar";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@material-ui/core/IconButton";
 
-const OrganisationProfilePage = () => { 
+const OrganisationProfilePage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [profileInfo, setProfileInfo] = React.useState(null);
@@ -20,8 +23,19 @@ const OrganisationProfilePage = () => {
   const [error, setError] = React.useState(false);
   const [form, setFormInput] = React.useState(null);
   const [description, setDescription] = React.useState(null);
+  const [image, setImage] = React.useState(null);
+  const [preview, setPreview] = React.useState(null);
 
   useEffect(() => {
+    if (image) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(image);
+    } else {
+      setPreview(null);
+    }
     const exe = async () => {
       try {
         const { data } = await GET_AUTH(
@@ -40,7 +54,7 @@ const OrganisationProfilePage = () => {
       }
     };
     exe();
-  }, []);
+  }, [image]);
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
@@ -65,6 +79,15 @@ const OrganisationProfilePage = () => {
     }));
   };
 
+  const imageHandler = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.substr(0, 5) === "image") {
+      setImage(file);
+    } else {
+      setImage(null);
+    }
+  };
+
   if (loading) {
     return <LoadingAnimation />;
   }
@@ -80,6 +103,48 @@ const OrganisationProfilePage = () => {
             <Grid container spacing={5}>
               <Grid item xs={12} lg={7} style={{ textAlign: "left" }}>
                 <h1 className="title-medium">MY PROFILE</h1>
+                <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
+                  <Paper
+                    elevation={0}
+                    component="form"
+                    style={{
+                      backgroundColor: "var(--ash)",
+                      borderRadius: 20,
+                      width: 150,
+                      height: 150,
+                      display: "inline-grid",
+                      alignContent: "center",
+                    }}
+                  >
+                    <Avatar
+                      style={{ width: 110, height: 110, padding: "13%" }}
+                      variant="square"
+                      src="/assets/images/company_img_preview.svg"
+                      srcSet={preview}
+                    />
+                  </Paper>
+                  <input
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    id="icon-button-file"
+                    type="file"
+                    onChange={imageHandler}
+                  />
+                  <label htmlFor="icon-button-file">
+                    <IconButton
+                      aria-label="upload picture"
+                      component="span"
+                      style={{
+                        backgroundColor: "var(--purple)",
+                        position: "absolute",
+                        marginLeft: "-15px",
+                        marginTop: "100px",
+                      }}
+                    >
+                      <EditIcon style={{ color: "white" }} />
+                    </IconButton>
+                  </label>
+                </div>
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                   <TextInputLayout
                     icon="company"

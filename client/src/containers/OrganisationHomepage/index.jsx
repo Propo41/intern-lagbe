@@ -28,7 +28,7 @@ const OrganisationHomepage = () => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(
-            `api/company/${localStorage.getItem("uid")}`
+            `api/company`
           );
 
           setJobsPosted(data);
@@ -47,7 +47,7 @@ const OrganisationHomepage = () => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(
-            `api/company/profile-completion/${localStorage.getItem("uid")}`
+            `api/company/profile-completion`
           );
           console.log(data);
           setProfileStatus(data);

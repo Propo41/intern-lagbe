@@ -22,12 +22,12 @@ function MyToggleButton(props) {
   return <ToggleButton classes={classes} {...other} onClick={event} />;
 }
 
+/* entry point */
 const ToggleAvailableButtonMobile = (props) => {
-  console.log(props);
   const [color, setColor] = React.useState(
     props.status ? "available" : "not-available"
   );
-
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -45,8 +45,11 @@ const ToggleAvailableButtonMobile = (props) => {
     setAnchorEl(null);
   };
 
-  const onDeleteJob = async () => {
+  const onDeleteJob = async (e) => {
     setAnchorEl(null);
+    console.log("deleted");
+    e.stopPropagation();
+    e.preventDefault();
     try {
       const { data } = await DELETE_AUTH(`api/company/job`, {
         id: props.id,

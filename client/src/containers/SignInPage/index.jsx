@@ -36,8 +36,6 @@ const SignInPage = () => {
       if (data.statusCode === 200) {
         console.log("Logged in successfully.");
         localStorage.setItem("token", data.token);
-        localStorage.setItem("uid", data.uid);
-
         window.location.href = "/";
        /*  history.push({
           pathname: "/",

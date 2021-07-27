@@ -25,7 +25,7 @@ const OrganisationProfilePage = () => {
     const exe = async () => {
       try {
         const { data } = await GET_AUTH(
-          `api/company/profile/${localStorage.getItem("uid")}`
+          `api/company/profile`
         );
         setProfileInfo(data);
         setFormInput(data);

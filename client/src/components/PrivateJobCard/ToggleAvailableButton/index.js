@@ -6,7 +6,7 @@ import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Button } from "@material-ui/core";
-import { GET_AUTH, POST_AUTH } from "../../../api/api.js";
+import { DELETE_AUTH, GET_AUTH, POST_AUTH } from "../../../api/api.js";
 
 const useStyles = makeStyles((theme) => ({
   root: (props) => {
@@ -26,6 +26,7 @@ const ToggleAvailableButton = (props) => {
   const [color, setColor] = React.useState(
     props.status ? "available" : "not-available"
   );
+  console.log(props);
   const handleColor = (e, value) => {
     if (value !== null) {
       setColor(value);
@@ -68,6 +69,24 @@ const ToggleAvailableButton = (props) => {
     }
   };
 
+  const onDeleteClick = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("deleting..");
+
+    try {
+      const { data } = await DELETE_AUTH(`api/company/job`, {
+        id: props.id,
+        isAvailable: true,
+      });
+      console.log(data);
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+      window.location.reload();
+    }
+  };
+
   return (
     <ToggleButtonGroup
       onChange={handleColor}
@@ -91,7 +110,7 @@ const ToggleAvailableButton = (props) => {
         <HourglassEmptyIcon />
       </MyToggleButton>
 
-      <Button className="circular-button">
+      <Button className="circular-button" onClick={onDeleteClick}>
         <DeleteIcon style={{ color: "var(--red)" }} />
       </Button>
     </ToggleButtonGroup>

@@ -27,9 +27,7 @@ const OrganisationHomepage = () => {
     const promise1 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
-          const { data } = await GET_AUTH(
-            `api/company`
-          );
+          const { data } = await GET_AUTH(`api/company`);
 
           setJobsPosted(data);
           console.log(data);
@@ -46,9 +44,7 @@ const OrganisationHomepage = () => {
     const promise2 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
-          const { data } = await GET_AUTH(
-            `api/company/profile-completion`
-          );
+          const { data } = await GET_AUTH(`api/company/profile-completion`);
           console.log(data);
           setProfileStatus(data);
           resolve();
@@ -82,31 +78,31 @@ const OrganisationHomepage = () => {
     );
   }
 
-  if (jobsPosted.length > 0) {
-    return (
-      <>
-        <PrivateNavbar />
-        <Collapse in={!profileStatus}>
-          <Alert
-            severity="warning"
-            className={classes.alertStyle}
-            classes={{
-              icon: classes.alertIcon,
-              message: classes.alertMessage,
-            }}
-            action={
-              <Button
-                color="inherit"
-                size="small"
-                className={classes.alertButton}
-              >
-                <Link to="/profile">SETUP PROFILE</Link>
-              </Button>
-            }
-          >
-            PLEASE SETUP YOUR PROFILE TO START POSTING JOBS.
-          </Alert>
-        </Collapse>
+  return (
+    <>
+      <PrivateNavbar />
+      <Collapse in={!profileStatus}>
+        <Alert
+          severity="warning"
+          className={classes.alertStyle}
+          classes={{
+            icon: classes.alertIcon,
+            message: classes.alertMessage,
+          }}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              className={classes.alertButton}
+            >
+              <Link to="/profile">SETUP PROFILE</Link>
+            </Button>
+          }
+        >
+          PLEASE SETUP YOUR PROFILE TO START POSTING JOBS.
+        </Alert>
+      </Collapse>
+      {jobsPosted.length > 0 ? (
         <div className="content-grid-padding">
           <div className={classes.root}>
             <Paper elevation={5} className="semi-rounded-card">
@@ -163,19 +159,7 @@ const OrganisationHomepage = () => {
             </Paper>
           </div>
         </div>
-        <div
-          style={{
-            marginTop: "var(--margin-footer-spacing)",
-          }}
-        >
-          <Footer />
-        </div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <PrivateNavbar />
+      ) : (
         <div className="content-grid-padding">
           <div className={classes.root}>
             <Paper elevation={5} className="semi-rounded-card">
@@ -193,30 +177,45 @@ const OrganisationHomepage = () => {
               />
 
               <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
-                <h1 className="content" style={{ color: "var(--darkash)" }}>
-                  You don't have any postings listed.
-                  <span
-                    className="text-button-lg"
-                    onClick={() => {
-                      history.push("/create-job");
-                    }}
-                  >
-                    Create a new posting.
-                  </span>
-                </h1>
+                {profileStatus ? (
+                  <h1 className="content" style={{ color: "var(--darkash)" }}>
+                    You don't have any postings listed.
+                    <span
+                      className="text-button-lg"
+                      onClick={() => {
+                        history.push("/create-job");
+                      }}
+                    >
+                      {" "}Create a new posting.
+                    </span>
+                  </h1>
+                ) : (
+                  <h1 className="content" style={{ color: "var(--darkash)" }}>
+                    You need to set up your profile first.
+                    <span
+                      className="text-button-lg"
+                      onClick={() => {
+                        history.push("/profile");
+                      }}
+                    >
+                      {" "}Setup profile.
+                    </span>
+                  </h1>
+                )}
               </div>
             </Paper>
           </div>
         </div>
-        <div
-          style={{
-            marginTop: "var(--margin-footer-spacing)",
-          }}
-        >
-          <Footer />
-        </div>
-      </>
-    );
-  }
+      )}
+
+      <div
+        style={{
+          marginTop: "var(--margin-footer-spacing)",
+        }}
+      >
+        <Footer />
+      </div>
+    </>
+  );
 };
 export default OrganisationHomepage;

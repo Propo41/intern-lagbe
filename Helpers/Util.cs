@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using InternFinder.Models;
 using Microsoft.IdentityModel.Tokens;
 
@@ -66,9 +71,6 @@ namespace InternFinder.Helpers
 
         public static string ValidateToken(string token, string secret)
         {
-            Console.WriteLine("Validating token... ");
-            //Console.WriteLine(token);
-
             if (token == null)
                 return null;
 
@@ -97,6 +99,54 @@ namespace InternFinder.Helpers
                 // return null if validation fails
                 return null;
             }
+        }
+
+        // key -> expire
+        // value -> signature
+        public static KeyValuePair<string, string> GenerateSignature(string secret, int expiry)
+        {
+            TimeSpan expiryTime = TimeSpan.FromMinutes(expiry);
+            var expire = (DateTimeOffset.UtcNow.ToUnixTimeSeconds() + expiryTime.TotalSeconds).ToString(CultureInfo.InvariantCulture);
+            var signature = StringToMD5(secret + expire);
+
+            return new KeyValuePair<string, string>(expire, signature);
+
+        }
+
+        // implicit call
+        private static string StringToMD5(string s)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(s);
+                var hashBytes = md5.ComputeHash(bytes);
+                return HexStringFromBytes(hashBytes);
+            }
+        }
+        // implict call
+        private static string HexStringFromBytes(byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        }
+
+
+        /* https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
+               https://uploadcare.com/api-refs/rest-api/v0.5.0/#section/Authentication/Uploadcare.Simple */
+        public static async Task DeleteImage(string uuid, string publicKey, string secretKey)
+        {
+
+            Console.WriteLine("Deleting file: " + uuid);
+            string URL = $"https://api.uploadcare.com/files/{uuid}/storage/";
+            HttpClient client = new HttpClient();
+            // the following headers are required for the uploadcare API
+            client.DefaultRequestHeaders.Add("Accept", "application/vnd.uploadcare-v0.5+json");
+            client.DefaultRequestHeaders.Add("Authentication", $"Uploadcare.Simple {publicKey}:{secretKey}");
+
+            // DELETE request
+            var response = client.DeleteAsync(URL);
+            var msg = await response;
+            Console.WriteLine(msg);
+
         }
 
     }

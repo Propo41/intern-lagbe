@@ -9,6 +9,9 @@ using InternFinder.Services;
 using Newtonsoft.Json;
 using MongoDB.Bson;
 using Microsoft.AspNetCore.Http;
+using MongoDB.Bson.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace InternFinder.Controllers
 {
@@ -37,18 +40,37 @@ namespace InternFinder.Controllers
         // updates user profile and set value of profileCompletion to true
         [HttpPost]
         [Route("profile")]
-        public ActionResult UpdateProfile(User user)
+        async public Task<ActionResult> UpdateProfile(Company company)
         {
-            if (user != null)
+            if (!ModelState.IsValid)
             {
-                user.Id = _authUser.Id;
-                ResponseStatus res = _companyService.UpdateCompanyProfile(user);
+                System.Console.WriteLine("invalid input!!");
+                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
+            }
+            if (company != null)
+            {
+                System.Console.WriteLine("input correct");
+
+                company.Id = _authUser.CompanyId;
+                Payload res = await _companyService.UpdateCompanyProfile(company);
                 return Ok(res);
             }
             else
             {
+                System.Console.WriteLine("internal errro");
+
                 return BadRequest(new { error = "Internal server error" });
             }
+        }
+
+
+        // api/company/profile/image
+        // creates a signed url for uploading a profile image
+        [HttpGet("profile/image")]
+        public ActionResult GetSignedUrl()
+        {
+            UploadCare uploadCare = _companyService.GetSignedUrl();
+            return uploadCare != null ? Ok(uploadCare) : BadRequest(new { error = "Couldn't generate a secured URL for uploading files to cloud" });
         }
 
         // GET api/company/profile
@@ -56,9 +78,8 @@ namespace InternFinder.Controllers
         [HttpGet("profile")]
         public ActionResult GetCompanyProfile()
         {
-            User res = _companyService.GetCompanyProfile(_authUser.Id);
+            Company res = _companyService.GetCompanyProfile(_authUser.CompanyId);
             return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
-
         }
 
 
@@ -66,25 +87,31 @@ namespace InternFinder.Controllers
         [HttpGet]
         public ActionResult GetJobPostings()
         {
-            List<Job> res = _companyService.FetchJobPostings(_authUser.Id);
+            List<Job> res = _companyService.FetchJobPostings(_authUser.CompanyId);
             return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
         }
 
         // GET api/company/profile-completion
         [HttpGet("profile-completion")]
-        public ActionResult GetProfileStatus()
+        async public Task<ActionResult> GetProfileStatus()
         {
-            bool res = _companyService.GetProfileStatus(_authUser.Id);
+            Console.Write("auth user companyid: ");
+            Console.WriteLine(_authUser.CompanyId);
+            bool res = await _companyService.GetProfileStatus(_authUser.CompanyId);
             return Ok(res);
-
         }
 
+        // POST api/company/job/status
         [HttpPost("job/status")]
-        public ActionResult UpdateJobStatus(Job job)
+        public ActionResult UpdateJobStatus(IFormCollection form)
         {
-            if (job.Id != null && job.Id != "")
+
+            string id = form["id"];
+            bool isAvailable = form["isAvailable"] == "true" ? true : false;
+
+            if (id != null && id != "")
             {
-                ResponseStatus res = _companyService.UpdateJobStatus(job.Id, job.IsAvailable);
+                Payload res = _companyService.UpdateJobStatus(id, isAvailable);
                 return res != null ? Ok(res) : BadRequest(res);
             }
             else
@@ -95,20 +122,29 @@ namespace InternFinder.Controllers
 
         [HttpPost]
         [Route("job")]
-        public ActionResult Create(Job job)
+        async public Task<ActionResult> Create(Job job)
         {
-            job.CompanyId = _authUser.Id;
-            Job res = _companyService.CreateJobPosting(job);
-            return res != null ? Ok(new { status = 200, description = "Job created successfully!" }) : BadRequest(new { error = "Couldn't create job" });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
+            }
+
+            Console.Write("auth user companyid: ");
+            Console.WriteLine(_authUser.CompanyId);
+            job.CompanyId = _authUser.CompanyId;
+            Job res = await _companyService.CreateJobPosting(job);
+            return res != null ? Ok(new { status = 200, description = "Job created successfully!" }) :
+                BadRequest(new { error = "Couldn't create job. Did you setup your profile?" });
         }
 
         /* DELETES a job  */
         [HttpDelete]
         [Route("job")]
-        public ActionResult Delete(Job job)
+        public ActionResult Delete(IFormCollection form)
         {
-            Console.WriteLine("Deleting: ", job.Id);
-            ResponseStatus res = _companyService.DeleteJob(job.Id);
+            string id = form["id"];
+            Console.WriteLine("Deleting: ", id);
+            Payload res = _companyService.DeleteJob(id);
             return res != null ? Ok(res) : BadRequest(new { error = "Couldn't delete job" });
         }
 

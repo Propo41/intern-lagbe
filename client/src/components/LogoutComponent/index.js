@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LogoutComponent = () => {
+const LogoutComponent = (props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -73,7 +73,11 @@ const LogoutComponent = () => {
             margin: "2px 10px",
           }}
           alt="company logo"
-          src="/assets/images/dummy_logo.png"
+          src={
+            props.avatar
+              ? props.avatar
+              : "/assets/images/company_img_preview.svg"
+          }
         />
         <KeyboardArrowDownIcon />
       </Button>

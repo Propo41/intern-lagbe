@@ -4,6 +4,10 @@
 - clone the repo
 - `dotnet watch run` or `dotnet run`
 
+# IMPORTANT FOR PRODUCTION
+- all comments with @debug initials, remove them during production
+
+
 ### Note
 - When sending payloads to the server, consider 2 cases:
 

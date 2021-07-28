@@ -19,7 +19,7 @@ namespace InternFinder.Services
 {
     public interface ICompanyService
     {
-        Payload UpdateCompanyProfile(Company company);
+        Task<Payload> UpdateCompanyProfile(Company company);
         UploadCare GetSignedUrl();
         Company GetCompanyProfile(string companyId);
         Task<bool> GetProfileStatus(string companyId);
@@ -37,30 +37,40 @@ namespace InternFinder.Services
         private readonly IMongoCollection<User> _userCollection;
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Company> _companyCollection;
-        private readonly string secret;
+        private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
-        private readonly int expiry;
+        private readonly int uploadCareExpiry;
 
 
         public CompanyService(IConfiguration config)
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            secret = config["JWT:Secret"];
             uploadCarePubKey = config["UploadCare:PubKey"];
-            secret = config["UploadCare:Secret"];
-            expiry = int.Parse(config["UploadCare:Expiry"]);
+            uploadCareSecret = config["UploadCare:Secret"];
+            uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
             _userCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");
 
         }
 
-        /* Updates a company instance. Note, the company document is created when the user is created. */
-        public Payload UpdateCompanyProfile(Company company)
+        /* Updates a company instance. Note, the company document is created when the user is created. 
+        Also, deletes any current image that is saved previously*/
+        async public Task<Payload> UpdateCompanyProfile(Company company)
         {
             try
             {
+                // check if user has any existing images stored in the database
+                string url = GetCompanyImage(company.Id);
+                if (url != null)
+                {
+                    // delete the image from the uploadcare server
+                    // extracting the uid from the url
+                    var imageUuid = url.Split('/')[4];
+                    await Util.DeleteImage(imageUuid, uploadCarePubKey, uploadCareSecret);
+                }
+
                 var filter = Builders<Company>.Filter.Eq("Id", company.Id);
                 var update = Builders<Company>.Update.
                         Set("Name", company.Name).
@@ -82,9 +92,21 @@ namespace InternFinder.Services
             }
         }
 
+        /* return the company image url stored in the database.
+        returns null if no image found */
+        private string GetCompanyImage(string companyId)
+        {
+            var filter = Builders<Company>.Filter.Eq("Id", companyId);
+            var projection = Builders<Company>.Projection.Include("ProfilePictureUrl");
+            var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
+            Company company = BsonSerializer.Deserialize<Company>(result);
+            return company.ProfilePictureUrl;
+
+        }
+
         public UploadCare GetSignedUrl()
         {
-            KeyValuePair<string, string> pair = Util.GenerateSignature(secret, expiry);
+            KeyValuePair<string, string> pair = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
             return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
 
         }

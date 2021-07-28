@@ -10,18 +10,18 @@ namespace InternFinder.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]
+        [Required]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Description is required")]
+        [Required]
         public string Description { get; set; }
-        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$")]
-        [Required(ErrorMessage = "Contact is required")]
-        public string Contact { get; set; } // phone number
-        [Required(ErrorMessage = "District is required")]
+        [RegularExpression(@"(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$")]
+        [Required]
+        public string Contact { get; set; } // phone number validation in bangladeshi format
+        [Required]
         public string District { get; set; }
-        [Required(ErrorMessage = "Your office address is required")]
+        [Required]
         public string OfficeAddress { get; set; }
-        [Required(ErrorMessage = "You have to select an image")]
+        [Required]
         [Url]
         public string ProfilePictureUrl { get; set; }
 

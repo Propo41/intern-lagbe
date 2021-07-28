@@ -40,20 +40,25 @@ namespace InternFinder.Controllers
         // updates user profile and set value of profileCompletion to true
         [HttpPost]
         [Route("profile")]
-        public ActionResult UpdateProfile(Company company)
+        async public Task<ActionResult> UpdateProfile(Company company)
         {
             if (!ModelState.IsValid)
             {
+                System.Console.WriteLine("invalid input!!");
                 return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
             }
             if (company != null)
             {
+                System.Console.WriteLine("input correct");
+
                 company.Id = _authUser.CompanyId;
-                Payload res = _companyService.UpdateCompanyProfile(company);
+                Payload res = await _companyService.UpdateCompanyProfile(company);
                 return Ok(res);
             }
             else
             {
+                System.Console.WriteLine("internal errro");
+
                 return BadRequest(new { error = "Internal server error" });
             }
         }

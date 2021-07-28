@@ -9,6 +9,8 @@
 
   1. When sending wholesome data models, such as in Registration page, CreateJob page etc, receive the payload as their corresponding models
   2. But when sending edited data or partial data, such as sending only the jobID and status, send the data as FormData and receive the payload as IFormCollection in the server. (*But note that  According to FormData Documentation, FormData.append accepts only a USVString or a Blob. S you will have to convert your data to string and then parse it later on the backend. You can use JSON.stringify to convert your form object to a string.*)
+References:
+- "https://stackoverflow.com/a/60800516/7570616"
 
 ### Packages used
 To install a package using the dotnet CLI:  `dotnet add package <package-name>`

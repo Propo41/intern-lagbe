@@ -51,5 +51,22 @@ namespace InternFinder.Controllers
         [HttpPost]
         public ActionResult Create(About about) => Ok(_generalService.Create(about));
 
+        // GET api/landingpage/company/{companyId}
+        //fetches individual company's information and job postings
+        [HttpGet("company/{companyId}")]
+        public ActionResult GetCompanyInfo(string companyId)
+        {
+            User res = _generalService.GetCompanyInfo(companyId);
+            return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
+        }
+
+        // GET api/landingpage/company/{companyId}/jobs
+        //fetches individual company's job postings
+        [HttpGet("company/{companyId}/jobs")]
+        public ActionResult GetCompanyJobPostings(string companyId)
+        {
+            List<Job> res = _generalService.GetCompanyJobPostings(companyId);
+            return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
+        }
     }
 }

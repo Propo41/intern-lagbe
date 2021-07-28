@@ -27,7 +27,7 @@ const ToggleAvailableButtonMobile = (props) => {
   const [color, setColor] = React.useState(
     props.status ? "available" : "not-available"
   );
-  
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -50,10 +50,10 @@ const ToggleAvailableButtonMobile = (props) => {
     console.log("deleted");
     e.stopPropagation();
     e.preventDefault();
+    var form = new FormData();
+    form.append("id", props.id);
     try {
-      const { data } = await DELETE_AUTH(`api/company/job`, {
-        id: props.id,
-      });
+      const { data } = await DELETE_AUTH(`api/company/job`, form);
       console.log(data);
       window.location.reload();
     } catch (e) {
@@ -65,11 +65,11 @@ const ToggleAvailableButtonMobile = (props) => {
   const onToggleUnavailableClick = async (e) => {
     e.stopPropagation();
     console.log("unavailable");
+    let formData = new FormData();
+    formData.append("id", props.id);
+    formData.append("isAvailable", false);
     try {
-      const { data } = await POST_AUTH(`api/company/job/status`, {
-        id: props.id,
-        isAvailable: false,
-      });
+      const { data } = await POST_AUTH(`api/company/job/status`, formData);
       window.location.reload();
       console.log(data);
     } catch (e) {
@@ -82,12 +82,12 @@ const ToggleAvailableButtonMobile = (props) => {
   const onToggleAvailableClick = async (e) => {
     e.stopPropagation();
     console.log("available");
+    let formData = new FormData();
+    formData.append("id", props.id);
+    formData.append("isAvailable", true);
 
     try {
-      const { data } = await POST_AUTH(`api/company/job/status`, {
-        id: props.id,
-        isAvailable: true,
-      });
+      const { data } = await POST_AUTH(`api/company/job/status`, formData);
       window.location.reload();
       // @TODO: add loading animation
       console.log(data);

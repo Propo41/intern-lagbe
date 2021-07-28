@@ -14,6 +14,7 @@ import MDEditor from "@uiw/react-md-editor";
 import Avatar from "@material-ui/core/Avatar";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
+import axios from "axios";
 
 const OrganisationProfilePage = () => {
   const classes = useStyles();
@@ -25,6 +26,9 @@ const OrganisationProfilePage = () => {
   const [description, setDescription] = React.useState(null);
   const [image, setImage] = React.useState(null);
   const [preview, setPreview] = React.useState(null);
+  const [previewUrl, setPreviewUrl] = React.useState(
+    "/assets/images/company_img_preview.svg"
+  );
 
   useEffect(() => {
     if (image) {
@@ -38,16 +42,15 @@ const OrganisationProfilePage = () => {
     }
     const exe = async () => {
       try {
-        const { data } = await GET_AUTH(
-          `api/company/profile`
-        );
+        const { data } = await GET_AUTH(`api/company/profile`);
         setProfileInfo(data);
         setFormInput(data);
         console.log(data);
         setLoading(false);
-        data.companyDescription
-          ? setDescription(data.companyDescription)
+        data.description
+          ? setDescription(data.description)
           : setDescription("Enter your company description");
+        setPreviewUrl(data.profilePictureUrl);
       } catch (e) {
         console.log(e);
         setError(true);
@@ -58,17 +61,52 @@ const OrganisationProfilePage = () => {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
+
     try {
-      const { data } = await POST_AUTH(`api/company/profile`, {
-        ...form,
-        companyDescription: description,
-      });
+      const { data } = await GET_AUTH(`api/company/profile/image`);
       console.log(data);
-      window.location.reload();
-    } catch (e) {
-      console.log(e);
+      // uploading image to uploadCare server
+      const url = await uploadImage(data);
+
+      const payload = {
+        ...form,
+        description: description,
+        profilePictureUrl: url,
+      };
+      console.log(payload);
+
+      const res = await POST_AUTH(`api/company/profile`, {
+        ...form,
+        description: description,
+        profilePictureUrl: url,
+      });
+      console.log(res.data);
+
+      //  window.location.reload();
+    } catch (error) {
+      console.log(error);
       setError(true);
     }
+  };
+
+  const uploadImage = async (data) => {
+    var imageForm = new FormData();
+    imageForm.append("file", image);
+    imageForm.append("signature", data.signature);
+    imageForm.append("UPLOADCARE_PUB_KEY", data.pubKey);
+    imageForm.append("expire", data.expiry);
+
+    // create a POST request with axios
+    const res = await axios.post(
+      "https://upload.uploadcare.com/base/",
+      imageForm,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return `https://ucarecdn.com/${res.data.file}/`;
   };
 
   const onInputChange = (event) => {
@@ -96,7 +134,7 @@ const OrganisationProfilePage = () => {
   }
   return (
     <>
-      <PrivateNavBar />
+      <PrivateNavBar avatar={previewUrl} />
       <div className="content-grid-padding">
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">
@@ -119,7 +157,7 @@ const OrganisationProfilePage = () => {
                     <Avatar
                       style={{ width: 110, height: 110, padding: "13%" }}
                       variant="square"
-                      src="/assets/images/company_img_preview.svg"
+                      src={previewUrl}
                       srcSet={preview}
                     />
                   </Paper>

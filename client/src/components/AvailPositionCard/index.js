@@ -69,7 +69,7 @@ const AvailPositionCard = (props) => {
           <Grid item xs={12} sm={8} className={classes.flex}>
             <Avatar
               variant="rounded"
-              src="/dummy_logo.png"
+              src={props.avatar}
               className={classes.large}
             />
             <Container>
@@ -84,7 +84,7 @@ const AvailPositionCard = (props) => {
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {!props.disabledButton ? (
+            {!props.disabledButton && (
               <Button
                 className="circular-button"
                 aria-label="FlagButton"
@@ -93,8 +93,6 @@ const AvailPositionCard = (props) => {
               >
                 <FlagIcon style={{ color: "var(--red)" }} />
               </Button>
-            ) : (
-              ""
             )}
 
             <Button

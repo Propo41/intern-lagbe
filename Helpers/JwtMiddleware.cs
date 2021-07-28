@@ -29,7 +29,6 @@ namespace InternFinder.Helpers
         */
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            Console.WriteLine(_secret);
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = Util.ValidateToken(token, _secret);
             if (userId != null)

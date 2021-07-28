@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using InternFinder.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -66,9 +69,6 @@ namespace InternFinder.Helpers
 
         public static string ValidateToken(string token, string secret)
         {
-            Console.WriteLine("Validating token... ");
-            //Console.WriteLine(token);
-
             if (token == null)
                 return null;
 
@@ -98,6 +98,35 @@ namespace InternFinder.Helpers
                 return null;
             }
         }
+
+        // key -> expire
+        // value -> signature
+        public static KeyValuePair<string, string> GenerateSignature(string secret, int expiry)
+        {
+            TimeSpan expiryTime = TimeSpan.FromMinutes(expiry);
+            var expire = (DateTimeOffset.UtcNow.ToUnixTimeSeconds() + expiryTime.TotalSeconds).ToString(CultureInfo.InvariantCulture);
+            var signature = StringToMD5(secret + expire);
+
+            return new KeyValuePair<string, string>(expire, signature);
+
+        }
+
+        // implicit call
+        private static string StringToMD5(string s)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(s);
+                var hashBytes = md5.ComputeHash(bytes);
+                return HexStringFromBytes(hashBytes);
+            }
+        }
+        // implict call
+        private static string HexStringFromBytes(byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        }
+
 
     }
 

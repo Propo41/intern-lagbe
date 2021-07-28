@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace InternFinder.Models
 {
-    public class ResponseStatus
+    public class Payload
     {
         public int StatusCode { get; set; }
         public string StatusDescription { get; set; }

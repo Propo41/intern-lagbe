@@ -156,6 +156,7 @@ const LandingPage = () => {
                           disabledButton={
                             company.availableJobCount === 0 ? true : false
                           }
+                          avatar={company.profilePictureUrl}
                         />
                       );
                     } else {
@@ -176,6 +177,7 @@ const LandingPage = () => {
                       disabledButton={
                         company.availableJobCount === 0 ? true : false
                       }
+                      avatar={company.profilePictureUrl}
                     />
                   );
                 })}

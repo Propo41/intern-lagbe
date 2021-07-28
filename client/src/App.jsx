@@ -4,7 +4,6 @@ import routerList from "./utils/route_list";
 
 function App() {
   console.log(window.location);
-  //localStorage.clear();
   console.log(localStorage);
   if (localStorage.getItem("token") !== null) {
     return (

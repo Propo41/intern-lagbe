@@ -11,75 +11,98 @@ using System.Text;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using InternFinder.Helpers;
-
+using System.Threading.Tasks;
+using EllipticCurve;
+using System.ComponentModel;
 
 namespace InternFinder.Services
 {
     public interface ICompanyService
     {
-        ResponseStatus UpdateCompanyProfile(User user);
-        User GetCompanyProfile(string companyId);
-        bool GetProfileStatus(string companyId);
+        Payload UpdateCompanyProfile(Company company);
+        UploadCare GetSignedUrl();
+        Company GetCompanyProfile(string companyId);
+        Task<bool> GetProfileStatus(string companyId);
         List<Job> FetchJobPostings(string companyId);
-        Job CreateJobPosting(Job job);
-        ResponseStatus UpdateJobStatus(string jobId, bool status);
-        ResponseStatus DeleteJob(string jobId);
+        Task<Job> CreateJobPosting(Job job);
+        Payload UpdateJobStatus(string jobId, bool status);
+        Payload DeleteJob(string jobId);
         Job GetJobDetails(string jobId);
         Job UpdateJobDetails(Job job, string jobId);
     }
 
-    public class CompanyService: ICompanyService
+    public class CompanyService : ICompanyService
     {
 
-        private readonly IMongoCollection<User> users;
-        private readonly IMongoCollection<Job> jobPostings;
+        private readonly IMongoCollection<User> _userCollection;
+        private readonly IMongoCollection<Job> _jobCollection;
+        private readonly IMongoCollection<Company> _companyCollection;
+        private readonly string secret;
+        private readonly string uploadCarePubKey;
+        private readonly int expiry;
 
 
         public CompanyService(IConfiguration config)
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            users = db.GetCollection<User>("Users");
-            jobPostings = db.GetCollection<Job>("Job_Postings");
+            secret = config["JWT:Secret"];
+            uploadCarePubKey = config["UploadCare:PubKey"];
+            secret = config["UploadCare:Secret"];
+            expiry = int.Parse(config["UploadCare:Expiry"]);
+            _userCollection = db.GetCollection<User>("Users");
+            _jobCollection = db.GetCollection<Job>("Job_Postings");
+            _companyCollection = db.GetCollection<Company>("Company");
+
         }
 
-        public ResponseStatus UpdateCompanyProfile(User user)
+        /* Updates a company instance. Note, the company document is created when the user is created. */
+        public Payload UpdateCompanyProfile(Company company)
         {
             try
             {
-                var filter = Builders<User>.Filter.Eq("Id", user.Id);
-                var update = Builders<User>.Update.
-                        Set("Name", user.Name).
-                        Set("CompanyDescription", user.CompanyDescription).
-                        Set("Contact", user.Contact).
-                        Set("OfficeAddress", user.OfficeAddress).
-                        Set("District", user.District).
+                var filter = Builders<Company>.Filter.Eq("Id", company.Id);
+                var update = Builders<Company>.Update.
+                        Set("Name", company.Name).
+                        Set("Description", company.Description).
+                        Set("Contact", company.Contact).
+                        Set("OfficeAddress", company.OfficeAddress).
+                        Set("District", company.District).
+                        Set("ProfilePictureUrl", company.ProfilePictureUrl).
                         Set("IsProfileComplete", true);
-                var res = users.UpdateOne(filter, update);
-                Console.WriteLine(res);
-                return new ResponseStatus { StatusCode = 200, StatusDescription = "Company profile updated successfully." };
+                var res = _companyCollection.UpdateOne(filter, update);
+
+                return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
 
-        public User GetCompanyProfile(string companyId)
+        public UploadCare GetSignedUrl()
+        {
+            KeyValuePair<string, string> pair = Util.GenerateSignature(secret, expiry);
+            return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
+
+        }
+
+        public Company GetCompanyProfile(string companyId)
         {
             try
             {
-                var filter = Builders<User>.Filter.Eq("Id", companyId);
-                var projection = Builders<User>.Projection.
+                var filter = Builders<Company>.Filter.Eq("Id", companyId);
+                var projection = Builders<Company>.Projection.
                     Include("Name").
-                    Include("CompanyDescription").
+                    Include("Description").
                     Include("Contact").
                     Include("OfficeAddress").
+                    Include("ProfilePictureUrl").
                     Include("District");
-                var result = users.Find(filter).Project(projection).FirstOrDefault();
-                return BsonSerializer.Deserialize<User>(result);
+                var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
+                return BsonSerializer.Deserialize<Company>(result);
 
             }
             catch (Exception e)
@@ -92,15 +115,22 @@ namespace InternFinder.Services
         }
 
 
-        public bool GetProfileStatus(string companyId)
+        async public Task<bool> GetProfileStatus(string companyId)
         {
             try
             {
-                var filter = Builders<User>.Filter.Eq("Id", companyId);
-                var projection = Builders<User>.Projection.Include("IsProfileComplete").Include("Id");
-                var result = users.Find<User>(filter).Project(projection).FirstOrDefault();
-                User user = BsonSerializer.Deserialize<User>(result);
-                return user.IsProfileComplete;
+                var filter = Builders<Company>.Filter.Eq("Id", companyId);
+                var projection = Builders<Company>.Projection.
+                    Include("IsProfileComplete").
+                    Include("Id");
+                var options = new FindOptions<Company> { Projection = projection };
+
+                var result = await _companyCollection.FindAsync<Company>(filter, options);
+                Company company = result.ToList()[0];
+                Console.Write("profileStatus: ");
+                Console.WriteLine(company.IsProfileComplete);
+
+                return company.IsProfileComplete;
 
             }
             catch (Exception e)
@@ -122,7 +152,7 @@ namespace InternFinder.Services
                         Include("Address").
                         Include("District").
                         Include("IsAvailable");
-                var result = jobPostings.Find(filter).Project(projection).ToList();
+                var result = _jobCollection.Find(filter).Project(projection).ToList();
                 List<Job> postings = new List<Job>();
                 foreach (var item in result)
                     postings.Add(BsonSerializer.Deserialize<Job>(item));
@@ -138,11 +168,24 @@ namespace InternFinder.Services
 
         }
 
-        public Job CreateJobPosting(Job job)
+        async public Task<Job> CreateJobPosting(Job job)
         {
+            // only allow user to create a job iff profile is complete
+            bool profileStatus = await GetProfileStatus(job.CompanyId);
+
+            if (!profileStatus)
+            {
+                Console.WriteLine("Couldn't create a job post. User needs to create a profile first");
+                return null;
+            };
+
+            Console.WriteLine(job.ToJson());
             try
             {
-                jobPostings.InsertOne(job);
+                Console.Write("job.CompanyId: ");
+                Console.WriteLine(job.CompanyId);
+
+                _jobCollection.InsertOne(job);
                 return job;
             }
             catch (Exception e)
@@ -152,30 +195,30 @@ namespace InternFinder.Services
             }
         }
 
-        public ResponseStatus UpdateJobStatus(string jobId, bool status)
+        public Payload UpdateJobStatus(string jobId, bool status)
         {
             try
             {
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
                 var update = Builders<Job>.Update.Set("IsAvailable", status);
-                var res = jobPostings.UpdateOneAsync(filter, update);
-                return new ResponseStatus { StatusCode = 200, StatusDescription = "Job status updated successfully." };
+                var res = _jobCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Job status updated successfully." };
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
 
-        public ResponseStatus DeleteJob(string jobId)
+        public Payload DeleteJob(string jobId)
         {
             try
             {
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
-                var result = jobPostings.DeleteOne(filter);
-                return new ResponseStatus { StatusCode = 200, StatusDescription = "Job deleted successfully." };
+                var result = _jobCollection.DeleteOne(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Job deleted successfully." };
 
             }
             catch (Exception e)
@@ -197,7 +240,7 @@ namespace InternFinder.Services
                     Include("Requirements").
                     Include("ContactEmail").
                     Include("ContactPhone");
-                var result = jobPostings.Find(filter).Project(projection).FirstOrDefault();
+                var result = _jobCollection.Find(filter).Project(projection).FirstOrDefault();
                 return BsonSerializer.Deserialize<Job>(result);
 
             }
@@ -222,7 +265,7 @@ namespace InternFinder.Services
                             Set("Requirements", job.Requirements).
                             Set("ContactEmail", job.ContactEmail).
                             Set("ContactPhone", job.ContactPhone);
-                    var res = jobPostings.UpdateOne(filter, update);
+                    var res = _jobCollection.UpdateOne(filter, update);
                     Console.WriteLine(res);
                     return job;
                 }

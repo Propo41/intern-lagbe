@@ -12,24 +12,23 @@ using InternFinder.Helpers;
 using MongoDB.Bson.Serialization;
 
 
-
-/* Note that here we are hardcoding collection name etc.
-Like I mentioned, in real life you’d be getting these from appsettings.json file. */
 namespace InternFinder.Services
 {
     public interface IUserService
     {
-        ResponseStatus Authenticate(string email, string password);
-        ResponseStatus isUserExist(string email);
-        ResponseStatus VerifyUser(string uid);
+        Payload Authenticate(string email, string password);
+        Payload isUserExist(string email);
+        Payload VerifyUser(string uid);
         User GetById(string uid);
         User Create(User user);
     }
 
 
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly IMongoCollection<User> _userCollection;
+        private readonly IMongoCollection<Company> _companyCollection;
+
         private readonly string _secretKey;
         private readonly int _tokenExpiryTime;
 
@@ -37,16 +36,17 @@ namespace InternFinder.Services
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            _users = db.GetCollection<User>("Users");
+            _userCollection = db.GetCollection<User>("Users");
+            _companyCollection = db.GetCollection<Company>("Company");
             _secretKey = config["JWT:Secret"];
             _tokenExpiryTime = Int32.Parse(config["JWT:ExpiresIn"]);
         }
 
-        public ResponseStatus isUserExist(string email)
+        public Payload isUserExist(string email)
         {
             var filter = Builders<User>.Filter.Eq("Email", email);
-            var userDoc = _users.Find(filter).FirstOrDefaultAsync();
-            return new ResponseStatus { User = userDoc.Result };
+            var userDoc = _userCollection.Find(filter).FirstOrDefaultAsync();
+            return new Payload { User = userDoc.Result };
         }
 
         /*  
@@ -55,22 +55,23 @@ namespace InternFinder.Services
         are valid and if so, it will create the token with data we want inside it. 
         Method looks like this: 
         */
-        public ResponseStatus Authenticate(string email, string password)
+        public Payload Authenticate(string email, string password)
         {
-            var user = _users.Find(u => u.Email == email).FirstOrDefault();
+            var user = _userCollection.Find(u => u.Email == email).FirstOrDefault();
             // user doesn't exist
             if (user == null)
             {
                 Console.WriteLine(email + " doesnt exist");
-                return new ResponseStatus { StatusCode = 404, StatusDescription = "User doesn't exist." };
+                return new Payload { StatusCode = 404, StatusDescription = "User doesn't exist." };
             }
             else
             {
-                bool verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
-                if (!verified)
+                // decoding hash password
+                bool isPasswordVerified = BCrypt.Net.BCrypt.Verify(password, user.Password);
+                if (!isPasswordVerified)
                 {
                     Console.WriteLine("Password is incorrect");
-                    return new ResponseStatus { StatusCode = 403, StatusDescription = "Password is incorrect. Did you forget your password?" };
+                    return new Payload { StatusCode = 400, StatusDescription = "Password is incorrect. Did you forget your password?" };
 
                 }
 
@@ -79,35 +80,41 @@ namespace InternFinder.Services
                     Console.WriteLine(email + " is  verified");
                     // create token
                     string token = Util.GenerateToken(user, _secretKey, "Company", _tokenExpiryTime);
-                    return new ResponseStatus { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = token };
+                    return new Payload { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = token };
                 }
                 else
                 {
                     Console.WriteLine(email + " is not verified");
                     // user is not verified
                     // prompt user to verify their account
-                    return new ResponseStatus { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
+                    return new Payload { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
                 }
             }
 
 
         }
 
-        public ResponseStatus VerifyUser(string uid)
+        public Payload VerifyUser(string uid)
         {
             try
             {
+                Company company = new Company();
+                _companyCollection.InsertOne(company);
+               
                 var filter = Builders<User>.Filter.Eq("Id", uid);
-                var update = Builders<User>.Update.Set("IsVerified", true);
-                var res = _users.UpdateOneAsync(filter, update);
+                var update = Builders<User>.Update.
+                    Set("IsVerified", true).
+                    Set("CompanyId", company.Id);
+                var res = _userCollection.UpdateOneAsync(filter, update);
+
                 Console.WriteLine(res.Result);
 
-                return new ResponseStatus { StatusCode = 200, StatusDescription = "User verified." };
+                return new Payload { StatusCode = 200, StatusDescription = "User verified." };
             }
             catch (System.Exception e)
             {
                 Console.WriteLine(e.Message);
-                return new ResponseStatus { StatusCode = 500, StatusDescription = "Internal Server Error" };
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
 
         }
@@ -118,7 +125,7 @@ namespace InternFinder.Services
             try
             {
                 var filter = Builders<User>.Filter.Eq("Id", uid);
-                return _users.Find(filter).FirstOrDefault();
+                return _userCollection.Find(filter).FirstOrDefault();
             }
             catch (System.Exception e)
             {
@@ -128,9 +135,15 @@ namespace InternFinder.Services
 
         }
 
+        /* creates a new user and a company instance in the database */
         public User Create(User user)
         {
-            _users.InsertOne(user);
+            /* @debug remove it */
+            Company company = new Company();
+            /* @debug remove it */
+            _companyCollection.InsertOne(company);
+            user.CompanyId = company.Id;
+            _userCollection.InsertOne(user);
             return user;
         }
     }

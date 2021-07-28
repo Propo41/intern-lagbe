@@ -23,7 +23,7 @@ namespace InternFinder.Services
 
     public interface IEmailService
     {
-        ResponseStatus Service(string email, string uid, string type);
+        Payload Service(string email, string uid, string type);
         Task SendVerificationEmail(string email, string token, string uid);
     }
 
@@ -40,19 +40,19 @@ namespace InternFinder.Services
             emailFromEmail = config["EmailService:SENDGRID_FROM_EMAIL"];
         }
 
-        public ResponseStatus Service(string email, string uid, string type)
+        public Payload Service(string email, string uid, string type)
         {
             if (type == "confirmation")
             {
                 try
                 {
                     //SendVerificationEmail(email, Util.GenerateToken(), uid).Wait();
-                    return new ResponseStatus { StatusCode = 200, StatusDescription = "Email sent" };
+                    return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    return new ResponseStatus { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
+                    return new Payload { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
                 }
             }
             return null;

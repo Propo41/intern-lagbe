@@ -38,16 +38,16 @@ const ToggleAvailableButton = (props) => {
     e.stopPropagation();
     console.log("unavailable");
 
+    let formData = new FormData();
+    formData.append("id", props.id);
+    formData.append("isAvailable", false);
     try {
-      const { data } = await POST_AUTH(`api/company/job/status`, {
-        id: props.id,
-        isAvailable: false,
-      });
+      const { data } = await POST_AUTH(`api/company/job/status`, formData);
       console.log(data);
-      window.location.reload();
+      // window.location.reload();
     } catch (e) {
       console.log(e);
-      window.location.reload();
+      //   window.location.reload();
     }
   };
 
@@ -56,16 +56,17 @@ const ToggleAvailableButton = (props) => {
     e.stopPropagation();
     console.log("available");
 
+    let formData = new FormData();
+    formData.append("id", props.id);
+    formData.append("isAvailable", true);
+
     try {
-      const { data } = await POST_AUTH(`api/company/job/status`, {
-        id: props.id,
-        isAvailable: true,
-      });
+      const { data } = await POST_AUTH(`api/company/job/status`, formData);
       console.log(data);
-      window.location.reload();
+       window.location.reload();
     } catch (e) {
       console.log(e);
-      window.location.reload();
+       window.location.reload();
     }
   };
 
@@ -74,11 +75,11 @@ const ToggleAvailableButton = (props) => {
     e.preventDefault();
     console.log("deleting..");
 
+    var form = new FormData();
+    form.append("id", props.id);
+
     try {
-      const { data } = await DELETE_AUTH(`api/company/job`, {
-        id: props.id,
-        isAvailable: true,
-      });
+      const { data } = await DELETE_AUTH(`api/company/job`, form);
       console.log(data);
       window.location.reload();
     } catch (e) {

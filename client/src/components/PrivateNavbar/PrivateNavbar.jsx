@@ -20,7 +20,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import useStyles from "../../styles/private_navbar";
 
-const PrivateNavbar = () => {
+const PrivateNavbar = (props) => {
   const theme = useTheme();
   const classes = useStyles();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -38,6 +38,11 @@ const PrivateNavbar = () => {
 
   const handleClick = () => {
     setOpenNestedList(!openNestedList);
+  };
+  const onLogoutClick = () => {
+    console.log("log out");
+    localStorage.clear();
+    window.location.reload(); 
   };
 
   return (
@@ -112,7 +117,11 @@ const PrivateNavbar = () => {
                         height: "35px",
                       }}
                       alt="company logo"
-                      src="/assets/images/dummy_logo.png"
+                      src={
+                        props.avatar
+                          ? props.avatar
+                          : "/assets/images/company_img_preview.svg"
+                      }
                     />
                   </ListItemText>
                   {openNestedList ? <ExpandLess /> : <ExpandMore />}
@@ -135,13 +144,7 @@ const PrivateNavbar = () => {
                       style={{ display: "grid", justifyContent: "center" }}
                       onClick={handleClose}
                     >
-                      <ListItemText
-                        primary="Logout"
-                        onClick={() => {
-                          localStorage.clear();
-                          window.location.reload();
-                        }}
-                      />
+                      <ListItemText primary="Logout" onClick={onLogoutClick} />
                     </ListItem>
                   </List>
                 </Collapse>
@@ -160,7 +163,7 @@ const PrivateNavbar = () => {
               <Link to="/profile">PROFILE</Link>
             </Button>
             <div className={classes.rightToolbar}>
-              <LogoutComponent />
+              <LogoutComponent avatar={props.avatar} />
             </div>
           </div>
         )}

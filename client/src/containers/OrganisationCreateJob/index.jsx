@@ -21,10 +21,29 @@ const OrganisationCreateJob = () => {
     "Enter your job requirements in details"
   );
 
+  // check profile status
+  // only allow creating jobs iff profile is completed
+  useEffect(() => {
+    const exe = async () => {
+      try {
+        const { data } = await GET_AUTH(`api/company/profile-completion`);
+        console.log(data);
+        if (!data) {
+          window.location.href = `/`;
+        }
+      } catch (e) {
+        console.log(e);
+        window.location.href = `/`;
+      }
+    };
+    exe();
+  }, []);
+
   const onInputChange = (event) => {
     const { value, name } = event.target;
     console.log("deleting");
     console.log(value, name);
+
     setFormInput((prevState) => ({
       ...prevState,
       [name]: value,

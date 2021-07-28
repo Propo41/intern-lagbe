@@ -1,10 +1,16 @@
 # InternFinder
 
-### To run:
+### To run
 - clone the repo
 - `dotnet watch run` or `dotnet run`
 
-### Packages used:
+### Note
+- When sending payloads to the server, consider 2 cases:
+
+  1. When sending wholesome data models, such as in Registration page, CreateJob page etc, receive the payload as their corresponding models
+  2. But when sending edited data or partial data, such as sending only the jobID and status, send the data as FormData and receive the payload as IFormCollection in the server.
+
+### Packages used
 To install a package using the dotnet CLI:  `dotnet add package <package-name>`
 - `MongoDB.Driver`
 - `Microsoft.AspNetCore.Authentication`

@@ -22,6 +22,8 @@ namespace InternFinder.Services
         About GetLandingPageContent();
         About GetAboutUs();
         About Create(About about);
+        Company GetCompanyInfo(string companyId);
+        List<Job> GetCompanyJobPostings(string companyId);
     }
 
     public class GeneralService : IGeneralService
@@ -30,6 +32,8 @@ namespace InternFinder.Services
         private readonly IMongoCollection<Company> _companyCollection;
         private readonly IMongoCollection<User> _usersCollection;
         private readonly IMongoCollection<About> _aboutCollection;
+        private readonly IMongoCollection<Job> _jobCollection;
+
         private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
 
 
@@ -39,8 +43,8 @@ namespace InternFinder.Services
             var db = client.GetDatabase("HyphenDb");
             _aboutCollection = db.GetCollection<About>("About");
             _companyCollection = db.GetCollection<Company>("Company");
-            _usersCollection = db.GetCollection<User>("User");
-
+            _usersCollection = db.GetCollection<User>("Users");
+            _jobCollection = db.GetCollection<Job>("Job_Postings");
         }
 
         public List<Company> GetAllCompanies()
@@ -80,6 +84,53 @@ namespace InternFinder.Services
         {
             _aboutCollection.InsertOne(about);
             return about;
+        }
+
+        public Company GetCompanyInfo(string companyId) {
+            try
+            {
+                var filter = Builders<Company>.Filter.Eq("Id", companyId);
+                var projection = Builders<Company>.Projection.
+                    Include("Name").
+                    Include("CompanyDescription").
+                    Include("Contact").
+                    Include("OfficeAddress").
+                    Include("AvailableJobCount").
+                    Include("District");
+                var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
+                return BsonSerializer.Deserialize<Company>(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        public List<Job> GetCompanyJobPostings(string companyId) {
+            try
+            {
+                var filter = Builders<Job>.Filter.Eq("CompanyId", companyId);
+                var projection = Builders<Job>.Projection.
+                        Include("Title").
+                        Include("Address").
+                        Include("District").
+                        Include("IsAvailable").
+                        Include("Requirements").
+                        Include("ContactEmail").
+                        Include("ContactPhone");
+                var result = _jobCollection.Find(filter).Project(projection).ToList();
+                List<Job> postings = new List<Job>();
+                foreach (var item in result)
+                    postings.Add(BsonSerializer.Deserialize<Job>(item));
+
+                return postings;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
     }

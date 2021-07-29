@@ -52,11 +52,11 @@ namespace InternFinder.Controllers
         public ActionResult Create(About about) => Ok(_generalService.Create(about));
 
         // GET api/landingpage/company/{companyId}
-        //fetches individual company's information and job postings
+        // fetches individual company's information and job postings
         [HttpGet("company/{companyId}")]
         public ActionResult GetCompanyInfo(string companyId)
         {
-            User res = _generalService.GetCompanyInfo(companyId);
+            Company res = _generalService.GetCompanyInfo(companyId);
             return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
         }
 

@@ -51,8 +51,8 @@ const OrganisationProfilePage = () => {
           ? setDescription(data.description)
           : setDescription("Enter your company description");
         setPreviewUrl(data.profilePictureUrl);
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        console.log(error.response);
         setError(true);
       }
     };
@@ -61,12 +61,15 @@ const OrganisationProfilePage = () => {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(image);
     try {
+      // get the temporary signed url from server to upload the image
       const { data } = await GET_AUTH(`api/company/profile/image`);
       console.log(data);
       // uploading image to uploadCare server
       const url = await uploadImage(data);
+
+      setPreviewUrl(url);
 
       const payload = {
         ...form,
@@ -75,6 +78,7 @@ const OrganisationProfilePage = () => {
       };
       console.log(payload);
 
+      // sending the form input to server along with the image url
       const res = await POST_AUTH(`api/company/profile`, {
         ...form,
         description: description,
@@ -82,10 +86,13 @@ const OrganisationProfilePage = () => {
       });
       console.log(res.data);
 
-      //  window.location.reload();
+      window.location.reload();
     } catch (error) {
-      console.log(error);
-      setError(true);
+      if (error.response) {
+        console.log(error.response.data.errors);
+        console.log(error.response.data.title);
+      }
+      // setError(true);
     }
   };
 

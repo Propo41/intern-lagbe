@@ -28,7 +28,6 @@ const OrganisationHomepage = () => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(`api/company`);
-
           setJobsPosted(data);
           console.log(data);
           resolve();
@@ -44,9 +43,9 @@ const OrganisationHomepage = () => {
     const promise2 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
-          const { data } = await GET_AUTH(`api/company/profile-completion`);
+          const { data } = await GET_AUTH(`api/company/profile-config`);
           console.log(data);
-          setProfileStatus(data);
+          setProfileStatus(data.status);
           resolve();
         } catch (e) {
           console.log(e);

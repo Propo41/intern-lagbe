@@ -11,24 +11,28 @@ import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_create_job";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import MDEditor from "@uiw/react-md-editor";
+import errorHandling from "../../utils/error_handling.js";
+import Alert from "../../components/AlertCustom";
+import { LinearProgress } from "@material-ui/core";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
-  const [error, setError] = React.useState(false);
   const [form, setFormInput] = React.useState(null);
   const [description, setDescription] = React.useState(
     "Enter your job requirements in details"
   );
+  const [alert, setAlert] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
 
   // check profile status
   // only allow creating jobs iff profile is completed
   useEffect(() => {
     const exe = async () => {
       try {
-        const { data } = await GET_AUTH(`api/company/profile-completion`);
-        console.log(data);
-        if (!data) {
+        const { data } = await GET_AUTH(`api/company/profile-config`);
+        console.log(data.status);
+        if (!data.status) {
           window.location.href = `/`;
         }
       } catch (e) {
@@ -54,27 +58,30 @@ const OrganisationCreateJob = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setLoadingBar(true);
+
     try {
       const { data } = await POST_AUTH(`api/company/job`, {
         ...form,
         requirements: description,
       });
-      setError(false);
+      setAlert(null);
       console.log(data);
       window.location.reload();
     } catch (e) {
+      setLoadingBar(false);
       console.log(e);
-      setError(true);
+      if (e.response) {
+        setAlert(errorHandling(e));
+      }
     }
   };
-
-  if (error) {
-    return <div>Error</div>;
-  }
 
   return (
     <>
       <PrivateNavbar />
+      {loadingBar && <LinearProgress />}
+
       <div className="content-grid-padding">
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">
@@ -153,6 +160,14 @@ const OrganisationCreateJob = () => {
                     CREATE NEW LISTING
                   </Button>
                 </div>
+
+                {alert && alert.status && (
+                  <Alert
+                    severity={alert.severity}
+                    title={alert.title}
+                    message={alert.message}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12} lg={5} style={{ textAlign: "right" }}>

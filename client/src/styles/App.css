@@ -40,6 +40,8 @@
   --margin-item-spacing-xlg: 50px;
 
   --margin-footer-spacing: 0px;
+  /* paper radius */
+  --radius-paper: 10px;
 }
 
 body {
@@ -151,6 +153,11 @@ a {
   color: var(--white) !important;
   font-family: "Sen" !important;
 }
+
+.MuiLinearProgress-barColorPrimary {
+  background-color: var(--purple) !important;
+}
+
 .MuiButton-contained:hover {
   box-shadow: var(--card-shadow) !important;
   background-color: #9c8dfd !important;

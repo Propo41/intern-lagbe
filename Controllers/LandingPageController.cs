@@ -30,14 +30,13 @@ namespace InternFinder.Controllers
         [Route("companies")]
         public ActionResult GetCompanyList()
         {
-            // return Ok(_generalService.GetAllCompanies());
-            List<Company> res = _generalService.GetAllCompanies();
-            return Ok(res);
+            return Ok(_generalService.GetAllCompanies());
         }
 
         // fetch landing page content
         [HttpGet]
         public ActionResult GetLandingPageContent() => Ok(_generalService.GetLandingPageContent());
+
 
         [HttpGet]
         [Route("about")]

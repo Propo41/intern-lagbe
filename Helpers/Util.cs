@@ -129,26 +129,6 @@ namespace InternFinder.Helpers
             return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
-
-        /* https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
-               https://uploadcare.com/api-refs/rest-api/v0.5.0/#section/Authentication/Uploadcare.Simple */
-        public static async Task DeleteImage(string uuid, string publicKey, string secretKey)
-        {
-
-            Console.WriteLine("Deleting file: " + uuid);
-            string URL = $"https://api.uploadcare.com/files/{uuid}/storage/";
-            HttpClient client = new HttpClient();
-            // the following headers are required for the uploadcare API
-            client.DefaultRequestHeaders.Add("Accept", "application/vnd.uploadcare-v0.5+json");
-            client.DefaultRequestHeaders.Add("Authentication", $"Uploadcare.Simple {publicKey}:{secretKey}");
-
-            // DELETE request
-            var response = client.DeleteAsync(URL);
-            var msg = await response;
-            Console.WriteLine(msg);
-
-        }
-
     }
 
 }

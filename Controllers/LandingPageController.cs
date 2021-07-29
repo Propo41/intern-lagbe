@@ -37,7 +37,7 @@ namespace InternFinder.Controllers
         [HttpGet]
         public ActionResult GetLandingPageContent() => Ok(_generalService.GetLandingPageContent());
 
-        [Authorize]
+      
         [HttpGet]
         [Route("about")]
         public ActionResult GetAboutUs()

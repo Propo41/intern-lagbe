@@ -58,7 +58,7 @@ namespace InternFinder.Controllers
         public ActionResult VerifyToken(string token, string uid)
         {
             Console.WriteLine("endpoint triggered");
-            if (token==null || uid==null || token.Length == 0 || uid.Length == 0)
+            if (token == null || uid == null || token.Length == 0 || uid.Length == 0)
             {
                 return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Bad Request" });
             }
@@ -93,9 +93,9 @@ namespace InternFinder.Controllers
                     return Ok(new Payload { StatusCode = 200, StatusDescription = "Login success.", Token = res.Token });
                 case 403:
                     Payload responseStatus = _emailService.Service(res.User.Email, res.User.Id, "confirmation");
-                    return Unauthorized(new { statusDescription = res.StatusDescription });
+                    return new UnauthorizedObjectResult(new ErrorResult("Verification error", 403, res.StatusDescription));
                 default:
-                    return Unauthorized(res);
+                    return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, res.StatusDescription));
             }
 
 

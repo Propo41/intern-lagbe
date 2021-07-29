@@ -4,17 +4,24 @@ import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
 import TextInputLayout from "../../components/TextInputLayout";
-import { useMediaQuery } from "@material-ui/core";
+import { LinearProgress, useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/signin_page";
 import { Link, useHistory } from "react-router-dom";
 import { POST } from "../../api/api.js";
+import Alert from "../../components/AlertCustom";
+import errorHandling from "../../utils/error_handling.js";
+import Snackbar from "../../components/SnackbarCustom";
 
 const SignInPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [form, setForm] = React.useState(null);
-  const history = useHistory();
+  const [alert, setAlert] = React.useState(null);
+  //const [snackbar, setSnackbar] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
+
+  const history = useHistory(); 
 
   const onInput = (event) => {
     const { value, name } = event.target;
@@ -27,6 +34,7 @@ const SignInPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(form);
+    setLoadingBar(true);
     try {
       const { data } = await POST("auth/user/login", {
         email: form.email,
@@ -34,22 +42,37 @@ const SignInPage = () => {
       });
       console.log(data);
       if (data.statusCode === 200) {
-        console.log("Logged in successfully.");
+        setAlert(null);
+
+        /*  setSnackbar({
+          open: true,
+          message: "You have successfully logged in.",
+          severity: "success",
+        }); */
+
         localStorage.setItem("token", data.token);
         window.location.href = "/";
-       /*  history.push({
-          pathname: "/",
-        }); */
       }
     } catch (e) {
-      console.log(e.response);
+      setLoadingBar(false);
+      if (e.response) {
+        setAlert(errorHandling(e));
+      } else {
+        console.log("server didnt respond");
+      }
     }
   };
 
   return (
     <>
       <PublicNavbar />
+      {loadingBar && <LinearProgress />}
       <div className="content-grid-padding">
+        {/* <Snackbar
+          severity={snackbar && snackbar.severity}
+          open={snackbar && snackbar.open}
+          message={snackbar && snackbar.message}
+        /> */}
         <Grid container spacing={5} className={classes.root}>
           <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
             <Paper elevation={5} className="semi-rounded-card">
@@ -79,6 +102,7 @@ const SignInPage = () => {
                   fullWidth={true}
                   className={classes.buttonPurple}
                   onClick={onSubmit}
+                  disabled={form === null || Object.keys(form).length < 2}
                 >
                   SIGN IN
                 </Button>
@@ -121,6 +145,13 @@ const SignInPage = () => {
               >
                 REGISTER
               </Button>
+              {alert && alert.status && (
+                <Alert
+                  severity={alert.severity}
+                  title={alert.title}
+                  message={alert.message}
+                />
+              )}
             </Paper>
           </Grid>
           <Grid
@@ -129,14 +160,12 @@ const SignInPage = () => {
             lg={5}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            {mobileViewBreakpoint ? (
+            {mobileViewBreakpoint && (
               <img
                 src="/assets/images/login_blob.svg"
                 alt="landing page"
                 className={classes.image}
               />
-            ) : (
-              ""
             )}
           </Grid>
         </Grid>

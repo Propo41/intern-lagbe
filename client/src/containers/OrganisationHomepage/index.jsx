@@ -28,7 +28,6 @@ const OrganisationHomepage = () => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(`api/company`);
-
           setJobsPosted(data);
           console.log(data);
           resolve();
@@ -44,9 +43,9 @@ const OrganisationHomepage = () => {
     const promise2 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
-          const { data } = await GET_AUTH(`api/company/profile-completion`);
+          const { data } = await GET_AUTH(`api/company/profile-config`);
           console.log(data);
-          setProfileStatus(data);
+          setProfileStatus(data.status);
           resolve();
         } catch (e) {
           console.log(e);
@@ -186,7 +185,8 @@ const OrganisationHomepage = () => {
                         history.push("/create-job");
                       }}
                     >
-                      {" "}Create a new posting.
+                      {" "}
+                      Create a new posting.
                     </span>
                   </h1>
                 ) : (
@@ -198,7 +198,8 @@ const OrganisationHomepage = () => {
                         history.push("/profile");
                       }}
                     >
-                      {" "}Setup profile.
+                      {" "}
+                      Setup profile.
                     </span>
                   </h1>
                 )}

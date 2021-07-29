@@ -92,7 +92,7 @@ namespace InternFinder.Services
                 var filter = Builders<Company>.Filter.Eq("Id", companyId);
                 var projection = Builders<Company>.Projection.
                     Include("Name").
-                    Include("CompanyDescription").
+                    Include("Description").
                     Include("Contact").
                     Include("OfficeAddress").
                     Include("AvailableJobCount").

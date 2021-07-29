@@ -186,7 +186,8 @@ const OrganisationHomepage = () => {
                         history.push("/create-job");
                       }}
                     >
-                      {" "}Create a new posting.
+                      {" "}
+                      Create a new posting.
                     </span>
                   </h1>
                 ) : (
@@ -198,7 +199,8 @@ const OrganisationHomepage = () => {
                         history.push("/profile");
                       }}
                     >
-                      {" "}Setup profile.
+                      {" "}
+                      Setup profile.
                     </span>
                   </h1>
                 )}

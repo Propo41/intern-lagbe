@@ -9,180 +9,198 @@ import AvailPositionCard from "../../components/AvailPositionCard";
 import Label from "../../components/Label";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/company_page";
+import { GET, POST } from "../../api/api.js";
+import LoadingAnimation from "../../components/LoadingAnimation";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const companies = {
-  company: "Microsoft",
-  address: "Dhanmondi, Dhaka",
-  jobs: [
-    {
-      title: "SOFTWARE ENGINEER",
-      address: "Dhaka, Dhanmondi",
-      requirements:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
-      status: "false",
-    },
-    {
-      title: "PRODUCTION ENGINEER",
-      address: "Dhaka, Dhanmondi",
-
-      requirements:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
-      status: "true",
-    },
-    {
-      title: "FRONT END ENGINEER",
-      address: "Dhaka, Dhanmondi",
-
-      requirements:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
-      status: "true",
-    },
-    {
-      title: "FRONT END ENGINEER",
-      address: "Dhaka, Dhanmondi",
-
-      requirements:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in accumsan platea. Ridiculus ",
-      mail: "microsoft@aust.edu",
-      contact: "+880 19611156262",
-      status: "true",
-    },
-  ],
-};
-const CompanyPage = () => {
+const CompanyPage = (props) => {
   const classes = useStyles();
+  const { companyId } = useParams();
+  console.log("company id", companyId);
+  const [companyInfo, setCompanyInfo] = React.useState(null);
+  const [jobPostings, setJobPostings] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  return (
-    <>
-      <PublicNavbar />
-      <div className="content-grid-padding">
-        {/* Landing page */}
-        <Grid container>
-          <Grid item xs={12} sm={6}>
-            <h1 className="title">Microsoft</h1>
-            <h1 className="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id turpis
-              a nulla id nisl. At urna non hendrerit feugiat aliquet. Proin at
-              blandit ut pellentesque at in accumsan platea. Ridiculus urna non
-              hendrerit feugiat aliquet. Proin at blandit ut pellentesque at in
-              accumsan platea. Ridiculus
-            </h1>
-            <div
+  useEffect(() => {
+    const promise1 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const res = await GET(`api/landingpage/company/${companyId}`);
+          setCompanyInfo(res.data);
+          console.log(res.data);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise2 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const res = await GET(`api/landingpage/company/${companyId}/jobs`);
+          setJobPostings(res.data);
+          console.log(res.data);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2])
+      .then((values) => {
+        console.log("all promises resolved");
+        setLoading(false);
+        setError(false);
+        // setFilteredLocations(["Dhaka"]);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setError(true);
+      });
+  }, []);
+
+  if (error) {
+    return (
+      <div>
+        <p>Failed to load. Try again..</p>
+      </div>
+    );
+  } else if (loading) {
+    return <LoadingAnimation />;
+  } else {
+    return (
+      <>
+        <PublicNavbar />
+        <div className="content-grid-padding">
+          {/* Landing page */}
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <h1 className="title">{companyInfo.name}</h1>
+              <h1 className="content">{companyInfo.description}</h1>
+              <div
+                style={{
+                  marginTop: "35px",
+                }}
+              >
+                <Label
+                  text={companyInfo.officeAddress}
+                  icon={"location"}
+                  color={"black"}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <img
+                src="/assets/images/circular_blob.svg"
+                alt="landing page"
+                className={classes.landingImage}
+              />
+            </Grid>
+          </Grid>
+          {/* Landing page body */}
+          <Grid container spacing={5}>
+            <Grid
+              item
+              xs={12}
+              lg={8}
               style={{
-                marginTop: "35px",
+                marginTop: "65px",
               }}
             >
-              <Label text={"Dhaka"} icon={"location"} color={"black"} />
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <img
-              src="/assets/images/circular_blob.svg"
-              alt="landing page"
-              className={classes.landingImage}
-            />
-          </Grid>
-        </Grid>
-        {/* Landing page body */}
-        <Grid container spacing={5}>
-          <Grid
-            item
-            xs={12}
-            lg={8}
-            style={{
-              marginTop: "65px",
-            }}
-          >
-            <Grid container>
-              <Grid
-                item
-                xs={12}
-                sm={5}
-                style={{
-                  alignSelf: "center",
-                }}
-              >
-                <h1
-                  className="section-heading"
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  sm={5}
                   style={{
-                    margin: "0",
+                    alignSelf: "center",
                   }}
                 >
-                  AVAILABLE POSITIONS
-                </h1>
+                  <h1
+                    className="section-heading"
+                    style={{
+                      margin: "0",
+                    }}
+                  >
+                    AVAILABLE POSITIONS
+                  </h1>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={7}
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    zIndex: "1000",
+                  }}
+                >
+                  <FilterBySort />
+                </Grid>
               </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={7}
+              <div
                 style={{
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  zIndex: "1000",
+                  marginTop: "30px",
                 }}
-              >
-                <FilterBySort />
-              </Grid>
+              ></div>
+
+              {jobPostings.map((job) => {
+                return (
+                  <div key={job.id}>
+                    <AvailPositionCard
+                      id={job.id}
+                      expandable={job.isAvailable === true ? true : false}
+                      title={job.title}
+                      address={job.address}
+                      more={job}
+                      disabledButton={job.isAvailable === true ? false : true}
+                    />
+                  </div>
+                );
+              })}
             </Grid>
-            <div
-              style={{
-                marginTop: "30px",
-              }}
-            ></div>
+            <Grid item xs={12} lg={4}>
+              <Paper elevation={2} className={classes.getStartedCard}>
+                <h1 className="section-heading">GET STARTED</h1>
+                <h1 className="content">
+                  Lorem ipsum dolor sit amet, consectetur
+                </h1>
+                <Button
+                  variant="contained"
+                  fullWidth={true}
+                  className={classes.buttonSmallPurple}
+                >
+                  CREATE A RESUME
+                </Button>
 
-            {companies.jobs.map((job, index) => {
-              return (
-                <AvailPositionCard
-                  expandable={job.status === "true" ? true : false}
-                  company={job.title}
-                  address={job.address}
-                  more={job}
-                  disabledButton={job.status === "true" ? false : true}
-                />
-              );
-            })}
+                <Button
+                  variant="contained"
+                  fullWidth={true}
+                  className={classes.buttonSmallRed}
+                >
+                  APPLYING TIPS
+                </Button>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} lg={4}>
-            <Paper elevation={2} className={classes.getStartedCard}>
-              <h1 className="section-heading">GET STARTED</h1>
-              <h1 className="content">
-                Lorem ipsum dolor sit amet, consectetur
-              </h1>
-              <Button
-                variant="contained"
-                fullWidth={true}
-                className={classes.buttonSmallPurple}
-              >
-                CREATE A RESUME
-              </Button>
-
-              <Button
-                variant="contained"
-                fullWidth={true}
-                className={classes.buttonSmallRed}
-              >
-                APPLYING TIPS
-              </Button>
-            </Paper>
-          </Grid>
-        </Grid>
-      </div>
-      <div
-        style={{
-          marginTop: "var(--margin-footer-spacing)",
-        }}
-      >
-        <Footer />
-      </div>
-    </>
-  );
+        </div>
+        <div
+          style={{
+            marginTop: "var(--margin-footer-spacing)",
+          }}
+        >
+          <Footer />
+        </div>
+      </>
+    );
+  }
 };
 
 /* https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sticky-footer  -> sticky footer to bottom */

@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import FilterBySort from "../../components/FilterBySort";
 import FilterByLocation from "../../components/FilterByLocation";
-import AvailPositionCard from "../../components/AvailPositionCard";
+import AvailCompanyCard from "../../components/AvailCompanyCard";
 import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/landing_page";
@@ -56,7 +56,7 @@ const LandingPage = () => {
         console.log("all promises resolved");
         setLoading(false);
         setError(false);
-        setFilteredLocations(["Dhaka"]);
+        // setFilteredLocations(["Dhaka"]);
       })
       .catch((error) => {
         console.log("error", error);
@@ -148,15 +148,14 @@ const LandingPage = () => {
                   companies.map((company) => {
                     if (filteredLocations.includes(company.district)) {
                       return (
-                        <AvailPositionCard
+                        <AvailCompanyCard
                           key={company.id}
-                          expandable={false}
+                          id={company.id}
                           company={company.name}
                           address={company.officeAddress}
                           disabledButton={
                             company.availableJobCount === 0 ? true : false
                           }
-                          avatar={company.profilePictureUrl}
                         />
                       );
                     } else {
@@ -169,15 +168,17 @@ const LandingPage = () => {
                 companies &&
                 companies.map((company) => {
                   return (
-                    <AvailPositionCard
+                    <AvailCompanyCard
                       key={company.id}
-                      expandable={false}
+                      id={company.id}
+                      // expandable={false}
                       company={company.name}
                       address={company.officeAddress}
-                      disabledButton={
-                        company.availableJobCount === 0 ? true : false
-                      }
-                      avatar={company.profilePictureUrl}
+                      /***** availableJobCount not implemented *****/
+                      // disabledButton={
+                      //   company.availableJobCount === 0 ? true : false
+                      // }
+                      disabledButton={false}
                     />
                   );
                 })}

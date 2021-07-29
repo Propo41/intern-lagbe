@@ -365,6 +365,12 @@ a {
   margin: 16px 0;
 }
 
+.MuiAccordion-root.Mui-expanded:last-child {
+  margin-bottom: 20px !important;
+}
+.MuiAccordion-root.Mui-expanded:first-child {
+  margin-top: 20px !important;
+}
 .MuiAccordion-root:before {
   background-color: var(--body-color) !important;
 }

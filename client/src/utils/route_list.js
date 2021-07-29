@@ -18,7 +18,7 @@ const routerList = {
     { path: "/", component: LandingPage },
     { path: "/about", component: AboutPage },
     {
-      path: "/company/:company",
+      path: "/company/:companyId",
       component: CompanyPage,
     },
     { path: "/sign-in", component: SignInPage },

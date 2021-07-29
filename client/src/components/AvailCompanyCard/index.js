@@ -3,20 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Avatar,
   Button,
+  Card,
+  CardContent,
   Container,
   Grid,
 } from "@material-ui/core";
 
-import Label from "../Label";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import ApplyJobModal from "../ApplyJobModal";
 import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -47,28 +41,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AvailPositionCard = (props) => {
+const AvailCompanyCard = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
 
   const onApplyClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    props.expandable && setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
-    <Accordion
+    <Card
       className="rounded-card"
       onClick={() => {
         console.log(props.id);
       }}
     >
-      <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+      <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8} className={classes.flex}>
             <Avatar
@@ -77,7 +65,7 @@ const AvailPositionCard = (props) => {
               className={classes.large}
             />
             <Container>
-              <h1 className="sub-heading">{props.title}</h1>
+              <h1 className="sub-heading">{props.company}</h1>
               <h1 className="card-location sub-content">{props.address}</h1>
             </Container>
           </Grid>
@@ -113,53 +101,19 @@ const AvailPositionCard = (props) => {
                   : classes.enabledButton
               }
             >
-              {/* <Link
+              <Link
                 to={{
                   pathname: `/company/${props.id}`,
                 }}
               >
                 APPLY
-              </Link> */}
-              APPLY
+              </Link>
             </Button>
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              className={classes.modal}
-              open={open}
-              onClose={handleClose}
-              onClick={(event) => event.stopPropagation()}
-              onFocus={(event) => event.stopPropagation()}
-              closeAfterTransition
-              BackdropComponent={Backdrop}
-              hideBackdrop={false}
-              BackdropProps={{
-                timeout: 500,
-              }}
-            >
-              <Fade in={open}>
-                <ApplyJobModal />
-              </Fade>
-            </Modal>
           </Grid>
         </Grid>
-      </AccordionSummary>
-      {props.expandable ? (
-        <AccordionDetails>
-          <h1 className="sub-heading">REQUIREMENTS</h1>
-          <h1 className="content">{props.more.requirements}</h1>
-          <Label text={props.more.contactEmail} icon={"mail"} color={"black"} />
-          <Label
-            text={props.more.contactEmail}
-            icon={"phone"}
-            color={"black"}
-          />
-        </AccordionDetails>
-      ) : (
-        ""
-      )}
-    </Accordion>
+      </CardContent>
+    </Card>
   );
 };
 
-export default AvailPositionCard;
+export default AvailCompanyCard;

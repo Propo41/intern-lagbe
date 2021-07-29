@@ -48,9 +48,9 @@ namespace InternFinder.Services
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            uploadCarePubKey = config["UploadCare:PubKey"];
-            uploadCareSecret = config["UploadCare:Secret"];
-            uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
+            // uploadCarePubKey = config["UploadCare:PubKey"];
+            // uploadCareSecret = config["UploadCare:Secret"];
+            // uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
             _userCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");

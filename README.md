@@ -7,6 +7,10 @@
 # IMPORTANT FOR PRODUCTION
 - all comments with @debug initials, remove them during production
 
+### Potential Errors
+- When running the program, an error `Microsoft.AspNetCore.SpaServices[0]: internal/modules/cjs/loader.js:883"` might pop up. Simply remove the node_modules folder and package-lock.json file
+- You need the files appsettings.json and appsettings.Development.json for the program to run
+
 ### Credentials
 Check <a href="https://docs.google.com/document/d/15o92_bAJAjbDGLN3EiKJ3iPX76xrkUo67c9FoZofb4Y/edit?usp=sharing">here</a>
 ### Note

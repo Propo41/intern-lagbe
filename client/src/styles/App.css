@@ -28,6 +28,9 @@
   --font-size-button-large: 1.563rem; /* dont use */
   --font-size-button-medium: 1.25rem; /* dont use */
   --font-size-button-small: 0.938rem;
+  --font-size-dialog-title: 1.5rem;
+  --font-size-dialog-content: 1rem;
+
   /* button dimens */
   --button-padding: 10px;
   /* text input dimens */
@@ -165,6 +168,34 @@ a {
 
 .MuiButton-contained {
   box-shadow: var(--card-shadow) !important;
+}
+
+/* @override dialog */
+
+.MuiDialogTitle-root {
+  font-size: var(--font-size-dialog-title) !important;
+  font-family: "Sen" !important;
+}
+.MuiTypography-body1 {
+  font-size: var(--font-size-dialog-content) !important;
+  font-family: "Sen" !important;
+}
+
+/* ** */
+
+.EasyMDEContainer .CodeMirror {
+  border-top: 1px solid #ddd !important;
+  border-bottom: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  font-family: "Sen" !important;
+  background-color: var(--ash) !important;
+  color: var(--darkash) !important;
+}
+.editor-toolbar {
+  border: 0px solid var(--white) !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
 }
 
 .MuiMenu-paper {

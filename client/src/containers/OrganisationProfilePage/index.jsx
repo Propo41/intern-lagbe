@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -10,7 +10,6 @@ import Footer from "../../components/Footer";
 import useStyles from "../../styles/organisation_profile_page";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
-import MDEditor from "@uiw/react-md-editor";
 import Avatar from "@material-ui/core/Avatar";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,6 +17,12 @@ import axios from "axios";
 import errorHandling from "../../utils/error_handling.js";
 import Alert from "../../components/AlertCustom";
 import { LinearProgress } from "@material-ui/core";
+import MarkdownEditor from "../../components/MarkdownEditor";
+import SimpleMdeReact from "react-simplemde-editor";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import ReactDOMServer from "react-dom/server";
+import ReactMarkdown from "react-markdown";
 
 const OrganisationProfilePage = () => {
   const classes = useStyles();
@@ -33,7 +38,6 @@ const OrganisationProfilePage = () => {
   );
   const [alert, setAlert] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
-
 
   useEffect(() => {
     if (image) {
@@ -136,10 +140,19 @@ const OrganisationProfilePage = () => {
     }
   };
 
+  const handleInput = (event) => {
+    console.log(event.target.value);
+  };
+
   if (loading) {
     return <LoadingAnimation />;
   }
- 
+  const markdown = `
+  # Header 1
+  ## Header 2
+  ** bold **
+  `;
+
   return (
     <>
       <PrivateNavBar />
@@ -235,15 +248,14 @@ const OrganisationProfilePage = () => {
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <MDEditor
-                    height={200}
-                    value={description}
-                    onChange={setDescription}
-                    preview="preview"
-                    className="markdown-area-style"
+                  <MarkdownEditor
+                    description={description}
+                    setDescription={setDescription}
                   />
                 </div>
-
+               {/*  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <ReactMarkdown children={description} />
+                </div> */}
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                   <Button
                     variant="contained"

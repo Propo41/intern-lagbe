@@ -63,10 +63,10 @@ const ToggleAvailableButton = (props) => {
     try {
       const { data } = await POST_AUTH(`api/company/job/status`, formData);
       console.log(data);
-       window.location.reload();
+      window.location.reload();
     } catch (e) {
       console.log(e);
-       window.location.reload();
+      window.location.reload();
     }
   };
 

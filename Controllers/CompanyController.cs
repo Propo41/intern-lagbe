@@ -167,17 +167,27 @@ namespace InternFinder.Controllers
 
         // POST api/company/job/{jobId}/edit 
         // updates individual job's detail
-        [HttpPost("job/{jobId}/edit")]
-        public ActionResult UpdateJobDetails(Job job, string jobId)
+        [HttpPost]
+        [Route("job/edit")]
+        public ActionResult UpdateJobDetails(Job job)
         {
-            if (jobId != null && jobId != "")
+            if (!ModelState.IsValid)
             {
-                Job res = _companyService.UpdateJobDetails(job, jobId);
-                return res != null ? Ok(res) : BadRequest(new { error = "Failed to edit job post. Please try again" });
+                System.Console.WriteLine("invalid input!!");
+                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
+            }
+            if (job != null && job.CompanyId == _authUser.CompanyId)
+            {
+                System.Console.WriteLine("input correct");
+
+                Payload res = _companyService.UpdateJobDetails(job);
+                return Ok(res);
             }
             else
             {
-                return BadRequest(new { error = "Cannot edit. Job ID is invalid" });
+                System.Console.WriteLine("Internal error");
+
+                return BadRequest(new { error = "Internal server error" });
             }
         }
 

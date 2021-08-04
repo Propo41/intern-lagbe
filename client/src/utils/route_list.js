@@ -52,11 +52,11 @@ const routerList = {
       component: OrganisationCreateJob,
     },
     {
-      path: "/job/:jobid",
+      path: "/job/:jobId",
       component: OrganisationJobPost,
     },
     {
-      path: "/job/:jobid/edit",
+      path: "/job/:jobId/edit",
       component: OrganisationJobPostEdit,
     },
     { path: "/*", component: OrganisationHomepage },

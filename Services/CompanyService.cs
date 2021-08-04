@@ -28,7 +28,7 @@ namespace InternFinder.Services
         Payload UpdateJobStatus(string jobId, bool status);
         Payload DeleteJob(string jobId);
         Job GetJobDetails(string jobId);
-        Job UpdateJobDetails(Job job, string jobId);
+        Payload UpdateJobDetails(Job job);
     }
 
     public class CompanyService : ICompanyService
@@ -46,9 +46,9 @@ namespace InternFinder.Services
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
-            // uploadCarePubKey = config["UploadCare:PubKey"];
-            // uploadCareSecret = config["UploadCare:Secret"];
-            // uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
+            uploadCarePubKey = config["UploadCare:PubKey"];
+            uploadCareSecret = config["UploadCare:Secret"];
+            uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
             _userCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");
@@ -257,6 +257,8 @@ namespace InternFinder.Services
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
                 var projection = Builders<Job>.Projection.
                     Include("Title").
+                    Include("CompanyId").
+                    Include("IsAvailable").
                     Include("Address").
                     Include("District").
                     Include("Requirements").
@@ -273,13 +275,11 @@ namespace InternFinder.Services
             }
         }
 
-        public Job UpdateJobDetails(Job job, string jobId)
+        public Payload UpdateJobDetails(Job job)
         {
             try
             {
-                if (jobId == job.Id)
-                {
-                    var filter = Builders<Job>.Filter.Eq("Id", jobId);
+                var filter = Builders<Job>.Filter.Eq("Id", job.Id);
                     var update = Builders<Job>.Update.
                             Set("Title", job.Title).
                             Set("Address", job.Address).
@@ -288,19 +288,14 @@ namespace InternFinder.Services
                             Set("ContactEmail", job.ContactEmail).
                             Set("ContactPhone", job.ContactPhone);
                     var res = _jobCollection.UpdateOne(filter, update);
-                    Console.WriteLine(res);
-                    return job;
-                }
-                else
-                {
-                    Console.WriteLine("job id did't match");
-                    return null;
-                }
+
+                return new Payload { StatusCode = 201, StatusDescription = "Job post updated successfully." };
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return null;
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
     }

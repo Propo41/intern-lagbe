@@ -198,6 +198,16 @@ a {
   border-top-right-radius: 5px !important;
 }
 
+.mark-down-viewer {
+  background-color: var(--ash);
+  border-radius: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: var(--darkash);
+}
+
 .MuiMenu-paper {
   box-shadow: var(--card-shadow) !important;
 }

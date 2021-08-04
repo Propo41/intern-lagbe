@@ -38,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "auto",
     backgroundColor: "var(--purple)",
   },
+  chip:{
+    fontFamily: "Sen",
+    color: "var(--darkash)",
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  }
 }));
 
 export default useStyles;

@@ -23,6 +23,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import ReactDOMServer from "react-dom/server";
 import ReactMarkdown from "react-markdown";
+import FilterDropdown from "../../components/FilterDropdown";
 
 const OrganisationProfilePage = () => {
   const classes = useStyles();
@@ -235,6 +236,7 @@ const OrganisationProfilePage = () => {
                     onInputChange={onInputChange}
                     name="district"
                   />
+                  <FilterDropdown list={["xx", "yy"]} />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
@@ -251,11 +253,11 @@ const OrganisationProfilePage = () => {
                   <MarkdownEditor
                     description={description}
                     setDescription={setDescription}
+                    placeholder="Enter your company description"
+                    disabled={false}
                   />
                 </div>
-               {/*  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <ReactMarkdown children={description} />
-                </div> */}
+
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                   <Button
                     variant="contained"

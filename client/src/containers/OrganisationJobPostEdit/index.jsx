@@ -9,6 +9,7 @@ import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_job_post_edit";
+import MarkdownEditor from "../../components/MarkdownEditor";
 
 const jobPost = {
   id: "1238959134914asd14",
@@ -22,6 +23,7 @@ const jobPost = {
 const OrganisationJobPostEdit = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [description, setDescription] = React.useState(jobPost.requirements);
 
   return (
     <>
@@ -41,14 +43,7 @@ const OrganisationJobPostEdit = () => {
                     value={jobPost.title}
                   />
                 </div>
-                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="requirements"
-                    placeholder="Enter job requirements"
-                    type="text"
-                    value={jobPost.requirements}
-                  />
-                </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
                     icon="mail"
@@ -63,6 +58,13 @@ const OrganisationJobPostEdit = () => {
                     placeholder="Enter contact number (optional)"
                     type="text"
                     value={jobPost.contact}
+                  />
+                </div>
+
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <MarkdownEditor
+                    description={description}
+                    setDescription={setDescription}
                   />
                 </div>
 

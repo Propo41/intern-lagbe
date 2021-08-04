@@ -11,6 +11,8 @@ import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/orginsation_job_post";
 import { Link } from "react-router-dom";
+import MarkdownEditor from "../../components/MarkdownEditor";
+import ReactMarkdown from "react-markdown";
 
 const jobPost = {
   id: "1238959134914asd14",
@@ -27,6 +29,7 @@ const OrganisationJobPost = (props) => {
   console.log(props.match.params.jobid);
   const jobId = props.match.params.jobid;
   const jobUrl = `/home/job/${jobId}/edit`;
+  const [description, setDescription] = React.useState(jobPost.requirements);
 
   return (
     <>
@@ -80,6 +83,16 @@ const OrganisationJobPost = (props) => {
                     value={jobPost.contact}
                     readOnly={true}
                   />
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "var(--margin-item-spacing)",
+                    background: "var(--ash)",
+                  }}
+                  className="mark-down-viewer"
+                >
+                  <ReactMarkdown children={description} />
                 </div>
               </Grid>
 

@@ -1,11 +1,11 @@
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useMemo } from "react";
-
+// https://github.com/RIP21/react-simplemde-editor
 const MarkdownEditor = (props) => {
   const autofocusNoSpellcheckerOptions = useMemo(() => {
     return {
-      autofocus: true,
+      autofocus: false,
       spellChecker: false,
     };
   }, []);
@@ -16,6 +16,7 @@ const MarkdownEditor = (props) => {
       value={props.description}
       onChange={props.setDescription}
       className="markdown-area-style"
+      placeholder={props.placeholder}
     />
   );
 };

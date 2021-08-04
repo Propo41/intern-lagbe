@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { useHistory } from "react-router";
+import MarkdownEditor from "../../components/MarkdownEditor";
 
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
@@ -22,6 +23,7 @@ const OrganisationJobPostEdit = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [formInput, setFormInput] = React.useState(null);
+  const [description, setDescription] = React.useState(null);
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
@@ -29,6 +31,7 @@ const OrganisationJobPostEdit = (props) => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
           setJob(data);
+          setDescription(data.requirements)
           setFormInput(data);
           console.log(data);
           resolve();
@@ -109,15 +112,12 @@ const OrganisationJobPostEdit = (props) => {
                     />
                   </div>
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                    <TextInputLayout
-                      icon="requirements"
-                      placeholder="Enter job requirements"
-                      type="text"
-                      value={job.requirements}
-                      onInputChange={onInputChange}
-                      name="requirements"
+                    <MarkdownEditor
+                        description={description}
+                        setDescription={setDescription}
                     />
                   </div>
+
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="mail"

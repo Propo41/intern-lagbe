@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import FilterBySort from "../../components/FilterBySort";
+import FilterDropdown from "../../components/FilterDropdown";
 import FilterByLocation from "../../components/FilterByLocation";
 import AvailCompanyCard from "../../components/AvailCompanyCard";
 import TextInputLayout from "../../components/TextInputLayout";
@@ -12,6 +12,7 @@ import useStyles from "../../styles/landing_page";
 import { useEffect } from "react";
 import { GET } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import { Avatar, Chip } from "@material-ui/core";
 //https://material-ui.com/components/chips/  use chips after selecting locations
 
 const LandingPage = () => {
@@ -21,6 +22,7 @@ const LandingPage = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
+  const districts = ["Dhaka", "Khulna", "Chittagong"];
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
@@ -43,6 +45,7 @@ const LandingPage = () => {
           const res = await GET("api/landingpage");
           setLandingPage(res.data);
           console.log(res.data);
+
           resolve();
         } catch (e) {
           reject();
@@ -131,10 +134,38 @@ const LandingPage = () => {
                     zIndex: "1000",
                   }}
                 >
-                  <FilterBySort />
-                  <FilterByLocation />
+                  <FilterDropdown list={["s", "y"]} />
+                  <FilterByLocation
+                    districts={districts}
+                    setLocations={setFilteredLocations}
+                    locations={filteredLocations}
+                  />
                 </Grid>
               </Grid>
+              <div
+                style={{
+                  marginTop: "15px",
+                  display: filteredLocations.length > 0 ? "block" : "none",
+                }}
+              >
+                {filteredLocations.map((location, index) => {
+                  return (
+                    <Chip
+                      key={index}
+                      label={location}
+                      className={classes.chip}
+                      onDelete={(e) => {
+                        // remove location from filteredLocations
+                        const newLocations = filteredLocations.filter(
+                          (l) => l !== location
+                        );
+                        setFilteredLocations(newLocations);
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
               <div
                 style={{
                   marginTop: "30px",
@@ -162,6 +193,20 @@ const LandingPage = () => {
                       return null;
                     }
                   })
+              }
+
+              {
+                /*  if the locations in filteredlocations are not in companies, show the no jobs message */
+                filteredLocations.length > 0 &&
+                  companies &&
+                  companies.filter((company) => {
+                    return filteredLocations.includes(company.district);
+                  }).length === 0 && (
+                    <p>
+                      No companies available. Display a picture here as
+                      placeholder
+                    </p>
+                  )
               }
 
               {filteredLocations.length === 0 &&

@@ -1,8 +1,16 @@
 import React from "react";
-import {Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper,} from "@material-ui/core";
+import {
+  Button,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+} from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
-const FilterBySort = () => {
+const FilterDropdown = (props) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -68,8 +76,12 @@ const FilterBySort = () => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>Alphabetically</MenuItem>
-                  <MenuItem onClick={handleClose}>Jobs Posted</MenuItem>
+                  {props.list &&
+                    props.list.map((item, index) => (
+                      <MenuItem key={index} onClick={handleClose}>
+                        {item}
+                      </MenuItem>
+                    ))}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -80,4 +92,4 @@ const FilterBySort = () => {
   );
 };
 
-export default FilterBySort;
+export default FilterDropdown;

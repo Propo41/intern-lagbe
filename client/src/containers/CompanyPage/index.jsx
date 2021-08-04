@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import FilterBySort from "../../components/FilterBySort";
 import AvailPositionCard from "../../components/AvailPositionCard";
 import Label from "../../components/Label";
 import Footer from "../../components/Footer";
@@ -13,6 +12,7 @@ import { GET, POST } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import FilterDropdown from "../../components/FilterDropdown";
 
 const CompanyPage = (props) => {
   const classes = useStyles();
@@ -142,7 +142,7 @@ const CompanyPage = (props) => {
                     zIndex: "1000",
                   }}
                 >
-                  <FilterBySort />
+                  <FilterDropdown />
                 </Grid>
               </Grid>
               <div

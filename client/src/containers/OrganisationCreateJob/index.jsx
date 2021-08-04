@@ -14,6 +14,7 @@ import MDEditor from "@uiw/react-md-editor";
 import errorHandling from "../../utils/error_handling.js";
 import Alert from "../../components/AlertCustom";
 import { LinearProgress } from "@material-ui/core";
+import MarkdownEditor from "../../components/MarkdownEditor";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
@@ -137,12 +138,11 @@ const OrganisationCreateJob = () => {
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <MDEditor
-                    height={200}
-                    value={description}
-                    onChange={setDescription}
-                    preview="preview"
-                    className="markdown-area-style"
+                  <MarkdownEditor
+                    description={description}
+                    setDescription={setDescription}
+                    placeholder="Enter your company description"
+                    disabled={false}
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>

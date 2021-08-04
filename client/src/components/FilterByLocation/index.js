@@ -1,16 +1,19 @@
 import React from "react";
 import {
   Button,
+  Checkbox,
   ClickAwayListener,
   Grow,
+  makeStyles,
   MenuItem,
   MenuList,
   Paper,
   Popper,
+  StylesProvider,
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
-const FilterByLocation = () => {
+const FilterByLocation = (props) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -22,7 +25,6 @@ const FilterByLocation = () => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
     setOpen(false);
   };
 
@@ -33,15 +35,38 @@ const FilterByLocation = () => {
     }
   }
 
+  const handleCheckBoxClick = (event) => {
+    const name = event.target.name;
+    console.log(name);
+    props.setLocations((prev) => {
+      console.log(prev);
+      // if selected name is already in the list, remove it
+      if (prev.indexOf(name) !== -1) {
+        prev.splice(prev.indexOf(name), 1);
+        return [...prev];
+      } else {
+        return [...prev, name];
+      }
+    });
+  };
+
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
+
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
+
+  const styles = makeStyles((theme) => ({
+    checkBoxContainer: {
+      justifyContent: "left !important",
+      justifyItems: "left !important",
+    },
+  }));
+
   return (
     <div>
       <Button
@@ -76,9 +101,28 @@ const FilterByLocation = () => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleClose}>Dhaka</MenuItem>
-                  <MenuItem onClick={handleClose}>Khulna</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  {props.districts.map((district, index) => {
+                    return (
+                      <MenuItem
+                        key={index}
+                        className={styles.checkBoxContainer}
+                      >
+                        <Checkbox
+                          checked={
+                            props.locations.indexOf(district) === -1
+                              ? false
+                              : true
+                          }
+                          inputProps={{ "aria-label": "primary checkbox" }}
+                          size="small"
+                          color="default"
+                          name={district}
+                          onChange={handleCheckBoxClick}
+                        />
+                        {district}
+                      </MenuItem>
+                    );
+                  })}
                 </MenuList>
               </ClickAwayListener>
             </Paper>

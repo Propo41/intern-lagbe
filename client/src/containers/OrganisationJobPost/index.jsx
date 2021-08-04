@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
+import MarkdownEditor from "../../components/MarkdownEditor";
+import ReactMarkdown from "react-markdown";
 
 const OrganisationJobPost = (props) => {
   const classes = useStyles();
@@ -22,6 +24,7 @@ const OrganisationJobPost = (props) => {
   const [error, setError] = React.useState(false);
   const { jobId } = useParams();
   const jobEditUrl = `/job/${jobId}/edit`;
+  const [description, setDescription] = React.useState(null);
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
@@ -29,6 +32,7 @@ const OrganisationJobPost = (props) => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
           setJob(data);
+          setDescription(data.requirements);
           console.log(data);
           resolve();
         } catch (e) {
@@ -85,14 +89,14 @@ const OrganisationJobPost = (props) => {
                       readOnly={true}
                     />
                   </div>
-                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                    <TextInputLayout
-                      icon="requirements"
-                      placeholder="Enter job requirements"
-                      type="text"
-                      value={job.requirements}
-                      readOnly={true}
-                    />
+                  <div
+                    style={{
+                      marginTop: "var(--margin-item-spacing)",
+                      background: "var(--ash)",
+                    }}
+                    className="mark-down-viewer"
+                  >
+                    <ReactMarkdown children={description} />
                   </div>
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -10,18 +10,25 @@ import Footer from "../../components/Footer";
 import useStyles from "../../styles/organisation_profile_page";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
-import MDEditor from "@uiw/react-md-editor";
 import Avatar from "@material-ui/core/Avatar";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
+import errorHandling from "../../utils/error_handling.js";
+import Alert from "../../components/AlertCustom";
+import { LinearProgress } from "@material-ui/core";
+import MarkdownEditor from "../../components/MarkdownEditor";
+import SimpleMdeReact from "react-simplemde-editor";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import ReactDOMServer from "react-dom/server";
+import ReactMarkdown from "react-markdown";
 
 const OrganisationProfilePage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [profileInfo, setProfileInfo] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(false);
   const [form, setFormInput] = React.useState(null);
   const [description, setDescription] = React.useState(null);
   const [image, setImage] = React.useState(null);
@@ -29,6 +36,8 @@ const OrganisationProfilePage = () => {
   const [previewUrl, setPreviewUrl] = React.useState(
     "/assets/images/company_img_preview.svg"
   );
+  const [alert, setAlert] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {
     if (image) {
@@ -53,7 +62,6 @@ const OrganisationProfilePage = () => {
         setPreviewUrl(data.profilePictureUrl);
       } catch (error) {
         console.log(error.response);
-        setError(true);
       }
     };
     exe();
@@ -61,38 +69,37 @@ const OrganisationProfilePage = () => {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(image);
+    console.log(image ? "image selected" : "no image selected");
+    setLoadingBar(true);
     try {
-      // get the temporary signed url from server to upload the image
-      const { data } = await GET_AUTH(`api/company/profile/image`);
-      console.log(data);
-      // uploading image to uploadCare server
-      const url = await uploadImage(data);
-
-      setPreviewUrl(url);
+      // get the temporary signed url from server to upload the image iff the user changed the image
+      var url = "";
+      if (image) {
+        const { data } = await GET_AUTH(`api/company/profile/image`);
+        console.log(data);
+        // uploading image to uploadCare server
+        url = await uploadImage(data);
+        setPreviewUrl(url);
+      }
 
       const payload = {
         ...form,
         description: description,
-        profilePictureUrl: url,
+        profilePictureUrl: image ? url : previewUrl,
       };
       console.log(payload);
 
       // sending the form input to server along with the image url
-      const res = await POST_AUTH(`api/company/profile`, {
-        ...form,
-        description: description,
-        profilePictureUrl: url,
-      });
+      const res = await POST_AUTH(`api/company/profile`, payload);
+      setAlert(null);
       console.log(res.data);
 
       window.location.reload();
     } catch (error) {
+      setLoadingBar(false);
       if (error.response) {
-        console.log(error.response.data.errors);
-        console.log(error.response.data.title);
+        setAlert(errorHandling(error));
       }
-      // setError(true);
     }
   };
 
@@ -133,15 +140,24 @@ const OrganisationProfilePage = () => {
     }
   };
 
+  const handleInput = (event) => {
+    console.log(event.target.value);
+  };
+
   if (loading) {
     return <LoadingAnimation />;
   }
-  if (error) {
-    return <div>Error</div>;
-  }
+  const markdown = `
+  # Header 1
+  ## Header 2
+  ** bold **
+  `;
+
   return (
     <>
-      <PrivateNavBar avatar={previewUrl} />
+      <PrivateNavBar />
+      {loadingBar && <LinearProgress />}
+
       <div className="content-grid-padding">
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">
@@ -232,15 +248,14 @@ const OrganisationProfilePage = () => {
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <MDEditor
-                    height={200}
-                    value={description}
-                    onChange={setDescription}
-                    preview="preview"
-                    className="markdown-area-style"
+                  <MarkdownEditor
+                    description={description}
+                    setDescription={setDescription}
                   />
                 </div>
-
+               {/*  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <ReactMarkdown children={description} />
+                </div> */}
                 <div style={{ marginTop: "var(--margin-item-spacing-lg)" }}>
                   <Button
                     variant="contained"
@@ -252,6 +267,14 @@ const OrganisationProfilePage = () => {
                     SAVE CHANGES
                   </Button>
                 </div>
+
+                {alert && alert.status && (
+                  <Alert
+                    severity={alert.severity}
+                    title={alert.title}
+                    message={alert.message}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12} lg={5} style={{ textAlign: "right" }}>

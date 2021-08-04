@@ -19,13 +19,33 @@ import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import useStyles from "../../styles/private_navbar";
+import { useEffect } from "react";
+import { GET_AUTH } from "../../api/api";
 
-const PrivateNavbar = (props) => {
+const PrivateNavbar = () => {
   const theme = useTheme();
   const classes = useStyles();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userInfo, setUserInfo] = React.useState({
+    profilePictureUrl: "/assets/images/company_img_preview.svg",
+    name: "Company",
+    status: false,
+  });
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const exe = async () => {
+      try {
+        const { data } = await GET_AUTH(`api/company/profile-config`);
+        setUserInfo(data);
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    exe();
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,10 +59,11 @@ const PrivateNavbar = (props) => {
   const handleClick = () => {
     setOpenNestedList(!openNestedList);
   };
-  const onLogoutClick = () => {
+  const onLogoutClick = (e) => {
+    e.stopPropagation();
     console.log("log out");
     localStorage.clear();
-    window.location.reload(); 
+    window.location.reload();
   };
 
   return (
@@ -117,11 +138,7 @@ const PrivateNavbar = (props) => {
                         height: "35px",
                       }}
                       alt="company logo"
-                      src={
-                        props.avatar
-                          ? props.avatar
-                          : "/assets/images/company_img_preview.svg"
-                      }
+                      src={userInfo.profilePictureUrl}
                     />
                   </ListItemText>
                   {openNestedList ? <ExpandLess /> : <ExpandMore />}
@@ -163,7 +180,7 @@ const PrivateNavbar = (props) => {
               <Link to="/profile">PROFILE</Link>
             </Button>
             <div className={classes.rightToolbar}>
-              <LogoutComponent avatar={props.avatar} />
+              <LogoutComponent avatar={userInfo.profilePictureUrl} />
             </div>
           </div>
         )}

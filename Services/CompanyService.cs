@@ -14,6 +14,8 @@ using InternFinder.Helpers;
 using System.Threading.Tasks;
 using EllipticCurve;
 using System.ComponentModel;
+using System.Net.Http;
+using System.Linq;
 
 namespace InternFinder.Services
 {
@@ -22,7 +24,7 @@ namespace InternFinder.Services
         Task<Payload> UpdateCompanyProfile(Company company);
         UploadCare GetSignedUrl();
         Company GetCompanyProfile(string companyId);
-        Task<bool> GetProfileStatus(string companyId);
+        Task<Payload> GetProfileConfig(string companyId);
         List<Job> FetchJobPostings(string companyId);
         Task<Job> CreateJobPosting(Job job);
         Payload UpdateJobStatus(string jobId, bool status);
@@ -59,16 +61,26 @@ namespace InternFinder.Services
         Also, deletes any current image that is saved previously*/
         async public Task<Payload> UpdateCompanyProfile(Company company)
         {
+            Console.Write("image from server: ");
+            Console.WriteLine(company.ProfilePictureUrl);
             try
             {
                 // check if user has any existing images stored in the database
                 string url = GetCompanyImage(company.Id);
                 if (url != null)
                 {
-                    // delete the image from the uploadcare server
-                    // extracting the uid from the url
-                    var imageUuid = url.Split('/')[4];
-                    await Util.DeleteImage(imageUuid, uploadCarePubKey, uploadCareSecret);
+                    // CHECK if user uploaded a new picture
+                    // if old url = new url, then it means user did not upload a new picture
+                    // if not, then delete the old picture
+                    if (!url.Equals(company.ProfilePictureUrl))
+                    {
+                        Console.WriteLine("deleteing file");
+                        // delete the image from the uploadcare server
+                        // extracting the uid from the url
+                        string imageUuid = url.Split('/')[3];
+                        await DeleteImage(imageUuid, uploadCarePubKey, uploadCareSecret);
+                    }
+
                 }
 
                 var filter = Builders<Company>.Filter.Eq("Id", company.Id);
@@ -108,7 +120,6 @@ namespace InternFinder.Services
         {
             KeyValuePair<string, string> pair = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
             return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
-
         }
 
         public Company GetCompanyProfile(string companyId)
@@ -135,15 +146,21 @@ namespace InternFinder.Services
 
 
         }
-
-
-        async public Task<bool> GetProfileStatus(string companyId)
+        /*
+        Gets the IsProfileComplete and Preview Url and company name if exist
+        @Data1 = IsProfileComplete 
+        @Data2 = ProfilePictureUrl
+        @Data3 = Name
+        */
+        async public Task<Payload> GetProfileConfig(string companyId)
         {
             try
             {
                 var filter = Builders<Company>.Filter.Eq("Id", companyId);
                 var projection = Builders<Company>.Projection.
                     Include("IsProfileComplete").
+                    Include("ProfilePictureUrl").
+                    Include("Name").
                     Include("Id");
                 var options = new FindOptions<Company> { Projection = projection };
 
@@ -152,13 +169,13 @@ namespace InternFinder.Services
                 Console.Write("profileStatus: ");
                 Console.WriteLine(company.IsProfileComplete);
 
-                return company.IsProfileComplete;
+                return new Payload { Data1 = company.IsProfileComplete, Data2 = company.ProfilePictureUrl, Data3 = company.Name };
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return false;
+                return null;
             }
 
 
@@ -193,9 +210,9 @@ namespace InternFinder.Services
         async public Task<Job> CreateJobPosting(Job job)
         {
             // only allow user to create a job iff profile is complete
-            bool profileStatus = await GetProfileStatus(job.CompanyId);
+            Payload payload = await GetProfileConfig(job.CompanyId);
 
-            if (!profileStatus)
+            if (!payload.Data1)
             {
                 Console.WriteLine("Couldn't create a job post. User needs to create a profile first");
                 return null;
@@ -298,5 +315,29 @@ namespace InternFinder.Services
                 return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
+
+        /* https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
+               https://uploadcare.com/api-refs/rest-api/v0.5.0/#section/Authentication/Uploadcare.Simple */
+        public static async Task DeleteImage(string uuid, string publicKey, string secretKey)
+        {
+            Console.Write("Deleting file: ");
+            Console.WriteLine(uuid);
+            string URL = $"https://api.uploadcare.com/files/{uuid}/storage/";
+            HttpClient client = new HttpClient();
+            // the following headers are required for the uploadcare API
+            client.DefaultRequestHeaders.Add("Accept", "application/vnd.uploadcare-v0.5+json");
+            client.DefaultRequestHeaders.Add("Authorization", $"Uploadcare.Simple {publicKey}:{secretKey}");
+
+            // DELETE request
+            var response = await client.DeleteAsync(URL);
+        }
     }
 }
+
+/* 
+
+"https://ucarecdn.com/61d6fc53-138e-48d5-866b-cf04021fb765/"
+
+correct: c31a98e1-5650-4e71-ba48-c08fc309d55f
+old:     c31a98e1-5650-4e71-ba48-c08fc309d55f
+ */

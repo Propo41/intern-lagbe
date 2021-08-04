@@ -4,15 +4,19 @@ import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
 import TextInputLayout from "../../components/TextInputLayout";
-import { useMediaQuery } from "@material-ui/core";
+import { LinearProgress, useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/register_page";
 import { POST } from "../../api/api.js";
+import errorHandling from "../../utils/error_handling.js";
+import Alert from "../../components/AlertCustom";
 
 const RegisterPage = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
   const [form, setForm] = React.useState(null);
+  const [alert, setAlert] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
 
   const onInput = (event) => {
     const { value, name } = event.target;
@@ -25,6 +29,7 @@ const RegisterPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(form);
+    setLoadingBar(true);
     try {
       const { data } = await POST("auth/user/register", {
         email: form.email,
@@ -40,13 +45,18 @@ const RegisterPage = () => {
         }, 1000);
       }
     } catch (e) {
+      setLoadingBar(false);
       console.log(e.response.data.statusDescription);
+      if (e.response) {
+        setAlert(errorHandling(e));
+      }
     }
   };
 
   return (
     <>
       <PublicNavbar />
+      {loadingBar && <LinearProgress />}
       <div className="content-grid-padding">
         <Grid container spacing={5} className={classes.root}>
           <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
@@ -90,6 +100,13 @@ const RegisterPage = () => {
                   REGISTER
                 </Button>
               </div>
+              {alert && alert.status && (
+                <Alert
+                  severity={alert.severity}
+                  title={alert.title}
+                  message={alert.message}
+                />
+              )}
             </Paper>
           </Grid>
 

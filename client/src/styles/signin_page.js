@@ -1,9 +1,19 @@
 import { makeStyles } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "var(--content-margin-top)",
     flexWrap: "wrap",
     alignItems: "center",
+  },
+  alert: {
+    marginTop: "var(--margin-item-spacing-lg)",
+    borderRadius: "var(--radius-paper)",
+    textAlign: "left",
+    fontFamily: "Sen",
+  },
+  alertTitle: {
+    fontFamily: "Sen",
   },
   card: {
     borderTopRightRadius: 60,

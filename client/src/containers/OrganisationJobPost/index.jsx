@@ -13,10 +13,8 @@ import { useEffect } from "react";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
-import { Link } from "react-router-dom";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
-
 
 const OrganisationJobPost = (props) => {
   const classes = useStyles();
@@ -28,14 +26,13 @@ const OrganisationJobPost = (props) => {
   const jobEditUrl = `/job/${jobId}/edit`;
   const [description, setDescription] = React.useState(null);
 
-
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
           setJob(data);
-          setDescription(data.requirements)
+          setDescription(data.requirements);
           console.log(data);
           resolve();
         } catch (e) {
@@ -93,11 +90,11 @@ const OrganisationJobPost = (props) => {
                     />
                   </div>
                   <div
-                      style={{
-                        marginTop: "var(--margin-item-spacing)",
-                        background: "var(--ash)",
-                      }}
-                      className="mark-down-viewer"
+                    style={{
+                      marginTop: "var(--margin-item-spacing)",
+                      background: "var(--ash)",
+                    }}
+                    className="mark-down-viewer"
                   >
                     <ReactMarkdown children={description} />
                   </div>

@@ -10,6 +10,9 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import BusinessIcon from "@material-ui/icons/Business";
 import DescriptionIcon from "@material-ui/icons/Description";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
+import HomeWorkIcon from "@material-ui/icons/HomeWork";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import CategoryIcon from "@material-ui/icons/Category";
 
 /**
  * A util function that returns the desired Material Icon based on the parameters provided
@@ -44,6 +47,12 @@ const iconMapper = (iconName, color, parent) => {
       return <BusinessIcon style={style(color, parent)} />;
     case "description":
       return <DescriptionIcon style={style(color, parent)} />;
+    case "district":
+      return <HomeWorkIcon style={style(color, parent)} />;
+    case "category":
+      return <CategoryIcon style={style(color, parent)} />;
+    case "remuneration":
+      return <AccountBalanceIcon style={style(color, parent)} />;
     default:
       return <BookmarkIcon style={style(color, parent)} />;
   }

@@ -35,6 +35,7 @@ namespace InternFinder.Controllers
             _authUser = (User)_httpContextAccessor.HttpContext.Items["User"];
         }
 
+
         // POST api/company/profile 
         // updates user profile and set value of profileCompletion to true
         [HttpPost]
@@ -156,20 +157,21 @@ namespace InternFinder.Controllers
 
         // POST api/company/job/{jobId}/edit 
         // updates individual job's detail
-        [HttpPost("job/{jobId}/edit")]
-        public ActionResult UpdateJobDetails(Job job, string jobId)
+        [HttpPost]
+        [Route("job/edit")]
+        public ActionResult UpdateJobDetails(Job job)
         {
-            if (jobId != null && jobId != "")
+            if (job != null && job.CompanyId == _authUser.CompanyId)
             {
-                Job res = _companyService.UpdateJobDetails(job, jobId);
-                return res != null ? Ok(res) :
-                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
+                System.Console.WriteLine("input correct");
 
+                Payload res = _companyService.UpdateJobDetails(job);
+                return res != null ? Ok(res) :
+                                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
             }
             else
             {
                 return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Cannot edit. Job ID is invalid"));
-
             }
         }
 

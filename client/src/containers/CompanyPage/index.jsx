@@ -63,7 +63,7 @@ const CompanyPage = (props) => {
         console.log("error", error);
         setError(true);
       });
-  }, []);
+  }, [companyId]);
 
   if (error) {
     return (

@@ -46,10 +46,14 @@ const ToggleAvailableButtonMobile = (props) => {
   };
 
   const handleClick = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     setAnchorEl(null);
   };
 
@@ -153,7 +157,9 @@ const ToggleAvailableButtonMobile = (props) => {
     });
   };
 
-  const onAlertClose = () => {
+  const onAlertClose = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     console.log("alert closed");
     setAlertOpen(false);
   };
@@ -207,7 +213,9 @@ const ToggleAvailableButtonMobile = (props) => {
     setToggleType(null);
   };
 
-  const onAlertConfirm = () => {
+  const onAlertConfirm = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setAlertOpen(false);
     console.log("alert confirmed");
     switch (toggleType) {

@@ -61,7 +61,7 @@ const ToggleAvailableButton = (props) => {
   const onToggleAvailableClick = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-
+    console.log("available..");
     setToggleType(_AVAILABLE);
     setAlertContent({
       title: "Are you sure?",
@@ -88,7 +88,9 @@ const ToggleAvailableButton = (props) => {
     setAlertOpen(true);
   };
 
-  const onAlertClose = () => {
+  const onAlertClose = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     console.log("alert closed");
     setAlertOpen(false);
   };
@@ -142,7 +144,9 @@ const ToggleAvailableButton = (props) => {
     setToggleType(null);
   };
 
-  const onAlertConfirm = () => {
+  const onAlertConfirm = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setAlertOpen(false);
     console.log("alert confirmed");
     switch (toggleType) {

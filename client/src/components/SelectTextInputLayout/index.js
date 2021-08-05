@@ -4,109 +4,127 @@ import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import iconMapper from "../../utils/icon_mapper";
 import { useState } from "react";
-import { TextField } from "@material-ui/core";
+import { Button, Select, TextField } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "var(--ash)",
-    borderRadius: 4,
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-    fontFamily: "Sen",
-    color: "var(--darkash)",
-    padding: "var(--text-input-padding)",
-  },
-  mentuItem: {
-    justifyContent: "left !important",
-  },
-}));
+import { ClickAwayListener, Grow, MenuList, Popper } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 /**
- * A component that returns the Filled Text Input component
- * @param icon bookmark, mail, location, requirements, phone, delete, upload, user, lock, key, company, description
- * @param placeholder A String for the hint text
- * @param type email, file, date, image, text
- * @param  readOnly true or false
- * @param rowsMax integer value (optional)
- * @param value String: default value on the input layout
- * @param name String: name of the input, ie email or password
- * @param onInputChange a function passed that handles the input change event
+ *
+ * @param {string} value? the default value. Could be null
+ * @param {string} placeholder the placeholder to be shown
+ * @param {hook} setSelectedValue a hook function that sets the selected value from  the dropdown
+ * @param {string} name the name of the input field, ie district or category
  */
-
-const currencies = [
-  {
-    value: "USD",
-    label: "$",
-  },
-  {
-    value: "EUR",
-    label: "€",
-  },
-  {
-    value: "BTC",
-    label: "฿",
-  },
-  {
-    value: "JPY",
-    label: "¥",
-  },
-];
-
 const SelectTextInputLayout = (props) => {
-  const classes = useStyles();
-  const [value, setValues] = useState(props.value ? props.value : "");
-  const [currency, setCurrency] = React.useState("SELECT JOB CATEGORY");
+  //  const [value, setValues] = useState(props.value ? props.value : "");
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(
+    props.value ? props.value : props.placeholder
+  );
 
-  const handleChange = (event) => {
-    setCurrency(event.target.value);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
   };
 
+  const onClickAway = (event) => {
+    console.log(event.target);
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+     setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   return (
-    <Paper component="form" className={classes.root} elevation={0}>
-      {iconMapper(props.icon, "darkash", "textinputlayout")}
-      {/* <InputBase
-        name={props.name}
-        className={classes.input}
-        placeholder={props.placeholder}
+    <>
+      <Button
+        ref={anchorRef}
+        aria-controls={open ? "menu-list-grow" : undefined}
+        aria-haspopup="true"
+        onClick={handleToggle}
+        className="dropdown-button"
         fullWidth={true}
-        onChange={props.onInputChange}
-        type={props.type}
-        defaultValue={value}
-        multiline={
-          props.icon === "description" || props.icon === "requirements"
-            ? true
-            : false
-        }
-        rowsMax={10}
-        readOnly={props.readOnly}
-      /> */}
-      <TextField
-        className={classes.input}
-        id="outlined-select-currency"
-        select
-        value={currency}
-        onChange={handleChange}
-        variant="standard"
-        fullWidth="true"
-        placeholder="Job effecat"
       >
-        {currencies.map((option) => (
-          <MenuItem
-            className={classes.mentuItem}
-            key={option.value}
-            value={option.value}
+        {iconMapper(props.icon, "darkash", "textinputlayout")}
+        {value}
+        <KeyboardArrowDownIcon />
+      </Button>
+
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        style={{ zIndex: 5, width: "50%" }}
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom" ? "center top" : "center bottom",
+            }}
           >
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField>
-    </Paper>
+            <Paper>
+              <ClickAwayListener onClickAway={onClickAway}>
+                <MenuList
+                  autoFocusItem={open}
+                  id="menu-list-grow"
+                  onKeyDown={handleListKeyDown}
+                >
+                  {props.list &&
+                    props.list.map((item, index) => (
+                      <MenuItem
+                        key={index}
+                        onClick={(event) => {
+                          setValue(item);
+                          props.setSelectedValue((prevState) => ({
+                            ...prevState,
+                            [props.name]: item,
+                          }));
+
+                          console.log(event.target);
+                          if (
+                            anchorRef.current &&
+                            anchorRef.current.contains(event.target)
+                          ) {
+                            return;
+                          }
+
+                          setOpen(false);
+                        }}
+                        name="Monkey"
+                      >
+                        {item}
+                      </MenuItem>
+                    ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </>
   );
 };
 

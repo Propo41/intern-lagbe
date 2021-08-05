@@ -42,6 +42,8 @@ namespace InternFinder.Services
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
+        private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
+        private readonly IMongoCollection<About> _aboutCollection;
 
 
         public CompanyService(IConfiguration config)
@@ -54,6 +56,8 @@ namespace InternFinder.Services
             _userCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");
+            _aboutCollection = db.GetCollection<About>("About");
+
 
         }
 
@@ -90,6 +94,7 @@ namespace InternFinder.Services
                         Set("Contact", company.Contact).
                         Set("OfficeAddress", company.OfficeAddress).
                         Set("District", company.District).
+                        Set("Category", company.Category).
                         Set("ProfilePictureUrl", company.ProfilePictureUrl).
                         Set("IsProfileComplete", true);
                 var res = _companyCollection.UpdateOne(filter, update);
@@ -133,6 +138,7 @@ namespace InternFinder.Services
                     Include("Contact").
                     Include("OfficeAddress").
                     Include("ProfilePictureUrl").
+                    Include("Category").
                     Include("District");
                 var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
                 return BsonSerializer.Deserialize<Company>(result);
@@ -297,14 +303,14 @@ namespace InternFinder.Services
             try
             {
                 var filter = Builders<Job>.Filter.Eq("Id", job.Id);
-                    var update = Builders<Job>.Update.
-                            Set("Title", job.Title).
-                            Set("Address", job.Address).
-                            Set("District", job.District).
-                            Set("Requirements", job.Requirements).
-                            Set("ContactEmail", job.ContactEmail).
-                            Set("ContactPhone", job.ContactPhone);
-                    var res = _jobCollection.UpdateOne(filter, update);
+                var update = Builders<Job>.Update.
+                        Set("Title", job.Title).
+                        Set("Address", job.Address).
+                        Set("District", job.District).
+                        Set("Requirements", job.Requirements).
+                        Set("ContactEmail", job.ContactEmail).
+                        Set("ContactPhone", job.ContactPhone);
+                var res = _jobCollection.UpdateOne(filter, update);
 
                 return new Payload { StatusCode = 201, StatusDescription = "Job post updated successfully." };
 
@@ -331,6 +337,7 @@ namespace InternFinder.Services
             // DELETE request
             var response = await client.DeleteAsync(URL);
         }
+
     }
 }
 

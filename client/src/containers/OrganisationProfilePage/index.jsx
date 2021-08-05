@@ -8,7 +8,7 @@ import TextInputLayout from "../../components/TextInputLayout";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/organisation_profile_page";
-import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import { GET, GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import Avatar from "@material-ui/core/Avatar";
 import EditIcon from "@material-ui/icons/Edit";
@@ -39,9 +39,13 @@ const OrganisationProfilePage = () => {
     "/assets/images/company_img_preview.svg"
   );
   const [alert, setAlert] = React.useState(null);
+  const [districtList, setDistrictList] = React.useState(null);
+  const [categoryList, setCategoryList] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {
+    setLoadingBar(true);
+
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -51,28 +55,80 @@ const OrganisationProfilePage = () => {
     } else {
       setPreview(null);
     }
-    const exe = async () => {
-      try {
-        const { data } = await GET_AUTH(`api/company/profile`);
-        setProfileInfo(data);
-        setFormInput(data);
-        console.log(data);
-        setLoading(false);
-        data.description
-          ? setDescription(data.description)
-          : setDescription("Enter your company description");
-        setPreviewUrl(data.profilePictureUrl);
-      } catch (error) {
-        console.log(error.response);
-      }
-    };
-    exe();
+
+    const promise1 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/company-categories");
+          console.log(data);
+          setCategoryList(data.companyCategories);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise2 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/districts");
+          console.log(data);
+          setDistrictList(data.districts);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise3 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET_AUTH("api/company/profile");
+          console.log(data);
+
+          setProfileInfo(data);
+          setFormInput(data);
+          setLoading(false);
+          data.description
+            ? setDescription(data.description)
+            : setDescription("Enter your company description");
+          setPreviewUrl(data.profilePictureUrl);
+
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2, promise3])
+      .then((values) => {
+        console.log("all promises resolved");
+        setLoadingBar(false);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setLoadingBar(false);
+        /*  if (error) {
+          setAlert(errorHandling(error));
+        } */
+      });
+      
   }, [image]);
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
     console.log(image ? "image selected" : "no image selected");
+    console.log("printing form");
+    console.log(form);
+
     setLoadingBar(true);
+
     try {
       // get the temporary signed url from server to upload the image iff the user changed the image
       var url = "";
@@ -94,10 +150,11 @@ const OrganisationProfilePage = () => {
       // sending the form input to server along with the image url
       const res = await POST_AUTH(`api/company/profile`, payload);
       setAlert(null);
+      setLoadingBar(false);
       console.log(res.data);
-
       window.location.reload();
     } catch (error) {
+      setLoading(false);
       setLoadingBar(false);
       if (error.response) {
         setAlert(errorHandling(error));
@@ -142,18 +199,9 @@ const OrganisationProfilePage = () => {
     }
   };
 
-  const handleInput = (event) => {
-    console.log(event.target.value);
-  };
-
   if (loading) {
     return <LoadingAnimation />;
   }
-  const markdown = `
-  # Header 1
-  ## Header 2
-  ** bold **
-  `;
 
   return (
     <>
@@ -229,25 +277,26 @@ const OrganisationProfilePage = () => {
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="location"
-                    placeholder="Enter district"
-                    type="text"
-                    value={profileInfo.district}
+                  <SelectTextInputLayout
+                    icon="company"
+                    placeholder="Select company category"
+                    value={profileInfo.category}
+                    list={categoryList}
                     onInputChange={onInputChange}
-                    name="district"
+                    name="category"
+                    setSelectedValue={setFormInput}
                   />
-                  {/*   <FilterDropdown list={["xx", "yy"]} /> */}
                 </div>
 
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <SelectTextInputLayout
-                    icon="location"
-                    placeholder="Enter office address"
-                    type="text"
-                    value={profileInfo.officeAddress}
+                    icon="map"
+                    placeholder="Select district"
+                    value={profileInfo.district}
                     onInputChange={onInputChange}
-                    name="officeAddress"
+                    list={districtList}
+                    name="district"
+                    setSelectedValue={setFormInput}
                   />
                 </div>
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>

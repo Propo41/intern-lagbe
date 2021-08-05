@@ -138,7 +138,7 @@ const AvailPositionCard = (props) => {
               }}
             >
               <Fade in={open}>
-                <ApplyJobModal />
+                {/* <ApplyJobModal id={props.id} title={props.title} /> */}
               </Fade>
             </Modal>
           </Grid>

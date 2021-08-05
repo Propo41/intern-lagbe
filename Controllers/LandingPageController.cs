@@ -9,6 +9,7 @@ using InternFinder.Services;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using System.Threading.Tasks;
 
 namespace InternFinder.Controllers
 {
@@ -68,5 +69,15 @@ namespace InternFinder.Controllers
             List<Job> res = _generalService.GetCompanyJobPostings(companyId);
             return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
         }
+
+        // [HttpPost]
+        // [Route("company/job/apply")]
+        // async public Task<ActionResult> ApplyJob(Applicant applicant)
+        // {
+        //     Applicant res =  await _generalService.ApplyJob(applicant);
+        //     return res != null ? Ok(new { status = 200, description = "You have applied the job successfully!" }) :
+        //                 new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "The Job is unavailable right now."));
+
+        // }
     }
 }

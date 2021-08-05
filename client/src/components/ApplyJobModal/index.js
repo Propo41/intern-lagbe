@@ -7,6 +7,10 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextInputLayout from "../TextInputLayout";
 import PublishIcon from "@material-ui/icons/Publish";
+import errorHandling from "../../utils/error_handling.js";
+import Alert from "../../components/AlertCustom";
+import { LinearProgress } from "@material-ui/core";
+import { GET, POST } from "../../api/api.js";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,62 +41,121 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ApplyJobModal = () => {
+const ApplyJobModal = (props) => {
   const classes = useStyles();
+  const [formInput, setFormInput] = React.useState(null);
+  const [alert, setAlert] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    setLoadingBar(true);
+
+    try {
+      const { data } = await POST(`company/job/apply`, {
+        ...formInput,
+        jobId: props.id,
+      });
+      setAlert(null);
+      console.log(data);
+      window.location.reload();
+    } catch (e) {
+      setLoadingBar(false);
+      console.log(e);
+      if (e.response) {
+        setAlert(errorHandling(e));
+      }
+    }
+  };
+
+  const onInputChange = (event) => {
+    const { value, name } = event.target;
+    console.log("deleting");
+    console.log(value, name);
+
+    setFormInput((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+
+    console.log(formInput);
+  };
+
   return (
-    <Paper elevation={5} className={classes.paper}>
-      <h1 className="title-medium">APPLY FOR JOB</h1>
-      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-        <TextInputLayout
-          icon="user"
-          placeholder="Enter your name*"
-          type="text"
-        />
-      </div>
-      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-        <TextInputLayout
-          icon="mail"
-          placeholder="Enter your email*"
-          type="email"
-        />
-      </div>
-      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-        <TextInputLayout
-          icon="phone"
-          placeholder="Enter your contact*"
-          type="phone"
-        />
-      </div>
-      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-        <input
-          accept=".pdf,.doc,.docx"
-          className={classes.input}
-          id="contained-button-file"
-          multiple
-          type="file"
-        />
-        <label htmlFor="contained-button-file">
+    <>
+      {loadingBar && <LinearProgress />}
+      <Paper elevation={5} className={classes.paper}>
+        <h1 className="title-medium">APPLYING FOR: {props.title}</h1>
+        <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+          <TextInputLayout
+            icon="user"
+            placeholder="Enter your name*"
+            type="text"
+            name="name"
+            onInputChange={onInputChange}
+          />
+        </div>
+        <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+          <TextInputLayout
+            icon="mail"
+            placeholder="Enter your email*"
+            type="email"
+            name="contactEmail"
+            onInputChange={onInputChange}
+          />
+        </div>
+        <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+          <TextInputLayout
+            icon="phone"
+            placeholder="Enter your contact*"
+            type="phone"
+            name="contactPhone"
+            onInputChange={onInputChange}
+          />
+        </div>
+        <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+          <input
+            accept=".pdf,.doc,.docx"
+            className={classes.input}
+            id="contained-button-file"
+            multiple
+            type="file"
+          />
+          <label htmlFor="contained-button-file">
+            <Button
+              variant="contained"
+              component="span"
+              fullWidth={true}
+              className={classes.buttonUpload}
+              startIcon={<PublishIcon />}
+            >
+              UPLOAD RESUME
+            </Button>
+          </label>
+        </div>
+        <div style={{ marginTop: "var(--margin-item-spacing)" }}>
           <Button
             variant="contained"
-            component="span"
             fullWidth={true}
-            className={classes.buttonUpload}
-            startIcon={<PublishIcon />}
+            className={classes.buttonPurple}
+            onClick={submitForm}
+            disabled={
+              formInput === null || Object.keys(formInput).length < 3
+              // || description === null
+            }
           >
-            UPLOAD RESUME
+            APPLY
           </Button>
-        </label>
-      </div>
-      <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-        <Button
-          variant="contained"
-          fullWidth={true}
-          className={classes.buttonPurple}
-        >
-          APPLY
-        </Button>
-      </div>
-    </Paper>
+        </div>
+        {alert && alert.status && (
+          <Alert
+            severity={alert.severity}
+            title={alert.title}
+            message={alert.message}
+          />
+        )}
+      </Paper>
+    </>
   );
 };
 

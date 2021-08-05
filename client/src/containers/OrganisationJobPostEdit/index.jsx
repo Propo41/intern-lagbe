@@ -31,7 +31,7 @@ const OrganisationJobPostEdit = (props) => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
           setJob(data);
-          setDescription(data.requirements)
+          setDescription(data.requirements);
           setFormInput(data);
           console.log(data);
           resolve();
@@ -96,7 +96,7 @@ const OrganisationJobPostEdit = (props) => {
         <PrivateNavbar />
         <div className="content-grid-padding">
           <div className={classes.root}>
-            <Paper component="form" elevation={5} className="semi-rounded-card">
+            <Paper elevation={5} className="semi-rounded-card">
               <Grid container spacing={5}>
                 <Grid item xs={12} lg={7} style={{ textAlign: "left" }}>
                   <h1 className="title-medium">MAKE CHANGES</h1>
@@ -113,8 +113,8 @@ const OrganisationJobPostEdit = (props) => {
                   </div>
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <MarkdownEditor
-                        description={description}
-                        setDescription={setDescription}
+                      description={description}
+                      setDescription={setDescription}
                     />
                   </div>
 

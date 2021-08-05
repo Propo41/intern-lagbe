@@ -11,6 +11,7 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using InternFinder.Helpers;
+using System.Threading.Tasks;
 
 
 namespace InternFinder.Services
@@ -24,6 +25,7 @@ namespace InternFinder.Services
         About Create(About about);
         Company GetCompanyInfo(string companyId);
         List<Job> GetCompanyJobPostings(string companyId);
+        // Task<Applicant> ApplyJob(Applicant applicant);
     }
 
     public class GeneralService : IGeneralService
@@ -33,6 +35,7 @@ namespace InternFinder.Services
         private readonly IMongoCollection<User> _usersCollection;
         private readonly IMongoCollection<About> _aboutCollection;
         private readonly IMongoCollection<Job> _jobCollection;
+        private readonly IMongoCollection<Applicant> _applicantCollection;
 
         private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
 
@@ -45,6 +48,7 @@ namespace InternFinder.Services
             _companyCollection = db.GetCollection<Company>("Company");
             _usersCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
+            _applicantCollection = db.GetCollection<Applicant>("Applicants");
         }
 
         public List<Company> GetAllCompanies()
@@ -132,6 +136,33 @@ namespace InternFinder.Services
                 return null;
             }
         }
+
+        // async public Task<Applicant> ApplyJob(Applicant applicant)
+        // {
+        //     // // only allow user to create a job iff profile is complete
+        //     // Payload payload = await GetProfileConfig(job.CompanyId);
+
+        //     // if (!payload.Data1)
+        //     // {
+        //     //     Console.WriteLine("Couldn't create a job post. User needs to create a profile first");
+        //     //     return null;
+        //     // };
+
+        //     Console.WriteLine(applicant.ToJson());
+        //     try
+        //     {
+        //         Console.Write("job.CompanyId: ");
+        //         Console.WriteLine(applicant.CompanyId);
+
+        //         _applicantCollection.InsertOne(applicant);
+        //         return applicant;
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e);
+        //         return null;
+        //     }
+        // }
 
     }
 }

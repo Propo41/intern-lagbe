@@ -49,7 +49,7 @@ namespace InternFinder.Controllers
         // @ FOR ADMINS ONLY
         // @ Role based authentication
         [HttpPost]
-        public ActionResult Create(About about) => Ok(_generalService.Create(about));
+        public ActionResult UpdateInfo(About about) => Ok(_generalService.UpdateInfo(about));
 
         // GET api/landingpage/company/{companyId}
         // fetches individual company's information and job postings
@@ -68,5 +68,35 @@ namespace InternFinder.Controllers
             List<Job> res = _generalService.GetCompanyJobPostings(companyId);
             return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
         }
+
+        // GET api/landingpage/districts
+        [HttpGet("districts")]
+        public ActionResult GetDistricts()
+        {
+            return Ok(_generalService.GetDistricts());
+            //return res != null ? Ok(res) : BadRequest(new { error = "Company doesn't exist or there could be a problem. Please refresh the page" });
+        }
+
+        // GET api/landingpage/company-categories
+        [HttpGet("company-categories")]
+        public ActionResult GetCompanyCategories()
+        {
+            return Ok(_generalService.GetCompanyCategories());
+        }
+
+        // GET api/landingpage/job-categories
+        [HttpGet("job-categories")]
+        public ActionResult GetJobCategories()
+        {
+            return Ok(_generalService.GetJobCategories());
+        }
+
+        // GET api/landingpage/job-categories
+        [HttpGet("remuneration")]
+        public ActionResult GetRemuneration()
+        {
+            return Ok(_generalService.GetRemuneration());
+        }
+
     }
 }

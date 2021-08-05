@@ -459,6 +459,20 @@ a {
   margin-left: 0.8rem !important;
 }
 
+.dropdown-button {
+  background-color: var(--white) !important;
+  color: var(--darkash) !important;
+  border-radius: 5px !important;
+  font-style: normal;
+  box-shadow: var(--card-shadow);
+  font-weight: 700 !important;
+  font-size: var(--font-size-content-small) !important;
+  font-family: "Sen", sans-serif !important;
+  /*`top bottom right left */
+  padding: 0.5em !important;
+  justify-content: left !important;
+}
+
 /* Common for horizontal lines in signin page- starts*/
 .divider-custom {
   width: 100%;

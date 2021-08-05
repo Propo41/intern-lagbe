@@ -14,11 +14,15 @@ namespace InternFinder.Models
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
+
         [RegularExpression(@"(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$")]
         [Required]
         public string Contact { get; set; } // phone number validation in bangladeshi format
         [Required]
         public string District { get; set; }
+        [Required]
+        [StringLength(150, ErrorMessage = "Please select a correct category", MinimumLength = 3)]
+        public string Category { get; set; }
         [Required]
         public string OfficeAddress { get; set; }
         [Required]

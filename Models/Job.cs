@@ -42,9 +42,11 @@ namespace InternFinder.Models
         [Required(ErrorMessage = "ContactPhone is required")]
         public string ContactPhone { get; set; }
 
-        // @todo add it to the ui and database. not yet implemented
-        // this will be a dropdown list of the available categories the user can choose from
+        [Required]
         public string Category { get; set; }
+
+        [Required]
+        public string Remuneration { get; set; }
 
 
     }

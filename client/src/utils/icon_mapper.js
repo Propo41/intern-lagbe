@@ -13,7 +13,7 @@ import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CategoryIcon from "@material-ui/icons/Category";
-
+import MapIcon from "@material-ui/icons/Map";
 /**
  * A util function that returns the desired Material Icon based on the parameters provided
  * @param iconName bookmark, mail, location, requirements, phone, delete, upload, user, lock, key, company, description
@@ -25,6 +25,8 @@ const iconMapper = (iconName, color, parent) => {
   switch (iconName) {
     case "bookmark":
       return <BookmarkIcon style={style(color, parent)} />;
+    case "map":
+      return <MapIcon style={style(color, parent)} />;
     case "mail":
       return <MailIcon style={style(color, parent)} />;
     case "location":

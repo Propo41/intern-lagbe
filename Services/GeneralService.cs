@@ -13,6 +13,7 @@ using MongoDB.Bson.Serialization;
 using InternFinder.Helpers;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json.Linq;
 
 namespace InternFinder.Services
 {
@@ -22,9 +23,15 @@ namespace InternFinder.Services
         List<Company> GetAllCompanies();
         About GetLandingPageContent();
         About GetAboutUs();
-        About Create(About about);
+        Payload UpdateInfo(About about);
         Company GetCompanyInfo(string companyId);
         List<Job> GetCompanyJobPostings(string companyId);
+        About GetDistricts();
+        About GetCompanyCategories();
+        About GetJobCategories();
+        About GetRemuneration();
+
+
         // Task<Applicant> ApplyJob(Applicant applicant);
     }
 
@@ -84,13 +91,35 @@ namespace InternFinder.Services
             return BsonSerializer.Deserialize<About>(result);
         }
 
-        public About Create(About about)
+        public Payload UpdateInfo(About about)
         {
-            _aboutCollection.InsertOne(about);
-            return about;
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("Districts", about.Districts).
+                    Set("JobCategories", about.JobCategories).
+                    Set("CompanyCategories", about.CompanyCategories).
+                    Set("Remuneration", about.Remuneration).
+                    Set("Title", about.Title).
+                    Set("Subtitle", about.Subtitle).
+                    Set("SocialMediaFacebook", about.SocialMediaFacebook).
+                    CurrentDate("lastModified");
+
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Job status updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+
         }
 
-        public Company GetCompanyInfo(string companyId) {
+        public Company GetCompanyInfo(string companyId)
+        {
             try
             {
                 var filter = Builders<Company>.Filter.Eq("Id", companyId);
@@ -111,7 +140,8 @@ namespace InternFinder.Services
             }
         }
 
-        public List<Job> GetCompanyJobPostings(string companyId) {
+        public List<Job> GetCompanyJobPostings(string companyId)
+        {
             try
             {
                 var filter = Builders<Job>.Filter.Eq("CompanyId", companyId);
@@ -135,6 +165,41 @@ namespace InternFinder.Services
                 Console.WriteLine(e);
                 return null;
             }
+        }
+
+        public About GetDistricts()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("Districts").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+        }
+
+        public About GetCompanyCategories()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("CompanyCategories").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+
+        }
+
+        public About GetJobCategories()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("JobCategories").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+
+        }
+
+        public About GetRemuneration()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("Remuneration").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+
         }
 
         // async public Task<Applicant> ApplyJob(Applicant applicant)

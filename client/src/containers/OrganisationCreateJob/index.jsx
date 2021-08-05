@@ -9,12 +9,13 @@ import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_create_job";
-import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import { GET, GET_AUTH, POST_AUTH } from "../../api/api.js";
 import MDEditor from "@uiw/react-md-editor";
 import errorHandling from "../../utils/error_handling.js";
 import Alert from "../../components/AlertCustom";
 import { LinearProgress } from "@material-ui/core";
 import MarkdownEditor from "../../components/MarkdownEditor";
+import SelectTextInputLayout from "../../components/SelectTextInputLayout";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
@@ -25,23 +26,83 @@ const OrganisationCreateJob = () => {
   );
   const [alert, setAlert] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
+  const [districtList, setDistrictList] = React.useState(null);
+  const [categoryList, setCategoryList] = React.useState(null);
+  const [remunerationList, setRemunerationList] = React.useState(null);
 
   // check profile status
   // only allow creating jobs iff profile is completed
   useEffect(() => {
-    const exe = async () => {
-      try {
-        const { data } = await GET_AUTH(`api/company/profile-config`);
-        console.log(data.status);
-        if (!data.status) {
+    const promise1 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/job-categories");
+          console.log(data);
+          setCategoryList(data.jobCategories);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise2 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET_AUTH(`api/company/profile-config`);
+          console.log(data.status);
+          if (!data.status) {
+            window.location.href = `/`;
+          }
+        } catch (e) {
+          console.log(e);
           window.location.href = `/`;
         }
-      } catch (e) {
-        console.log(e);
-        window.location.href = `/`;
-      }
-    };
-    exe();
+      };
+      exe();
+    });
+
+    const promise3 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/districts");
+          console.log(data);
+          setDistrictList(data.districts);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise4 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/remuneration");
+          console.log(data);
+          setRemunerationList(data.remuneration);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2, promise3, promise4])
+      .then((values) => {
+        console.log("all promises resolved");
+        setLoadingBar(false);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setLoadingBar(false);
+        /*  if (error) {
+          setAlert(errorHandling(error));
+        } */
+      });
   }, []);
 
   const onInputChange = (event) => {
@@ -109,6 +170,19 @@ const OrganisationCreateJob = () => {
                     name="contactEmail"
                   />
                 </div>
+
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <SelectTextInputLayout
+                    icon="company"
+                    placeholder="Select company category"
+                    value={null}
+                    list={categoryList}
+                    onInputChange={onInputChange}
+                    name="category"
+                    setSelectedValue={setFormInput}
+                  />
+                </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
                     icon="phone"
@@ -118,15 +192,19 @@ const OrganisationCreateJob = () => {
                     name="contactPhone"
                   />
                 </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                  <TextInputLayout
-                    icon="location"
-                    placeholder="Enter district"
-                    type="text"
+                  <SelectTextInputLayout
+                    icon="map"
+                    placeholder="Select district"
+                    value={null}
                     onInputChange={onInputChange}
+                    list={districtList}
                     name="district"
+                    setSelectedValue={setFormInput}
                   />
                 </div>
+
                 <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                   <TextInputLayout
                     icon="location"
@@ -134,6 +212,18 @@ const OrganisationCreateJob = () => {
                     type="text"
                     onInputChange={onInputChange}
                     name="address"
+                  />
+                </div>
+
+                <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                  <SelectTextInputLayout
+                    icon="map"
+                    placeholder="Select remuneration"
+                    value={null}
+                    onInputChange={onInputChange}
+                    list={remunerationList}
+                    name="remuneration"
+                    setSelectedValue={setFormInput}
                   />
                 </div>
 

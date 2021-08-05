@@ -42,6 +42,7 @@ const FilterDropdown = (props) => {
 
     prevOpen.current = open;
   }, [open]);
+  
   return (
     <div>
       <Button

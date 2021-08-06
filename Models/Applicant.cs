@@ -30,9 +30,9 @@ namespace InternFinder.Models
         [Required(ErrorMessage = "Contact Phone is required")]
         public string ContactPhone { get; set; }
 
-        // [Required]
-        // [Url]
-        // public string ResumeUrl { get; set; }
+        [Required(ErrorMessage = "Resume required")]
+        [Url]
+        public string ResumeUrl { get; set; }
 
 
     }

@@ -12,7 +12,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using InternFinder.Helpers;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json.Linq;
 
 namespace InternFinder.Services
@@ -30,9 +29,8 @@ namespace InternFinder.Services
         About GetCompanyCategories();
         About GetJobCategories();
         About GetRemuneration();
-
-
-        // Task<Applicant> ApplyJob(Applicant applicant);
+        Task<Applicant> ApplyJob(Applicant applicant);
+        UploadCare GetSignedUrl();
     }
 
     public class GeneralService : IGeneralService
@@ -43,6 +41,9 @@ namespace InternFinder.Services
         private readonly IMongoCollection<About> _aboutCollection;
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Applicant> _applicantCollection;
+        private readonly string uploadCareSecret;
+        private readonly string uploadCarePubKey;
+        private readonly int uploadCareExpiry;
 
         private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
 
@@ -51,6 +52,9 @@ namespace InternFinder.Services
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
+            uploadCarePubKey = config["UploadCare:PubKey"];
+            uploadCareSecret = config["UploadCare:Secret"];
+            uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
             _aboutCollection = db.GetCollection<About>("About");
             _companyCollection = db.GetCollection<Company>("Company");
             _usersCollection = db.GetCollection<User>("Users");
@@ -202,32 +206,25 @@ namespace InternFinder.Services
 
         }
 
-        // async public Task<Applicant> ApplyJob(Applicant applicant)
-        // {
-        //     // // only allow user to create a job iff profile is complete
-        //     // Payload payload = await GetProfileConfig(job.CompanyId);
+        public UploadCare GetSignedUrl()
+        {
+            KeyValuePair<string, string> pair = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
+            return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
+        }
 
-        //     // if (!payload.Data1)
-        //     // {
-        //     //     Console.WriteLine("Couldn't create a job post. User needs to create a profile first");
-        //     //     return null;
-        //     // };
-
-        //     Console.WriteLine(applicant.ToJson());
-        //     try
-        //     {
-        //         Console.Write("job.CompanyId: ");
-        //         Console.WriteLine(applicant.CompanyId);
-
-        //         _applicantCollection.InsertOne(applicant);
-        //         return applicant;
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         return null;
-        //     }
-        // }
+        async public Task<Applicant> ApplyJob(Applicant applicant)
+        {
+            try
+            {
+                _applicantCollection.InsertOne(applicant);
+                return applicant;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
 
     }
 }

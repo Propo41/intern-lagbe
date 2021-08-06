@@ -2,13 +2,17 @@ import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { Button, Card, CardContent, Grid } from "@material-ui/core";
-import { DELETE_AUTH, GET_AUTH, POST_AUTH } from "../../api/api.js";
+import { DELETE_AUTH } from "../../api/api.js";
 import AlertDialog from "../AlertDialog";
 
 const ApplicantCard = (props) => {
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const [toggleType, setToggleType] = React.useState(null);
   const [alertContent, setAlertContent] = React.useState(null);
+
+  // download resume of an applicant
+  const downloadResume = () => {
+    window.open(props.applicant.resumeUrl);
+  };
 
   // delete the applicant
   const onDeleteClick = async (e) => {
@@ -24,8 +28,8 @@ const ApplicantCard = (props) => {
     setAlertOpen(true);
   };
 
-  // function to delete job
-  const deleteJob = async () => {
+  // function to delete applicant
+  const deleteApplicant = async () => {
     console.log("deleting..");
     var form = new FormData();
     form.append("id", props.applicant.id);
@@ -37,7 +41,6 @@ const ApplicantCard = (props) => {
       console.log(e);
       window.location.reload();
     }
-    setToggleType(null);
   };
 
   const onAlertClose = (e) => {
@@ -53,7 +56,7 @@ const ApplicantCard = (props) => {
     setAlertOpen(false);
     console.log("alert confirmed");
     const exe = async () => {
-      await deleteJob();
+      await deleteApplicant();
     };
     exe();
   };
@@ -89,7 +92,7 @@ const ApplicantCard = (props) => {
               <Button className="circular-button" onClick={onDeleteClick}>
                 <DeleteIcon style={{ color: "var(--red)" }} />
               </Button>
-              <Button className="circular-button">
+              <Button className="circular-button" onClick={downloadResume}>
                 <GetAppIcon style={{ color: "var(--purple)" }} />
               </Button>
             </Grid>

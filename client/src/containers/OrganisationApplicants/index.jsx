@@ -6,36 +6,9 @@ import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_applicants";
-import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import { GET_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { Alert } from "@material-ui/lab";
-
-const applicants = [
-  {
-    id: "abc1",
-    name: "Matcovic",
-    mail: "tashfiqnahiyan@gmail.com",
-    contact: "+9910 122 5645",
-  },
-  {
-    id: "abc2",
-    name: "Tashfiq Nahiyan Khan",
-    mail: "tashfiqnahiyan@gmail.com",
-    contact: "+9910 122 5645",
-  },
-  {
-    id: "abc3",
-    name: "Zunayed Rahim Ahmed",
-    mail: "tashfiqnahiyan@gmail.com",
-    contact: "+9910 122 5645",
-  },
-  {
-    id: "abc4",
-    name: "Mustofa Ahmed",
-    mail: "tashfiqnahiyan@gmail.com",
-    contact: "+9910 122 5645",
-  },
-];
 
 const OrganisationApplicants = () => {
   const classes = useStyles();

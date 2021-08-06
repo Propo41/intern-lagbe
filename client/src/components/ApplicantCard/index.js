@@ -8,15 +8,15 @@ const ApplicantCard = (props) => {
     <Card className="rounded-card">
       <CardContent>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={8}>
+          <Grid item sm={12} md={8}>
             <h1 className="sub-heading">{props.name}</h1>
             <h1 className="card-location sub-content">{props.mail}</h1>
             <h1 className="card-location sub-content">{props.contact}</h1>
           </Grid>
           <Grid
             item
-            xs={12}
-            sm={4}
+            sm={12}
+            md={4}
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >

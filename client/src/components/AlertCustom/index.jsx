@@ -27,9 +27,14 @@ const _Alert = (props) => {
   return (
     <Alert severity={props.severity} className={classes.alert}>
       <AlertTitle className={classes.alertTitle}>{props.title}</AlertTitle>
-      {props.message.map((item, i) => {
+      {/* {props.message.map((item, i) => {
         return <li key={i}>{item}</li>;
-      })}
+      })} */}
+      {props.severity === "success"
+        ? ""
+        : props.message.map((item, i) => {
+            return <li key={i}>{item}</li>;
+          })}
     </Alert>
   );
 };

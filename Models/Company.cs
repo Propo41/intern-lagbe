@@ -15,7 +15,7 @@ namespace InternFinder.Models
         [Required]
         public string Description { get; set; }
 
-        [RegularExpression(@"(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$")]
+        [RegularExpression(@"(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$", ErrorMessage = "Enter a correct Bangladeshi phone number")]
         [Required]
         public string Contact { get; set; } // phone number validation in bangladeshi format
         [Required]

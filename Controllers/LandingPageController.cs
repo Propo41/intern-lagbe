@@ -9,6 +9,7 @@ using InternFinder.Services;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using System.Threading.Tasks;
 
 namespace InternFinder.Controllers
 {
@@ -98,5 +99,25 @@ namespace InternFinder.Controllers
             return Ok(_generalService.GetRemuneration());
         }
 
+        // api/landingpage/company/job/apply/resume
+        // creates a signed url for uploading a resume
+        [HttpGet("company/job/apply/resume")]
+        public ActionResult GetSignedUrl()
+        {
+            UploadCare uploadCare = _generalService.GetSignedUrl();
+            return uploadCare != null ? Ok(uploadCare) : new BadRequestObjectResult(
+                new ErrorResult("Couldn't process your request", 400, "Couldn't generate a secured URL for uploading files to cloud"));
+        }
+
+        // POST api/landingpage/company/job/apply
+        [HttpPost]
+        [Route("company/job/apply")]
+         async public Task<ActionResult> ApplyJob(Applicant applicant)
+        {
+            Applicant res = await _generalService.ApplyJob(applicant);
+            return res != null ? Ok(new { status = 200, description = "You have applied for the job successfully!" }) :
+                        new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "The Job is unavailable right now."));
+
+        }
     }
 }

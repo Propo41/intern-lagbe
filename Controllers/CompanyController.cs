@@ -175,5 +175,28 @@ namespace InternFinder.Controllers
         //     }
         // }
 
+        // GET api/company/applicants
+        [HttpGet]
+        [Route("applicants")]
+        public ActionResult GetApplicants()
+        {
+            List<Applicant> res = _companyService.GetApplicants(_authUser.CompanyId);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Company doesn't exist or there could be a problem. Please refresh the page"));
+        }
+
+        /* DELETES an applicant  */
+        [HttpDelete]
+        [Route("applicant")]
+        async public Task<ActionResult> DeleteApplicant(IFormCollection form)
+        {
+            string id = form["id"];
+            Console.WriteLine("Deleting: ", id);
+            Payload res = await _companyService.DeleteApplicant(id);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+
+        }
+
     }
 }

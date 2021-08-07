@@ -13,6 +13,7 @@ import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { useHistory } from "react-router";
 import MarkdownEditor from "../../components/MarkdownEditor";
+import Alert from "../../components/AlertCustom";
 
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
@@ -31,7 +32,7 @@ const OrganisationJobPostEdit = (props) => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
           setJob(data);
-          setDescription(data.requirements)
+          setDescription(data.requirements);
           setFormInput(data);
           console.log(data);
           resolve();
@@ -113,8 +114,8 @@ const OrganisationJobPostEdit = (props) => {
                   </div>
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <MarkdownEditor
-                        description={description}
-                        setDescription={setDescription}
+                      description={description}
+                      setDescription={setDescription}
                     />
                   </div>
 

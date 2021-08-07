@@ -23,18 +23,38 @@ namespace InternFinder.Helpers
             return Convert.ToBase64String(time.Concat(key).ToArray());
         }
         /* validates a token for the forgot password view */
-        public static bool isUidTokenValid(string token)
+        public static bool isUidTokenValid(string token, int minutesToExpire)
         {
-            byte[] data = Convert.FromBase64String(token);
-            DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
-            Console.WriteLine(when);
-            // if when is more than 50 minutes old, return false
-            if (DateTime.UtcNow.Subtract(when).TotalMinutes > 50)
+            Console.WriteLine("Util: validating token");
+
+            try
             {
+                // replace any white spaces with + in token
+                string newToken = token.Replace(" ", "+");
+                byte[] data = Convert.FromBase64String(newToken);
+                DateTime when = DateTime.FromBinary(BitConverter.ToInt64(data, 0));
+                Console.WriteLine(when);
+                // if when is more than 50 minutes old, return false
+                if (DateTime.UtcNow.Subtract(when).TotalMinutes > minutesToExpire)
+                {
+                    Console.WriteLine("invalid token");
+
+                    return false;
+                }
+
+                Console.WriteLine("valid token");
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("invalid token");
+
+                Console.WriteLine(e.Message);
                 return false;
             }
 
-            return true;
+
         }
 
         public static bool isDomainValid(string email)

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
-const FilterByLocation = (props) => {
+const FilterByCategory = (props) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -38,7 +38,7 @@ const FilterByLocation = (props) => {
   const handleCheckBoxClick = (event) => {
     const name = event.target.name;
     console.log(name);
-    props.setLocations((prev) => {
+    props.setCategories((prev) => {
       console.log(prev);
       // if selected name is already in the list, remove it
       if (prev.indexOf(name) !== -1) {
@@ -76,7 +76,7 @@ const FilterByLocation = (props) => {
         onClick={handleToggle}
         className="filter-button"
       >
-        LOCATION
+        {props.label}
         <KeyboardArrowDownIcon />
       </Button>
       <Popper
@@ -101,7 +101,7 @@ const FilterByLocation = (props) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {props.districts.map((district, index) => {
+                  {props.categoryList.map((district, index) => {
                     return (
                       <MenuItem
                         key={index}
@@ -109,7 +109,7 @@ const FilterByLocation = (props) => {
                       >
                         <Checkbox
                           checked={
-                            props.locations.indexOf(district) === -1
+                            props.categories.indexOf(district) === -1
                               ? false
                               : true
                           }
@@ -133,4 +133,4 @@ const FilterByLocation = (props) => {
   );
 };
 
-export default FilterByLocation;
+export default FilterByCategory;

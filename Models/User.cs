@@ -31,5 +31,7 @@ namespace InternFinder.Models
         [BsonDefaultValue(false)]
         public bool IsVerified { get; set; }
 
+        public string Token { get; set; }
+
     }
 }

@@ -5,13 +5,14 @@ import SignInPage from "../containers/SignInPage";
 import ForgotPassword from "../containers/ForgotPassword";
 import ChangePassword from "../containers/ChangePassword";
 import RegisterPage from "../containers/RegisterPage";
-import VerifedPage from "../containers/VerifedPage";
+import VerifiedPage from "../containers/VerifedPage";
 import OrganisationProfilePage from "../containers/OrganisationProfilePage";
 import OrganisationCreateJob from "../containers/OrganisationCreateJob";
 import OrganisationJobPost from "../containers/OrganisationJobPost";
 import OrganisationJobPostEdit from "../containers/OrganisationJobPostEdit";
 import OrganisationApplicants from "../containers/OrganisationApplicants";
 import AboutPage from "../containers/AboutPage";
+import StatusPage from "../containers/StatusPage";
 
 const routerList = {
   public: [
@@ -28,13 +29,18 @@ const routerList = {
       component: ForgotPassword,
     },
     {
-      path: "/change-password/:token",
+      path: "/auth/user/change-password",
       component: ChangePassword,
     },
     {
-      path: "/verification-success/:token",
-      component: VerifedPage,
+      path: "/auth/user/verify",
+      component: StatusPage,
     },
+    {
+      path: "/verification-success",
+      component: VerifiedPage,
+    },
+
     { path: "/*", component: SignInPage },
   ],
   private: [

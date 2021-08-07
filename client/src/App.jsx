@@ -1,6 +1,7 @@
 import "./styles/App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import routerList from "./utils/route_list";
+import ChangePassword from "./containers/ChangePassword";
 
 function App() {
   console.log(window.location);

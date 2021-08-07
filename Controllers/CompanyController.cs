@@ -86,12 +86,12 @@ namespace InternFinder.Controllers
             Console.Write("auth user companyid: ");
             Console.WriteLine(_authUser.CompanyId);
             Payload res = await _companyService.GetProfileConfig(_authUser.CompanyId);
-            return Ok(new { status = res.Data1, profilePictureUrl = res.Data2, name = res.Data3, email=_authUser.Email});
+            return Ok(new { status = res.Data1, profilePictureUrl = res.Data2, name = res.Data3, email = _authUser.Email });
         }
 
         // POST api/company/job/status
         [HttpPost("job/status")]
-        public ActionResult UpdateJobStatus(IFormCollection form)
+        async public Task<ActionResult> UpdateJobStatus(IFormCollection form)
         {
 
             string id = form["id"];
@@ -99,7 +99,7 @@ namespace InternFinder.Controllers
 
             if (id != null && id != "")
             {
-                Payload res = _companyService.UpdateJobStatus(id, isAvailable);
+                Payload res = await _companyService.UpdateJobStatus(id, isAvailable, _authUser.CompanyId);
                 return res != null ? Ok(res) :
                         new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, res.StatusDescription));
             }
@@ -109,6 +109,7 @@ namespace InternFinder.Controllers
             }
         }
 
+        /* POST creates a new job */
         [HttpPost]
         [Route("job")]
         async public Task<ActionResult> Create(Job job)
@@ -122,7 +123,7 @@ namespace InternFinder.Controllers
 
         }
 
-        /* DELETES a job  */
+        /* DELETE deletes a job  */
         [HttpDelete]
         [Route("job")]
         public ActionResult Delete(IFormCollection form)

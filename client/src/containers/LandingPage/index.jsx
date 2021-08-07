@@ -4,7 +4,7 @@ import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import FilterDropdown from "../../components/FilterDropdown";
-import FilterByLocation from "../../components/FilterByLocation";
+import FilterByCategory from "../../components/FilterByCategory";
 import AvailCompanyCard from "../../components/AvailCompanyCard";
 import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { GET } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { Avatar, Chip } from "@material-ui/core";
+
 //https://material-ui.com/components/chips/  use chips after selecting locations
 
 const LandingPage = () => {
@@ -22,7 +23,9 @@ const LandingPage = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
-  const districts = ["Dhaka", "Khulna", "Chittagong"];
+  const [districtList, setDistrictList] = React.useState(null);
+  const [jobCategories, setJobCategories] = React.useState(null);
+  const [companyCategories, setCompanyCategories] = React.useState(null);
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
@@ -33,6 +36,8 @@ const LandingPage = () => {
           console.log(res.data);
           resolve();
         } catch (e) {
+          console.log(e);
+
           reject();
         }
       };
@@ -45,21 +50,73 @@ const LandingPage = () => {
           const res = await GET("api/landingpage");
           setLandingPage(res.data);
           console.log(res.data);
-
           resolve();
         } catch (e) {
+          console.log(e);
+
           reject();
         }
       };
       exe();
     });
 
-    Promise.all([promise1, promise2])
+    const promise3 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/districts");
+          console.log(data);
+          setDistrictList(data.districts);
+          resolve();
+        } catch (e) {
+          console.log(e);
+
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise4 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/company-categories");
+          console.log(data);
+          setCompanyCategories(data.companyCategories);
+          resolve();
+        } catch (e) {
+          console.log(e);
+
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise5 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/job-categories");
+          console.log(data);
+          setJobCategories(data.jobCategories);
+          resolve();
+        } catch (e) {
+          console.log(e);
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2, promise3, promise4, promise5])
       .then((values) => {
         console.log("all promises resolved");
         setLoading(false);
         setError(false);
-        // setFilteredLocations(["Dhaka"]);
+        const list = {
+          companyCategory: companyCategories,
+          jobCategories: jobCategories,
+        };
+        console.log(list);
       })
       .catch((error) => {
         console.log("error", error);
@@ -134,11 +191,17 @@ const LandingPage = () => {
                     zIndex: "1000",
                   }}
                 >
-                  <FilterDropdown list={["s", "y"]} />
-                  <FilterByLocation
-                    districts={districts}
-                    setLocations={setFilteredLocations}
-                    locations={filteredLocations}
+                  <FilterByCategory
+                    categoryList={[...jobCategories, ...companyCategories]}
+                    setCategories={setFilteredLocations}
+                    categories={filteredLocations}
+                    label="CATEGORY"
+                  />
+                  <FilterByCategory
+                    categoryList={districtList}
+                    setCategories={setFilteredLocations}
+                    categories={filteredLocations}
+                    label="LOCATION"
                   />
                 </Grid>
               </Grid>
@@ -216,14 +279,11 @@ const LandingPage = () => {
                     <AvailCompanyCard
                       key={company.id}
                       id={company.id}
-                      // expandable={false}
                       company={company.name}
                       address={company.officeAddress}
-                      /***** availableJobCount not implemented *****/
-                      // disabledButton={
-                      //   company.availableJobCount === 0 ? true : false
-                      // }
-                      disabledButton={false}
+                      disabledButton={
+                        company.availableJobCount === 0 ? true : false
+                      }
                     />
                   );
                 })}

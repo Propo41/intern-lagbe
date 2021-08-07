@@ -29,6 +29,7 @@ const VerifedPage = () => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonPurple}
+                  onClick={(e) => (window.location.href = "/login")}
                 >
                   REDIRECT
                 </Button>
@@ -42,14 +43,12 @@ const VerifedPage = () => {
             lg={5}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            {mobileViewBreakpoint ? (
+            {mobileViewBreakpoint && (
               <img
                 src="/assets/images/security_blob.svg"
                 alt="landing page"
                 className={classes.image}
               />
-            ) : (
-              ""
             )}
           </Grid>
         </Grid>

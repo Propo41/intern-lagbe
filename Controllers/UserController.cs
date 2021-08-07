@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using InternFinder.Models;
 using InternFinder.Helpers;
 using InternFinder.Services;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 /* 
  * 
@@ -27,19 +29,14 @@ namespace InternFinder.Controllers
         [Route("register")]
         public ActionResult Create(User user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
-            }
 
             if (!Util.isDomainValid(user.Email))
             {
-                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Please enter an organizational email address." });
+                return new BadRequestObjectResult(new ErrorResult("Invalid input", 400, "Please enter an organizational email address."));
             }
             Payload res = _userService.isUserExist(user.Email);
             if (res.User == null)
             {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
                 _userService.Create(user);
                 Console.WriteLine(user.Id);
                 Payload responseStatus = _emailService.Service(user.Email, user.Id, "confirmation");
@@ -47,23 +44,23 @@ namespace InternFinder.Controllers
             }
             else
             {
-                return Conflict(new Payload { StatusCode = 403, StatusDescription = "User already exists. Please try a different email or login to your existing account." });
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 403, "User already exists. Please try a different email or login to your existing account."));
             }
 
         }
 
         /* triggered when user clicks on the link sent to their email for confirmation */
-        [Route("verify")]
+        [Route("verify-email")]
         [HttpGet]
         public ActionResult VerifyToken(string token, string uid)
         {
             Console.WriteLine("endpoint triggered");
             if (token == null || uid == null || token.Length == 0 || uid.Length == 0)
             {
-                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Bad Request" });
+                return new BadRequestObjectResult(new ErrorResult("Invalid request", 400, "Token is invalid or expired."));
             }
 
-            if (Util.isUidTokenValid(token))
+            if (Util.isUidTokenValid(token, 50))
             {
                 // token is valid, now make the user verified
                 _userService.VerifyUser(uid);
@@ -71,21 +68,88 @@ namespace InternFinder.Controllers
             }
             else
             {
-                return BadRequest(new Payload { StatusCode = 403, StatusDescription = "Invalid token or the token has been expired." });
+                return new BadRequestObjectResult(new ErrorResult("Invalid request", 403, "Invalid token or the token has been expired."));
             }
 
         }
+
+
+        /* forgot password: when user enters an email  */
+        [Route("forgot-password")]
+        [HttpPost]
+        public ActionResult ForgotPassword(IFormCollection form)
+        {
+            string email = form["email"];
+            Console.WriteLine(email);
+            if (email == null || email == "" || !Util.isDomainValid(email))
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Please enter a correct email"));
+            }
+
+            Payload res = _userService.isUserExist(email);
+            if (res.User == null)
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "A user doesn't exist associated with the given email address"));
+            }
+            else
+            {
+                Payload responseStatus = _emailService.Service(email, res.User.Id, "forgotpassword");
+                return Ok(responseStatus);
+            }
+
+        }
+
+        // GET /auth/user/forgot-password?token=<token>&&uid=<uid>
+        //forgot password token validation 
+        [Route("forgot-password")]
+        [HttpGet]
+        async public Task<ActionResult> IsTokenValid(string token, string uid)
+        {
+            Console.WriteLine("validating token");
+            Console.WriteLine(token);
+            var isValid = await _userService.IsTokenValid(uid, token);
+
+            if (isValid)
+            {
+                return Ok(new Payload { StatusCode = 200, StatusDescription = "Token validation success. Please enter your new password" });
+            }
+            else
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Token is invalid"));
+            }
+        }
+
+
+        /* forgot password > new password */
+        [Route("forgot-password/new")]
+        [HttpPost]
+        async public Task<ActionResult> ChangePassword(IFormCollection form)
+        {
+            string password = form["password"];
+            string uid = form["uid"];
+            string token = form["token"];
+
+            var isValid = await _userService.IsTokenValid(uid, token);
+            Console.WriteLine("token validation: " + isValid);
+
+            if (password == null || password == "" || uid == null || uid == "" || !isValid)
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Please enter a valid password"));
+            }
+
+            if (_userService.ChangePassword(password, uid, token))
+            {
+                return Ok(new Payload { StatusCode = 200, StatusDescription = "Password changed successfully" });
+            }
+            return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+        }
+
 
 
         [Route("login")]
         [HttpPost]
         public ActionResult Login(User user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new Payload { StatusCode = 400, StatusDescription = "Invalid inputs. Please check if you have entered the information correctly" });
-            }
-
             Payload res = _userService.Authenticate(user.Email, user.Password);
             switch (res.StatusCode)
             {

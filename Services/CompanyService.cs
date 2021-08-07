@@ -27,7 +27,7 @@ namespace InternFinder.Services
         Task<Payload> GetProfileConfig(string companyId);
         List<Job> FetchJobPostings(string companyId);
         Task<Job> CreateJobPosting(Job job);
-        Payload UpdateJobStatus(string jobId, bool status);
+        Task<Payload> UpdateJobStatus(string jobId, bool status, string companyId);
         Payload DeleteJob(string jobId);
         Job GetJobDetails(string jobId);
         Payload UpdateJobDetails(Job job);
@@ -138,6 +138,7 @@ namespace InternFinder.Services
                     Include("Contact").
                     Include("OfficeAddress").
                     Include("ProfilePictureUrl").
+                    Include("AvailableJobCount").
                     Include("Category").
                     Include("District");
                 var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
@@ -231,6 +232,7 @@ namespace InternFinder.Services
                 Console.WriteLine(job.CompanyId);
 
                 _jobCollection.InsertOne(job);
+                await UpdateJobCount(job.CompanyId, 1);
                 return job;
             }
             catch (Exception e)
@@ -240,14 +242,60 @@ namespace InternFinder.Services
             }
         }
 
-        public Payload UpdateJobStatus(string jobId, bool status)
+        /* increases or decreases the available job count of the user */
+        async public Task<Payload> UpdateJobCount(string companyId, int count)
+        {
+            try
+            { // first get the existing job count
+                var filter = Builders<Company>.Filter.Eq("Id", companyId);
+                var projection = Builders<Company>.Projection.
+                    Include("AvailableJobCount");
+                var result = await _companyCollection.Find(filter).Project(projection).FirstOrDefaultAsync();
+                Company company = BsonSerializer.Deserialize<Company>(result);
+
+                // update the job count
+                var currentJobCount = company.AvailableJobCount + count;
+                Console.WriteLine("currentJobCount: " + currentJobCount);
+                if (currentJobCount < 0) currentJobCount = 0;
+
+                // update the count in the database
+                var filter2 = Builders<Company>.Filter.Eq("Id", companyId);
+                var update = Builders<Company>.Update.Set("AvailableJobCount", currentJobCount);
+                var res = await _companyCollection.UpdateOneAsync(filter, update);
+                Console.WriteLine("updated job count");
+
+                return new Payload { StatusCode = 200, StatusDescription = "Job count updated successfully." };
+
+
+            }
+            catch (System.Exception e)
+            {
+                throw new Exception("Couldn't update the job count", e);
+            }
+        }
+
+
+        async public Task<Payload> UpdateJobStatus(string jobId, bool status, string companyId)
         {
             try
             {
+                // first check the current job status
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
-                var update = Builders<Job>.Update.Set("IsAvailable", status);
-                var res = _jobCollection.UpdateOneAsync(filter, update);
-                return new Payload { StatusCode = 200, StatusDescription = "Job status updated successfully." };
+                var projection = Builders<Job>.Projection.
+                    Include("IsAvailable");
+                var result = await _jobCollection.Find(filter).Project(projection).FirstOrDefaultAsync();
+                Job job = BsonSerializer.Deserialize<Job>(result);
+                // if the existing job status is not the same as the new status, then update it
+                if (job.IsAvailable != status)
+                {
+                    var filter2 = Builders<Job>.Filter.Eq("Id", jobId);
+                    var update = Builders<Job>.Update.Set("IsAvailable", status);
+                    var res = _jobCollection.UpdateOneAsync(filter2, update);
+                    // update the available job count of the company as well
+                    await UpdateJobCount(companyId, status ? 1 : -1);
+                    return new Payload { StatusCode = 200, StatusDescription = "Job status updated successfully." };
+                }
+                return new Payload { StatusCode = 200, StatusDescription = $"Job status not updated as it's already {status}" };
 
             }
             catch (Exception e)

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
@@ -10,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using InternFinder.Helpers;
 using MongoDB.Bson.Serialization;
-
+using System.Runtime.Serialization.Formatters;
 
 namespace InternFinder.Services
 {
@@ -21,6 +22,8 @@ namespace InternFinder.Services
         Payload VerifyUser(string uid);
         User GetById(string uid);
         User Create(User user);
+        bool ChangePassword(string password, string uid, string token);
+        Task<bool> IsTokenValid(string uid, string token);
     }
 
 
@@ -94,13 +97,37 @@ namespace InternFinder.Services
 
         }
 
+        async public Task<bool> IsTokenValid(string uid, string token)
+        {
+            // check if token has been expired or not
+            if (Util.isUidTokenValid(token, 10))
+            {
+                // now check if token was used before by the user
+                var filter = Builders<User>.Filter.Eq("Id", uid);
+                var user = await _userCollection.Find(filter).FirstOrDefaultAsync();
+
+                if (user == null)
+                    return false;
+
+                if (user.Token == token)
+                    return false;
+
+                return true;
+
+            }
+            return false;
+
+
+
+        }
+
         public Payload VerifyUser(string uid)
         {
             try
             {
                 Company company = new Company();
                 _companyCollection.InsertOne(company);
-               
+
                 var filter = Builders<User>.Filter.Eq("Id", uid);
                 var update = Builders<User>.Update.
                     Set("IsVerified", true).
@@ -135,9 +162,30 @@ namespace InternFinder.Services
 
         }
 
+        public bool ChangePassword(string password, string uid, string token)
+        {
+            try
+            {
+                var hashPassword = BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
+
+                var filter = Builders<User>.Filter.Eq("Id", uid);
+                var update = Builders<User>.Update.Set("Password", hashPassword).Set("Token", token);
+                var res = _userCollection.UpdateOneAsync(filter, update);
+
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+        }
+
         /* creates a new user and a company instance in the database */
         public User Create(User user)
         {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
             /* @debug remove it */
             Company company = new Company();
             /* @debug remove it */

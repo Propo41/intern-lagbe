@@ -5,17 +5,62 @@ import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
 import Button from "@material-ui/core/Button";
 import TextInputLayout from "../../components/TextInputLayout";
-import { useMediaQuery } from "@material-ui/core";
+import { LinearProgress, useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/forgot_password";
+import { POST } from "../../api/api";
+import Alert from "../../components/AlertCustom";
+import errorHandling from "../../utils/error_handling";
 
 const ForgotPassword = () => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
+  const [loadingBar, setLoadingBar] = React.useState(false);
+  const [email, setEmail] = React.useState(null);
+  const [alert, setAlert] = React.useState(null);
+  const [emailSent, setEmailSent] = React.useState(false);
+
+  const onInputChange = (event) => {
+    const { value } = event.target;
+    setEmail(value);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email);
+
+    try {
+      setLoadingBar(true);
+      var formData = new FormData();
+      formData.append("email", email);
+
+      const { data } = await POST(`auth/user/forgot-password`, formData);
+      console.log(data);
+      if (data.statusCode === 200) {
+        setLoadingBar(false);
+        setEmailSent(true);
+        setAlert({
+          status: true,
+          severity: "success",
+          message: [
+            "An email has been sent to your account with a temporary link. Follow through the link to change your password.",
+          ],
+          title: "Password reset email sent",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setLoadingBar(false);
+      if (e) {
+        setAlert(errorHandling(e));
+      }
+    }
+  };
 
   return (
     <>
       <PublicNavbar />
+      {loadingBar && <LinearProgress />}
       <div className="content-grid-padding">
         <Grid container spacing={5} className={classes.root}>
           <Grid item xs={12} lg={7} style={{ textAlign: "center" }}>
@@ -32,6 +77,7 @@ const ForgotPassword = () => {
                   icon="mail"
                   placeholder="Enter your company email"
                   type="email"
+                  onInputChange={onInputChange}
                 />
               </div>
               <div style={{ marginTop: "var(--margin-item-spacing)" }}>
@@ -39,10 +85,20 @@ const ForgotPassword = () => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonPurple}
+                  onClick={onSubmit}
+                  disabled={emailSent}
                 >
                   SEND
                 </Button>
               </div>
+
+              {alert && alert.status && (
+                <Alert
+                  severity={alert.severity}
+                  title={alert.title}
+                  message={alert.message}
+                />
+              )}
             </Paper>
           </Grid>
 
@@ -52,14 +108,12 @@ const ForgotPassword = () => {
             lg={5}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            {mobileViewBreakpoint ? (
+            {mobileViewBreakpoint && (
               <img
                 src="/assets/images/forgot_password_blob.svg"
                 alt="landing page"
                 className={classes.image}
               />
-            ) : (
-              ""
             )}
           </Grid>
         </Grid>

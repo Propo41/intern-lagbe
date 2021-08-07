@@ -24,7 +24,7 @@ namespace InternFinder.Services
     public interface IEmailService
     {
         Payload Service(string email, string uid, string type);
-        Task SendVerificationEmail(string email, string token, string uid);
+        Task SendEmail(string email, string token, string uid, string type, string subject, string content);
     }
 
     public class EmailService : IEmailService
@@ -46,7 +46,22 @@ namespace InternFinder.Services
             {
                 try
                 {
-                    //SendVerificationEmail(email, Util.GenerateToken(), uid).Wait();
+                    SendEmail(email, Util.GenerateUidToken(), uid, "verify", "Email Confirmation",
+                         "Verify your email address to get started with our website.").Wait();
+                    return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return new Payload { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
+                }
+            }
+            else if (type == "forgotpassword")
+            {
+                try
+                {
+                    SendEmail(email, Util.GenerateUidToken(), uid, "change-password", "Reset your Password",
+                        "Please click on the link to change your password. Note that the link will be expired in 8 minutes.").Wait();
                     return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
                 catch (Exception e)
@@ -59,29 +74,32 @@ namespace InternFinder.Services
 
         }
 
-        public async Task SendVerificationEmail(string email, string token, string uid)
+        public async Task SendEmail(string email, string token, string uid, string type, string subject, string plainTextContent)
         {
             // print to console
             Console.WriteLine($"Sending email to {email}");
             Console.WriteLine($"token: {token}");
+            Console.WriteLine($"https://localhost:5001/auth/user/{type}?token={token}&&uid={uid}");
+
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(emailFromEmail, emailFromName);
-            var subject = "Email Confirmation";
             var to = new EmailAddress(email, email.Split('@')[0]);
-            var plainTextContent = "Verify your email address to get started with our website.";
-            var htmlContent = "<strong>Verify</strong>  your email address to get started with our website.";
+            var htmlContent = plainTextContent;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var dynamicTemplateData = new TemplateData
             {
                 User = email.Split('@')[0],
-                ButtonUrl = $"http://localhost:5000/auth/user/verify?token={token}&&uid={uid}",
+                ButtonUrl = $"https://localhost:5000/auth/user/{type}?token={token}&&uid={uid}",
 
             };
             msg.SetTemplateId("d-b99af81ce9654555a1397cb750c9ba98");
             msg.SetTemplateData(dynamicTemplateData);
 
+
             var response = await client.SendEmailAsync(msg);
         }
+
+
     }
 
 }

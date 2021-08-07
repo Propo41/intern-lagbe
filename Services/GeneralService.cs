@@ -60,6 +60,8 @@ namespace InternFinder.Services
                 Include("OfficeAddress").
                 Include("District").
                 Include("ProfilePictureUrl").
+                Include("AvailableJobCount").
+                Include("Category").
                 Include("IsProfileComplete");
             // A user's profile will be complete iff the user is verified
             var result = _companyCollection.Find(company => true && company.IsProfileComplete == true).Project(projection).ToList();
@@ -124,6 +126,7 @@ namespace InternFinder.Services
                     Include("Contact").
                     Include("OfficeAddress").
                     Include("AvailableJobCount").
+                    Include("Category").
                     Include("District");
                 var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
                 return BsonSerializer.Deserialize<Company>(result);

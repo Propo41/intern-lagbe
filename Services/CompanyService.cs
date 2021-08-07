@@ -31,6 +31,8 @@ namespace InternFinder.Services
         Task<Payload> DeleteJob(string jobId, string companyId);
         Job GetJobDetails(string jobId);
         Payload UpdateJobDetails(Job job);
+        List<Applicant> GetApplicants(string companyId);
+        Task<Payload> DeleteApplicant(string applicantId);
     }
 
     public class CompanyService : ICompanyService
@@ -39,6 +41,7 @@ namespace InternFinder.Services
         private readonly IMongoCollection<User> _userCollection;
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Company> _companyCollection;
+        private readonly IMongoCollection<Applicant> _applicantCollection;
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
@@ -57,8 +60,7 @@ namespace InternFinder.Services
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");
             _aboutCollection = db.GetCollection<About>("About");
-
-
+             _applicantCollection = db.GetCollection<Applicant>("Applicants");
         }
 
         /* Updates a company instance. Note, the company document is created when the user is created. 
@@ -82,7 +84,7 @@ namespace InternFinder.Services
                         // delete the image from the uploadcare server
                         // extracting the uid from the url
                         string imageUuid = url.Split('/')[3];
-                        await DeleteImage(imageUuid, uploadCarePubKey, uploadCareSecret);
+                        await DeleteFile(imageUuid, uploadCarePubKey, uploadCareSecret);
                     }
 
                 }
@@ -402,7 +404,7 @@ namespace InternFinder.Services
 
         /* https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
                https://uploadcare.com/api-refs/rest-api/v0.5.0/#section/Authentication/Uploadcare.Simple */
-        public static async Task DeleteImage(string uuid, string publicKey, string secretKey)
+        public static async Task DeleteFile(string uuid, string publicKey, string secretKey)
         {
             Console.Write("Deleting file: ");
             Console.WriteLine(uuid);
@@ -414,6 +416,69 @@ namespace InternFinder.Services
 
             // DELETE request
             var response = await client.DeleteAsync(URL);
+        }
+
+        public List<Applicant> GetApplicants(string companyId)
+        {
+            try
+            {
+                var filter = Builders<Applicant>.Filter.Eq("CompanyId", companyId);
+                var projection = Builders<Applicant>.Projection.
+                        Include("JobId").
+                        Include("CompanyId").
+                        Include("Name").
+                        Include("ContactEmail").
+                        Include("ContactPhone").
+                        Include("ResumeUrl");
+                var result = _applicantCollection.Find(filter).Project(projection).ToList();
+                List<Applicant> applicantList = new List<Applicant>();
+                foreach (var item in result)
+                    applicantList.Add(BsonSerializer.Deserialize<Applicant>(item));
+
+                return applicantList;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        /* return the applicant resume url stored in the database.
+        returns null if no file found */
+        private string GetApplicantResume(string applicantId)
+        {
+            var filter = Builders<Applicant>.Filter.Eq("Id", applicantId);
+            var projection = Builders<Applicant>.Projection.Include("ResumeUrl");
+            var result = _applicantCollection.Find(filter).Project(projection).FirstOrDefault();
+            Applicant applicant = BsonSerializer.Deserialize<Applicant>(result);
+            return applicant.ResumeUrl;
+
+        }
+        async public Task<Payload> DeleteApplicant(string applicantId)
+        {
+            try
+            {
+                string url = GetApplicantResume(applicantId);
+                if (url != null)
+                {
+                    Console.WriteLine("deleteing file");
+                    // delete the file from the uploadcare server
+                    // extracting the uid from the url
+                    string fileUuid = url.Split('/')[3];
+                    await DeleteFile(fileUuid, uploadCarePubKey, uploadCareSecret);
+                }
+
+                var filter = Builders<Applicant>.Filter.Eq("Id", applicantId);
+                var result = _applicantCollection.DeleteOne(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Applicant deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
     }

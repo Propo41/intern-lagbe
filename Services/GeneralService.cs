@@ -11,6 +11,7 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using InternFinder.Helpers;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace InternFinder.Services
@@ -28,8 +29,8 @@ namespace InternFinder.Services
         About GetCompanyCategories();
         About GetJobCategories();
         About GetRemuneration();
-
-
+        Task<Applicant> ApplyJob(Applicant applicant);
+        UploadCare GetSignedUrl();
     }
 
     public class GeneralService : IGeneralService
@@ -39,6 +40,10 @@ namespace InternFinder.Services
         private readonly IMongoCollection<User> _usersCollection;
         private readonly IMongoCollection<About> _aboutCollection;
         private readonly IMongoCollection<Job> _jobCollection;
+        private readonly IMongoCollection<Applicant> _applicantCollection;
+        private readonly string uploadCareSecret;
+        private readonly string uploadCarePubKey;
+        private readonly int uploadCareExpiry;
 
         private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
 
@@ -47,10 +52,14 @@ namespace InternFinder.Services
         {
             var client = new MongoClient(config.GetConnectionString("HyphenDb"));
             var db = client.GetDatabase("HyphenDb");
+            uploadCarePubKey = config["UploadCare:PubKey"];
+            uploadCareSecret = config["UploadCare:Secret"];
+            uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
             _aboutCollection = db.GetCollection<About>("About");
             _companyCollection = db.GetCollection<Company>("Company");
             _usersCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
+            _applicantCollection = db.GetCollection<Applicant>("Applicants");
         }
 
         public List<Company> GetAllCompanies()
@@ -198,6 +207,26 @@ namespace InternFinder.Services
             var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
             return BsonSerializer.Deserialize<About>(result);
 
+        }
+
+        public UploadCare GetSignedUrl()
+        {
+            KeyValuePair<string, string> pair = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
+            return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
+        }
+
+        async public Task<Applicant> ApplyJob(Applicant applicant)
+        {
+            try
+            {
+                _applicantCollection.InsertOne(applicant);
+                return applicant;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
     }

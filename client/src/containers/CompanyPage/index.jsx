@@ -156,6 +156,7 @@ const CompanyPage = (props) => {
                   <div key={job.id}>
                     <AvailPositionCard
                       id={job.id}
+                      companyId={companyId}
                       expandable={job.isAvailable === true ? true : false}
                       title={job.title}
                       address={job.address}

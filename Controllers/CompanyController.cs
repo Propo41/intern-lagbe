@@ -158,22 +158,45 @@ namespace InternFinder.Controllers
 
         // POST api/company/job/{jobId}/edit 
         // updates individual job's detail
-        [HttpPost]
-        [Route("job/edit")]
-        public ActionResult UpdateJobDetails(Job job)
-        {
-            if (job != null && job.CompanyId == _authUser.CompanyId)
-            {
-                System.Console.WriteLine("input correct");
+        // [HttpPost]
+        // [Route("job/edit")]
+        // public ActionResult UpdateJobDetails(Job job)
+        // {
+        //     if (job != null && job.CompanyId == _authUser.CompanyId)
+        //     {
+        //         System.Console.WriteLine("input correct");
 
-                Payload res = _companyService.UpdateJobDetails(job);
-                return res != null ? Ok(res) :
-                                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
-            }
-            else
-            {
-                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Cannot edit. Job ID is invalid"));
-            }
+        //         Payload res = _companyService.UpdateJobDetails(job);
+        //         return res != null ? Ok(res) :
+        //                             new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
+        //     }
+        //     else
+        //     {
+        //         return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Cannot edit. Job ID is invalid"));
+        //     }
+        // }
+
+        // GET api/company/applicants
+        [HttpGet]
+        [Route("applicants")]
+        public ActionResult GetApplicants()
+        {
+            List<Applicant> res = _companyService.GetApplicants(_authUser.CompanyId);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Company doesn't exist or there could be a problem. Please refresh the page"));
+        }
+
+        /* DELETES an applicant  */
+        [HttpDelete]
+        [Route("applicant")]
+        async public Task<ActionResult> DeleteApplicant(IFormCollection form)
+        {
+            string id = form["id"];
+            Console.WriteLine("Deleting: ", id);
+            Payload res = await _companyService.DeleteApplicant(id);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+
         }
 
     }

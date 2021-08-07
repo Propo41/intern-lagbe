@@ -28,7 +28,7 @@ namespace InternFinder.Services
         List<Job> FetchJobPostings(string companyId);
         Task<Job> CreateJobPosting(Job job);
         Task<Payload> UpdateJobStatus(string jobId, bool status, string companyId);
-        Payload DeleteJob(string jobId);
+        Task<Payload> DeleteJob(string jobId, string companyId);
         Job GetJobDetails(string jobId);
         Payload UpdateJobDetails(Job job);
     }
@@ -305,12 +305,23 @@ namespace InternFinder.Services
             }
         }
 
-        public Payload DeleteJob(string jobId)
+        async public Task<Payload> DeleteJob(string jobId, string companyId)
         {
             try
             {
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
                 var result = _jobCollection.DeleteOne(filter);
+
+                var isJobAvailable = await IsJobAvailable(jobId);
+
+                // if job is unavailable, then decrementing the available job count of the company will be 
+                // done twice, which will result in an inaccurate count.
+                // since when toggling the job status, we are decrementing the count
+                if (isJobAvailable)
+                {
+                    await UpdateJobCount(companyId, -1);
+                }
+
                 return new Payload { StatusCode = 200, StatusDescription = "Job deleted successfully." };
 
             }
@@ -318,6 +329,25 @@ namespace InternFinder.Services
             {
                 Console.WriteLine(e);
                 return null;
+            }
+        }
+
+        async public Task<bool> IsJobAvailable(string jobId)
+        {
+            try
+            {
+                // first check the current job status
+                var filter = Builders<Job>.Filter.Eq("Id", jobId);
+                var projection = Builders<Job>.Projection.
+                    Include("IsAvailable");
+                var result = await _jobCollection.Find(filter).Project(projection).FirstOrDefaultAsync();
+                Job job = BsonSerializer.Deserialize<Job>(result);
+                return job.IsAvailable;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
             }
         }
 

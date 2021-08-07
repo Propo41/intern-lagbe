@@ -126,11 +126,11 @@ namespace InternFinder.Controllers
         /* DELETE deletes a job  */
         [HttpDelete]
         [Route("job")]
-        public ActionResult Delete(IFormCollection form)
+        async public Task<ActionResult> Delete(IFormCollection form)
         {
             string id = form["id"];
             Console.WriteLine("Deleting: ", id);
-            Payload res = _companyService.DeleteJob(id);
+            Payload res = await _companyService.DeleteJob(id, _authUser.CompanyId);
             return res != null ? Ok(res) :
                     new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
 

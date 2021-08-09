@@ -16,13 +16,13 @@ using EllipticCurve;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace InternFinder.Services
 {
     public interface ICompanyService
     {
-        Task<Payload> UpdateCompanyProfile(Company company);
-        UploadCare GetSignedUrl();
+        Task<Payload> UpdateCompanyProfile(Company company, IFormFile file);
         Company GetCompanyProfile(string companyId);
         Task<Payload> GetProfileConfig(string companyId);
         List<Job> FetchJobPostings(string companyId);
@@ -60,49 +60,45 @@ namespace InternFinder.Services
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _companyCollection = db.GetCollection<Company>("Company");
             _aboutCollection = db.GetCollection<About>("About");
-             _applicantCollection = db.GetCollection<Applicant>("Applicants");
+            _applicantCollection = db.GetCollection<Applicant>("Applicants");
         }
+
 
         /* Updates a company instance. Note, the company document is created when the user is created. 
         Also, deletes any current image that is saved previously*/
-        async public Task<Payload> UpdateCompanyProfile(Company company)
+        async public Task<Payload> UpdateCompanyProfile(Company company, IFormFile file)
         {
-            Console.Write("image from server: ");
-            Console.WriteLine(company.ProfilePictureUrl);
             try
             {
                 // check if user has any existing images stored in the database
-                string url = GetCompanyImage(company.Id);
-                if (url != null)
+                if (company.ProfilePictureUrl != null)
                 {
-                    // CHECK if user uploaded a new picture
-                    // if old url = new url, then it means user did not upload a new picture
-                    // if not, then delete the old picture
-                    if (!url.Equals(company.ProfilePictureUrl))
-                    {
-                        Console.WriteLine("deleteing file");
-                        // delete the image from the uploadcare server
-                        // extracting the uid from the url
-                        string imageUuid = url.Split('/')[3];
-                        await DeleteFile(imageUuid, uploadCarePubKey, uploadCareSecret);
-                    }
+                    Console.WriteLine("deleteing old picture");
+                    // delete the image from the uploadcare server
+                    // extracting the uid from the url
+                    string imageUuid = company.ProfilePictureUrl.Split('/')[3];
+                    await DeleteFile(imageUuid, uploadCarePubKey, uploadCareSecret);
+                }
+                // save the new image to the uploadcare server
+                var fileUrl = await Util.UploadFile(file, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
 
+                if (fileUrl != null)
+                {
+                    var filter = Builders<Company>.Filter.Eq("Id", company.Id);
+                    var update = Builders<Company>.Update.
+                            Set("Name", company.Name).
+                            Set("Description", company.Description).
+                            Set("Contact", company.Contact).
+                            Set("OfficeAddress", company.OfficeAddress).
+                            Set("District", company.District).
+                            Set("Category", company.Category).
+                            Set("ProfilePictureUrl", fileUrl).
+                            Set("IsProfileComplete", true);
+                    var res = _companyCollection.UpdateOne(filter, update);
+                    return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
                 }
 
-                var filter = Builders<Company>.Filter.Eq("Id", company.Id);
-                var update = Builders<Company>.Update.
-                        Set("Name", company.Name).
-                        Set("Description", company.Description).
-                        Set("Contact", company.Contact).
-                        Set("OfficeAddress", company.OfficeAddress).
-                        Set("District", company.District).
-                        Set("Category", company.Category).
-                        Set("ProfilePictureUrl", company.ProfilePictureUrl).
-                        Set("IsProfileComplete", true);
-                var res = _companyCollection.UpdateOne(filter, update);
-
-                return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
-
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
             catch (Exception e)
             {
@@ -111,23 +107,6 @@ namespace InternFinder.Services
             }
         }
 
-        /* return the company image url stored in the database.
-        returns null if no image found */
-        private string GetCompanyImage(string companyId)
-        {
-            var filter = Builders<Company>.Filter.Eq("Id", companyId);
-            var projection = Builders<Company>.Projection.Include("ProfilePictureUrl");
-            var result = _companyCollection.Find(filter).Project(projection).FirstOrDefault();
-            Company company = BsonSerializer.Deserialize<Company>(result);
-            return company.ProfilePictureUrl;
-
-        }
-
-        public UploadCare GetSignedUrl()
-        {
-            KeyValuePair<string, string> pair = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
-            return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
-        }
 
         public Company GetCompanyProfile(string companyId)
         {
@@ -313,6 +292,7 @@ namespace InternFinder.Services
             {
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
                 var result = _jobCollection.DeleteOne(filter);
+                await DeleteApplicantByJob(jobId);
 
                 var isJobAvailable = await IsJobAvailable(jobId);
 
@@ -364,6 +344,8 @@ namespace InternFinder.Services
                     Include("IsAvailable").
                     Include("Address").
                     Include("District").
+                    Include("Category").
+                    Include("Remuneration").
                     Include("Requirements").
                     Include("ContactEmail").
                     Include("ContactPhone");
@@ -455,6 +437,25 @@ namespace InternFinder.Services
             return applicant.ResumeUrl;
 
         }
+
+        async public Task<Payload> DeleteApplicantByJob(string jobId)
+        {
+            try
+            {
+                var filter = Builders<Applicant>.Filter.Eq("JobId", jobId);
+                var result = await _applicantCollection.DeleteManyAsync(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Applicants deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+
+
         async public Task<Payload> DeleteApplicant(string applicantId)
         {
             try

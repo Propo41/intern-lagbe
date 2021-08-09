@@ -13,6 +13,9 @@ using MongoDB.Bson.Serialization;
 using InternFinder.Helpers;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+using System.IO;
 
 namespace InternFinder.Services
 {
@@ -29,7 +32,7 @@ namespace InternFinder.Services
         About GetCompanyCategories();
         About GetJobCategories();
         About GetRemuneration();
-        Task<Applicant> ApplyJob(Applicant applicant);
+        Task<Payload> ApplyJob(Applicant applicant, IFormFile file);
         UploadCare GetSignedUrl();
     }
 
@@ -215,17 +218,54 @@ namespace InternFinder.Services
             return new UploadCare { Signature = pair.Value, Expiry = pair.Key, PubKey = uploadCarePubKey };
         }
 
-        async public Task<Applicant> ApplyJob(Applicant applicant)
+        /* checks if an applicant has applied to the job before. It checks against their email.
+        @todo: find better implementations */
+        async public Task<bool> IsApplicantValid(Applicant applicant)
+        {
+            var filter = Builders<Applicant>.Filter.Eq("ContactEmail", applicant.ContactEmail);
+
+            var result = await _applicantCollection.FindAsync(filter);
+            foreach (var item in result.ToList())
+            {
+
+                if (item.JobId == applicant.JobId)
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+
+        async public Task<Payload> ApplyJob(Applicant applicant, IFormFile file)
         {
             try
             {
-                _applicantCollection.InsertOne(applicant);
-                return applicant;
+                // first check if the applicant has submitted to the job before
+                bool applicantStatus = await IsApplicantValid(applicant);
+
+                if (!applicantStatus)
+                {
+                    return new Payload { StatusCode = 400, StatusDescription = "You have already applied to this job. Please sit tight and wait for your call." };
+                }
+
+                var fileUrl = await Util.UploadFile(file, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
+
+                if (fileUrl != null)
+                {
+                    applicant.ResumeUrl = fileUrl;
+                    _applicantCollection.InsertOne(applicant);
+                    return new Payload { StatusCode = 200, StatusDescription = "You have applied to job successfully!" };
+                }
+                return new Payload { StatusCode = 400, StatusDescription = "Internal server error" };
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return null;
+                return new Payload { StatusCode = 400, StatusDescription = e.Message };
+
             }
         }
 

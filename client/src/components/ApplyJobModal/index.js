@@ -45,11 +45,18 @@ const ApplyJobModal = (props) => {
   const [formInput, setFormInput] = React.useState(null);
   const [alert, setAlert] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
-  const [successMsg, setSuccessMsg] = React.useState(false);
   const [file, setFile] = React.useState(null);
   const [filename, setFilename] = React.useState(null);
+  const [ip, setIp] = React.useState(null);
 
   useEffect(() => {
+    const exe = async () => {
+      const res = await axios.get("https://geolocation-db.com/json/");
+      console.log(res.data);
+      setIp(res.data.IPv4);
+    };
+    exe();
+
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -58,35 +65,36 @@ const ApplyJobModal = (props) => {
     }
   }, [file]);
 
-  // On submission, file gets always uploaded even if there is form validation error
   const submitForm = async (e) => {
     e.preventDefault();
     setLoadingBar(true);
-    try {
-      var url = "";
-      if (file) {
-        const { data } = await GET(`api/landingpage/company/job/apply/resume`);
-        console.log(data);
-        // uploading resume to uploadCare server
-        url = await uploadFile(data);
-      }
+    console.log(formInput);
+    console.log("job id clicked: ", props.jobId);
 
-      const res = await POST(`api/landingpage/company/job/apply`, {
-        ...formInput,
-        jobId: props.jobId,
-        companyId: props.companyId,
-        resumeUrl: url,
-      });
+    try {
+      var formData = new FormData();
+      formData.append("file", file);
+      formData.append("name", formInput.name);
+      formData.append("email", formInput.email);
+      formData.append("contact", formInput.contact);
+      formData.append("ip", ip.toString());
+      formData.append("jobId", props.jobId);
+      formData.append("companyId", props.companyId);
+
+      const res = await POST(`api/landingpage/company/job/apply`, formData);
 
       if (res.data.status === 200) {
-        setSuccessMsg(true);
+        setAlert({
+          title: "Success",
+          message: "Your application has been submitted.",
+          severity: "success",
+        });
       }
-      setAlert(null);
+
       setLoadingBar(false);
       console.log("Applying for job :", res.data);
       window.location.reload();
     } catch (error) {
-      setSuccessMsg(false);
       setLoadingBar(false);
       if (error.response) {
         setAlert(errorHandling(error));
@@ -100,26 +108,6 @@ const ApplyJobModal = (props) => {
       ...prevState,
       [name]: value,
     }));
-  };
-
-  const uploadFile = async (data) => {
-    var resumeForm = new FormData();
-    resumeForm.append("file", file);
-    resumeForm.append("signature", data.signature);
-    resumeForm.append("UPLOADCARE_PUB_KEY", data.pubKey);
-    resumeForm.append("expire", data.expiry);
-
-    // create a POST request with axios
-    const res = await axios.post(
-      "https://upload.uploadcare.com/base/",
-      resumeForm,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return `https://ucarecdn.com/${res.data.file}/`;
   };
 
   const fileHandler = (event) => {
@@ -136,7 +124,7 @@ const ApplyJobModal = (props) => {
   return (
     <Paper elevation={5} className={classes.paper}>
       <h1 className="title-medium" style={{ textTransform: "uppercase" }}>
-        APPLYING FOR: {props.title}
+        APPLY TO JOB
       </h1>
       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
         <TextInputLayout
@@ -152,7 +140,7 @@ const ApplyJobModal = (props) => {
           icon="mail"
           placeholder="Enter your email*"
           type="email"
-          name="contactEmail"
+          name="email"
           onInputChange={onInputChange}
         />
       </div>
@@ -161,7 +149,7 @@ const ApplyJobModal = (props) => {
           icon="phone"
           placeholder="Enter your contact*"
           type="phone"
-          name="contactPhone"
+          name="contact"
           onInputChange={onInputChange}
         />
       </div>
@@ -212,13 +200,6 @@ const ApplyJobModal = (props) => {
         <div style={{ marginTop: "var(--margin-item-spacing)" }}>
           <LinearProgress />
         </div>
-      )}
-      {successMsg && (
-        <Alert
-          severity="success"
-          title="Job successfully applied!"
-          message={null}
-        />
       )}
     </Paper>
   );

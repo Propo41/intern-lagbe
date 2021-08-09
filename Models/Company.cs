@@ -25,7 +25,6 @@ namespace InternFinder.Models
         public string Category { get; set; }
         [Required]
         public string OfficeAddress { get; set; }
-        [Required]
         [Url]
         public string ProfilePictureUrl { get; set; }
 

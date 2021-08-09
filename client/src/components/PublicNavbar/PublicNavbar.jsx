@@ -49,7 +49,13 @@ const PublicNavbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  const handlePostJob = (e) => {
+    e.stopPropagation();
     setAnchorEl(null);
     history.push("/sign-in");
   };
@@ -102,7 +108,7 @@ const PublicNavbar = () => {
                   ABOUT
                 </h1>
               </MenuItem>
-              <MenuItem className="navbar-button" onClick={handleClose}>
+              <MenuItem className="navbar-button" onClick={handlePostJob}>
                 POST A JOB
               </MenuItem>
             </Menu>
@@ -116,10 +122,7 @@ const PublicNavbar = () => {
               <Link to="/about">ABOUT</Link>
             </Button>
             <div className={classes.rightToolbar}>
-              <Button
-                className="navbar-button"
-                onClick={() => history.push("/sign-in")}
-              >
+              <Button className="navbar-button" onClick={handlePostJob}>
                 POST A JOB
               </Button>
             </div>

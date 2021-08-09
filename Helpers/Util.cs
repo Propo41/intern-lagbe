@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -9,7 +10,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using InternFinder.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 
 namespace InternFinder.Helpers
 {
@@ -148,6 +151,52 @@ namespace InternFinder.Helpers
         {
             return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
+
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        async public static Task<string> UploadFile(IFormFile file, string uploadCareSecret, int uploadCareExpiry, string uploadCarePubKey)
+        {
+            string URL = $"https://upload.uploadcare.com/base/";
+            HttpClient client = new HttpClient();
+            // the following headers are required for the uploadcare API
+
+            KeyValuePair<string, string> keys = Util.GenerateSignature(uploadCareSecret, uploadCareExpiry);
+
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            // convert file to byte array
+            byte[] data;
+            using (var br = new BinaryReader(file.OpenReadStream()))
+                data = br.ReadBytes((int)file.OpenReadStream().Length);
+
+            ByteArrayContent bytes = new ByteArrayContent(data);
+            form.Add(new StringContent(keys.Key), "expire");
+            form.Add(new StringContent(keys.Value), "signature");
+            form.Add(new StringContent(uploadCarePubKey), "UPLOADCARE_PUB_KEY");
+            form.Add(new StringContent("1"), "UPLOADCARE_STORE");
+            form.Add(bytes, "file", file.FileName);
+
+            HttpResponseMessage response = await client.PostAsync(URL, form);
+            if (response.IsSuccessStatusCode)
+            {
+                var jo = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+                var fileUrl = jo["file"].ToString();
+                return $"https://ucarecdn.com/{fileUrl}/";
+            }
+            return null;
+        }
+
 
     }
 

@@ -40,24 +40,40 @@ namespace InternFinder.Controllers
         // updates user profile and set value of profileCompletion to true
         [HttpPost]
         [Route("profile")]
-        async public Task<ActionResult> UpdateProfile(Company company)
+        async public Task<ActionResult> UpdateProfile(IFormCollection form)
         {
-            System.Console.WriteLine("input correct");
+            Company company = new Company
+            {
+                Name = form["name"],
+                Contact = form["contact"],
+                OfficeAddress = form["officeAddress"],
+                District = form["district"],
+                Description = form["description"],
+                Category = form["category"],
+                ProfilePictureUrl = form["profilePictureUrl"],
+            };
+            // re-running form validation
+            if (!TryValidateModel(company, nameof(Company)))
+            {
+                Console.WriteLine("model is invalid");
+                return new BadRequestObjectResult(new ErrorResult("Invalid inputs", 400, "Please make sure you have entered correct values."));
+
+            }
+
+            List<IFormFile> files = form.Files.ToList();
+            if (files.Count == 0)
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "You must provide a company logo or image"));
+
+            if (files[0].Length > 5000000)
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Image file size must be less than 5MB"));
+
+            IFormFile file = files[0];
+
             company.Id = _authUser.CompanyId;
-            Payload res = await _companyService.UpdateCompanyProfile(company);
+            Payload res = await _companyService.UpdateCompanyProfile(company, file);
             return Ok(res);
         }
 
-
-        // api/company/profile/image
-        // creates a signed url for uploading a profile image
-        [HttpGet("profile/image")]
-        public ActionResult GetSignedUrl()
-        {
-            UploadCare uploadCare = _companyService.GetSignedUrl();
-            return uploadCare != null ? Ok(uploadCare) : new BadRequestObjectResult(
-                new ErrorResult("Couldn't process your request", 400, "Couldn't generate a secured URL for uploading files to cloud"));
-        }
 
         // GET api/company/profile
         // fetches the company info in profile tab
@@ -158,23 +174,23 @@ namespace InternFinder.Controllers
 
         // POST api/company/job/{jobId}/edit 
         // updates individual job's detail
-        // [HttpPost]
-        // [Route("job/edit")]
-        // public ActionResult UpdateJobDetails(Job job)
-        // {
-        //     if (job != null && job.CompanyId == _authUser.CompanyId)
-        //     {
-        //         System.Console.WriteLine("input correct");
-
-        //         Payload res = _companyService.UpdateJobDetails(job);
-        //         return res != null ? Ok(res) :
-        //                             new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
-        //     }
-        //     else
-        //     {
-        //         return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Cannot edit. Job ID is invalid"));
-        //     }
-        // }
+        [HttpPost]
+        [Route("job/edit")]
+        public ActionResult UpdateJobDetails(Job job)
+        {
+            if (job != null && job.CompanyId == _authUser.CompanyId)
+            {
+                Console.WriteLine(job.ToJson());
+                System.Console.WriteLine("input correct");
+                Payload res = _companyService.UpdateJobDetails(job);
+                return res != null ? Ok(res) :
+                        new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Failed to edit job post. Please try again"));
+            }
+            else
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Cannot edit. Job ID is invalid"));
+            }
+        }
 
         // GET api/company/applicants
         [HttpGet]

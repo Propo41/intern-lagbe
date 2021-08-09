@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace InternFinder.Controllers
 {
@@ -99,25 +101,43 @@ namespace InternFinder.Controllers
             return Ok(_generalService.GetRemuneration());
         }
 
-        // api/landingpage/company/job/apply/resume
-        // creates a signed url for uploading a resume
-        [HttpGet("company/job/apply/resume")]
-        public ActionResult GetSignedUrl()
-        {
-            UploadCare uploadCare = _generalService.GetSignedUrl();
-            return uploadCare != null ? Ok(uploadCare) : new BadRequestObjectResult(
-                new ErrorResult("Couldn't process your request", 400, "Couldn't generate a secured URL for uploading files to cloud"));
-        }
 
         // POST api/landingpage/company/job/apply
         [HttpPost]
         [Route("company/job/apply")]
-         async public Task<ActionResult> ApplyJob(Applicant applicant)
+        async public Task<ActionResult> ApplyJob(IFormCollection form)
         {
-            Applicant res = await _generalService.ApplyJob(applicant);
-            return res != null ? Ok(new { status = 200, description = "You have applied for the job successfully!" }) :
-                        new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "The Job is unavailable right now."));
+
+            Applicant applicant = new Applicant
+            {
+                ContactEmail = form["email"],
+                Name = form["name"],
+                ContactPhone = form["contact"],
+                IPAddress = form["ip"],
+                JobId = form["jobId"],
+                CompanyId = form["companyId"]
+            };
+            if (!TryValidateModel(applicant, nameof(Applicant)))
+            {
+                Console.WriteLine("model is invalid");
+                return new BadRequestObjectResult(new ErrorResult("Invalid inputs", 400, "Please make sure you have entered correct values."));
+
+            }
+
+            List<IFormFile> files = form.Files.ToList();
+            if (files.Count == 0)
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "You must provide a resume file before applying"));
+
+            if (files[0].Length > 5000000)
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Resume file size must be less than 5MB"));
+
+            IFormFile file = files[0];
+
+            Payload res = await _generalService.ApplyJob(applicant, file);
+            return res.StatusCode == 200 ? Ok(new { status = res.StatusCode, description = res.StatusDescription }) :
+                        new BadRequestObjectResult(new ErrorResult("Couldn't process your request", res.StatusCode, res.StatusDescription));
 
         }
+
     }
 }

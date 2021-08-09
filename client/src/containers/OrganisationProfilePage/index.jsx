@@ -118,7 +118,6 @@ const OrganisationProfilePage = () => {
           setAlert(errorHandling(error));
         } */
       });
-      
   }, [image]);
 
   const onFormSubmit = async (event) => {
@@ -126,29 +125,23 @@ const OrganisationProfilePage = () => {
     console.log(image ? "image selected" : "no image selected");
     console.log("printing form");
     console.log(form);
+    window.scrollTo(0, 0);
 
     setLoadingBar(true);
 
     try {
-      // get the temporary signed url from server to upload the image iff the user changed the image
-      var url = "";
-      if (image) {
-        const { data } = await GET_AUTH(`api/company/profile/image`);
-        console.log(data);
-        // uploading image to uploadCare server
-        url = await uploadImage(data);
-        setPreviewUrl(url);
-      }
-
-      const payload = {
-        ...form,
-        description: description,
-        profilePictureUrl: image ? url : previewUrl,
-      };
-      console.log(payload);
+      var formData = new FormData();
+      formData.append("category", form.category);
+      formData.append("contact", form.contact);
+      formData.append("description", description);
+      formData.append("name", form.name);
+      formData.append("officeAddress", form.officeAddress);
+      formData.append("profilePictureUrl", profileInfo.profilePictureUrl);
+      formData.append("district", form.district);
+      formData.append("file", image);
 
       // sending the form input to server along with the image url
-      const res = await POST_AUTH(`api/company/profile`, payload);
+      const res = await POST_AUTH(`api/company/profile`, formData);
       setAlert(null);
       setLoadingBar(false);
       console.log(res.data);
@@ -160,26 +153,6 @@ const OrganisationProfilePage = () => {
         setAlert(errorHandling(error));
       }
     }
-  };
-
-  const uploadImage = async (data) => {
-    var imageForm = new FormData();
-    imageForm.append("file", image);
-    imageForm.append("signature", data.signature);
-    imageForm.append("UPLOADCARE_PUB_KEY", data.pubKey);
-    imageForm.append("expire", data.expiry);
-
-    // create a POST request with axios
-    const res = await axios.post(
-      "https://upload.uploadcare.com/base/",
-      imageForm,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return `https://ucarecdn.com/${res.data.file}/`;
   };
 
   const onInputChange = (event) => {

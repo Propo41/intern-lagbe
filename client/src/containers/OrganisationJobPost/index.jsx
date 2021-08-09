@@ -89,28 +89,42 @@ const OrganisationJobPost = (props) => {
                       readOnly={true}
                     />
                   </div>
-                  <div
-                    style={{
-                      marginTop: "var(--margin-item-spacing)",
-                      background: "var(--ash)",
-                    }}
-                    className="mark-down-viewer"
-                  >
-                    <ReactMarkdown children={description} />
-                  </div>
+
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="mail"
-                      placeholder="Enter email (optional)"
+                      placeholder="Enter email"
                       type="text"
                       value={job.contactEmail}
                       readOnly={true}
                     />
                   </div>
+
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <TextInputLayout
+                      icon="category"
+                      placeholder="Enter category"
+                      type="text"
+                      value={job.category}
+                      readOnly={true}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <TextInputLayout
+                      icon="money"
+                      placeholder="Enter remuneration"
+                      type="text"
+                      value={job.remuneration}
+                      readOnly={true}
+                    />
+                  </div>
+
+
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="phone"
-                      placeholder="Enter contact number (optional)"
+                      placeholder="Enter contact number"
                       type="text"
                       value={job.contactPhone}
                       readOnly={true}
@@ -118,8 +132,8 @@ const OrganisationJobPost = (props) => {
                   </div>
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
-                      icon="district"
-                      placeholder="Enter contact number (optional)"
+                      icon="map"
+                      placeholder="Enter district"
                       type="text"
                       value={job.district}
                       readOnly={true}
@@ -128,11 +142,20 @@ const OrganisationJobPost = (props) => {
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="location"
-                      placeholder="Enter contact number (optional)"
+                      placeholder="Enter address"
                       type="text"
                       value={job.address}
                       readOnly={true}
                     />
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "var(--margin-item-spacing)",
+                      background: "var(--ash)",
+                    }}
+                    className="mark-down-viewer"
+                  >
+                    <ReactMarkdown children={description} />
                   </div>
                 </Grid>
 

@@ -22,6 +22,22 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginLeft: "auto",
   },
+  logoutContainer: {
+    justifyItems: "center",
+    display: "grid",
+    padding: "1rem 3rem",
+  },
+  userInfoText: {
+    margin: 0,
+    color: "var(--white)",
+    fontFamily: "var(--font-family-poppins)",
+    fontWeight: 200,
+    fontSize: "var(--font-size-dialog-content)",
+  },
+  menuItemIcon: {
+    marginRight: "5px",
+    color: "var(--darkash)",
+  },
 }));
 
 export default useStyles;

@@ -23,10 +23,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "var(--font-size-content)",
   },
   logoutButton: {
-    backgroundColor: "var(--ash)",
-    boxShadow: "var(--card-shadow)",
     borderRadius: "10px",
-    padding: "0.4rem 1rem",
+  },
+  logoutButtonAvatar: {
+    width: "40px",
+    height: "40px",
+    margin: "2px",
+    borderRadius: 50,
   },
   large: {
     width: theme.spacing(7),
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   logoutContainer: {
     justifyItems: "center",
     display: "grid",
-    padding: "0.8rem",
+    padding: "0.8rem 1rem",
   },
 }));
 
@@ -49,16 +52,37 @@ const LogoutComponent = (props) => {
   const anchorRef = React.useRef(null);
 
   const handleToggle = () => {
-    console.log("Destop vw: dropdown clicked");
     setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event) => {
     event.stopPropagation();
 
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleLogout = (event) => {
+    event.stopPropagation();
+
     localStorage.clear();
     window.location.reload();
     console.log("log out");
+
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleChangePass = (event) => {
+    event.stopPropagation();
+
+    console.log("change pass");
 
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
@@ -93,11 +117,7 @@ const LogoutComponent = (props) => {
         className={classes.logoutButton}
       >
         <img
-          style={{
-            width: "35px",
-            height: "35px",
-            margin: "2px 10px",
-          }}
+          className={classes.logoutButtonAvatar}
           alt="company logo"
           src={
             props.avatar
@@ -161,12 +181,12 @@ const LogoutComponent = (props) => {
                       </h1>
                     </div>
                   </div>
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleChangePass}>
                     <SettingsIcon className={classes.menuItemIcon} />
                     CHANGE PASSWORD
                   </MenuItem>
                   <MenuItem
-                    onClick={handleClose}
+                    onClick={handleLogout}
                     style={{
                       color: "#D67979",
                     }}

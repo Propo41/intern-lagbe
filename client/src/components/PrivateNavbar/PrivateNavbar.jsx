@@ -8,19 +8,14 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import LogoutComponent from "../LogoutComponent";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import useStyles from "../../styles/private_navbar";
 import { useEffect } from "react";
 import { GET_AUTH } from "../../api/api";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const PrivateNavbar = () => {
   const theme = useTheme();
@@ -54,13 +49,10 @@ const PrivateNavbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [openNestedList, setOpenNestedList] = React.useState(true);
 
-  const handleClick = () => {
-    setOpenNestedList(!openNestedList);
-  };
   const onLogoutClick = (e) => {
     e.stopPropagation();
+    setAnchorEl(null);
     console.log("log out");
     localStorage.clear();
     window.location.reload();
@@ -110,6 +102,34 @@ const PrivateNavbar = () => {
               open={open}
               onClose={handleClose}
             >
+              <div
+                style={{
+                  backgroundColor: "var(--purple)",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              >
+                <div className={classes.logoutContainer}>
+                  <Avatar
+                    alt="company image"
+                    src={
+                      userInfo.profilePictureUrl
+                        ? userInfo.profilePictureUrl
+                        : "/assets/images/company_img_preview.svg"
+                    }
+                    className={classes.large}
+                  />
+                  <h1 className={classes.userInfoText}>{userInfo.name}</h1>
+                  <h1
+                    className={classes.userInfoText}
+                    style={{
+                      fontSize: "var(--font-size-dialog-content",
+                    }}
+                  >
+                    {userInfo.email}
+                  </h1>
+                </div>
+              </div>
               <MenuItem onClick={handleClose}>
                 <h1 className="navbar">
                   <Link to="/">MY POSTINGS</Link>
@@ -125,47 +145,22 @@ const PrivateNavbar = () => {
                   <Link to="/profile">PROFILE</Link>
                 </h1>
               </MenuItem>
-              <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                style={{ backgroundColor: "var(--ash)" }}
+              <MenuItem>
+                <SettingsIcon className={classes.menuItemIcon} />
+                CHANGE PASSWORD
+              </MenuItem>
+              <MenuItem
+                onClick={onLogoutClick}
+                style={{
+                  color: "#D67979",
+                }}
               >
-                <ListItem button onClick={handleClick}>
-                  <ListItemText>
-                    <img
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                      }}
-                      alt="company logo"
-                      src={userInfo.profilePictureUrl}
-                    />
-                  </ListItemText>
-                  {openNestedList ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                <Collapse in={openNestedList} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItem
-                      style={{ display: "grid", justifyContent: "center" }}
-                    >
-                      <ListItemText primary="microapplesoft@micro.com" />
-                    </ListItem>
-                    <Divider
-                      style={{
-                        backgroundColor: "var(--darkash)",
-                        margin: "0 15px",
-                      }}
-                    />
-                    <ListItem
-                      button
-                      style={{ display: "grid", justifyContent: "center" }}
-                      onClick={handleClose}
-                    >
-                      <ListItemText primary="Logout" onClick={onLogoutClick} />
-                    </ListItem>
-                  </List>
-                </Collapse>
-              </List>
+                <ExitToAppIcon
+                  className={classes.menuItemIcon}
+                  style={{ color: "#D67979" }}
+                />
+                LOGOUT
+              </MenuItem>
             </Menu>
           </>
         ) : (

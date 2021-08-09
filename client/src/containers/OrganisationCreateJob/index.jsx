@@ -85,6 +85,9 @@ const OrganisationCreateJob = () => {
           setRemunerationList(data.remuneration);
           resolve();
         } catch (e) {
+          if (e) {
+            setAlert(errorHandling(e));
+          }
           reject();
         }
       };
@@ -99,9 +102,6 @@ const OrganisationCreateJob = () => {
       .catch((error) => {
         console.log("error", error);
         setLoadingBar(false);
-        /*  if (error) {
-          setAlert(errorHandling(error));
-        } */
       });
   }, []);
 

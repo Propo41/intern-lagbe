@@ -9,11 +9,13 @@ import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_job_post_edit";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { GET_AUTH, POST_AUTH } from "../../api/api.js";
+import { GET, GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { useHistory } from "react-router";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import Alert from "../../components/AlertCustom";
+import SelectTextInputLayout from "../../components/SelectTextInputLayout";
+import errorHandling from "../../utils/error_handling";
 
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
@@ -25,12 +27,17 @@ const OrganisationJobPostEdit = (props) => {
   const [error, setError] = React.useState(false);
   const [formInput, setFormInput] = React.useState(null);
   const [description, setDescription] = React.useState(null);
+  const [districtList, setDistrictList] = React.useState(null);
+  const [categoryList, setCategoryList] = React.useState(null);
+  const [alert, setAlert] = React.useState(null);
+  const [remunerationList, setRemunerationList] = React.useState(null);
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
       const exe = async () => {
         try {
           const { data } = await GET_AUTH(`api/company/job/${jobId}`);
+          console.log(data);
           setJob(data);
           setDescription(data.requirements);
           setFormInput(data);
@@ -44,7 +51,49 @@ const OrganisationJobPostEdit = (props) => {
       exe();
     });
 
-    Promise.all([promise1])
+    const promise2 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/districts");
+          console.log(data);
+          setDistrictList(data.districts);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise3 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/remuneration");
+          console.log(data);
+          setRemunerationList(data.remuneration);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    const promise4 = new Promise((resolve, reject) => {
+      const exe = async () => {
+        try {
+          const { data } = await GET("api/landingpage/job-categories");
+          console.log(data);
+          setCategoryList(data.jobCategories);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      };
+      exe();
+    });
+
+    Promise.all([promise1, promise2, promise3, promise4])
       .then((values) => {
         console.log("all promises resolved");
         setLoading(false);
@@ -63,15 +112,11 @@ const OrganisationJobPostEdit = (props) => {
         ...formInput,
       });
       console.log(res.data);
-
-      // window.location.reload(history.push(`/job/${jobId}`));
       history.push(`/job/${jobId}`);
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response.data.errors);
-        console.log(error.response.data.title);
+    } catch (e) {
+      if (e) {
+        setAlert(errorHandling(e));
       }
-      // setError(true);
     }
   };
 
@@ -112,12 +157,6 @@ const OrganisationJobPostEdit = (props) => {
                       name="title"
                     />
                   </div>
-                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                    <MarkdownEditor
-                      description={description}
-                      setDescription={setDescription}
-                    />
-                  </div>
 
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
@@ -139,16 +178,43 @@ const OrganisationJobPostEdit = (props) => {
                       name="contactPhone"
                     />
                   </div>
+
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
-                    <TextInputLayout
-                      icon="district"
-                      placeholder="Enter contact number (optional)"
-                      type="text"
-                      value={job.district}
+                    <SelectTextInputLayout
+                      icon="company"
+                      placeholder="Select company category"
+                      value={job.category}
+                      list={categoryList}
                       onInputChange={onInputChange}
-                      name="district"
+                      name="category"
+                      setSelectedValue={setFormInput}
                     />
                   </div>
+
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <SelectTextInputLayout
+                      icon="map"
+                      placeholder="Select district"
+                      value={job.district}
+                      onInputChange={onInputChange}
+                      list={districtList}
+                      name="district"
+                      setSelectedValue={setFormInput}
+                    />
+                  </div>
+
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <SelectTextInputLayout
+                      icon="map"
+                      placeholder="Select remuneration"
+                      value={job.remuneration}
+                      onInputChange={onInputChange}
+                      list={remunerationList}
+                      name="remuneration"
+                      setSelectedValue={setFormInput}
+                    />
+                  </div>
+
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="location"
@@ -157,6 +223,12 @@ const OrganisationJobPostEdit = (props) => {
                       value={job.address}
                       onInputChange={onInputChange}
                       name="address"
+                    />
+                  </div>
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <MarkdownEditor
+                      description={description}
+                      setDescription={setDescription}
                     />
                   </div>
 
@@ -171,6 +243,14 @@ const OrganisationJobPostEdit = (props) => {
                       SAVE CHANGES
                     </Button>
                   </div>
+
+                  {alert && alert.status && (
+                    <Alert
+                      severity={alert.severity}
+                      title={alert.title}
+                      message={alert.message}
+                    />
+                  )}
                 </Grid>
 
                 <Grid item xs={12} lg={5} style={{ textAlign: "right" }}>

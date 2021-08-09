@@ -180,17 +180,7 @@ const LandingPage = () => {
                     FIND YOUR DREAM JOB
                   </h1>
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={7}
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    zIndex: "1000",
-                  }}
-                >
+                <Grid item xs={12} sm={7} className={classes.filterContainer}>
                   <FilterByCategory
                     categoryList={[...jobCategories, ...companyCategories]}
                     setCategories={setFilteredLocations}

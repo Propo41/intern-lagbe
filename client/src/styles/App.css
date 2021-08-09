@@ -459,7 +459,7 @@ a {
   font-size: var(--font-size-content-small) !important;
   font-family: "Sen", sans-serif !important;
   padding: 0.4rem 0.6rem !important;
-  margin-left: 0.8rem !important;
+  margin: 0 0 0 0.8rem !important;
 }
 
 .dropdown-button {
@@ -537,6 +537,9 @@ a {
   }
   .MuiToolbar-root {
     padding: 0 2.5rem !important;
+  }
+  .filter-button {
+    margin: 1rem 0.8rem 0 0 !important;
   }
 }
 /* Medium devices (landscape tablets, 768px and up) */

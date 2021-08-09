@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     width: "90%",
     height: "90%",
   },
-  
+
   getStartedCard: {
     padding: 30,
     textAlign: "center",
@@ -38,12 +38,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "auto",
     backgroundColor: "var(--purple)",
   },
-  chip:{
+  chip: {
     fontFamily: "Sen",
     color: "var(--darkash)",
     marginRight: theme.spacing(1),
     marginBottom: theme.spacing(1),
-  }
+  },
+  filterContainer: {
+    position: "relative",
+    display: "flex",
+    justifyContent: "flex-end",
+    zIndex: "1000",
+    [theme.breakpoints.down("sm")]: {
+      justifyContent: "start",
+    },
+  },
 }));
 
 export default useStyles;

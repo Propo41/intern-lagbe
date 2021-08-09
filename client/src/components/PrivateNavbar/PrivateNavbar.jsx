@@ -180,7 +180,11 @@ const PrivateNavbar = () => {
               <Link to="/profile">PROFILE</Link>
             </Button>
             <div className={classes.rightToolbar}>
-              <LogoutComponent avatar={userInfo.profilePictureUrl} />
+              <LogoutComponent
+                avatar={userInfo.profilePictureUrl}
+                name={userInfo.name}
+                email={userInfo.email}
+              />
             </div>
           </div>
         )}

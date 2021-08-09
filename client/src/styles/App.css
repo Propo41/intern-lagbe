@@ -31,6 +31,9 @@
   --font-size-dialog-title: 1.5rem;
   --font-size-dialog-content: 1rem;
 
+  --font-family-poppins: "Poppins", sans-serif;
+  --font-family-sen: "Sen", sans-serif;
+
   /* button dimens */
   --button-padding: 10px;
   /* text input dimens */
@@ -49,7 +52,7 @@
 
 body {
   background-color: var(--body-color);
-  font-family: "Sen", sans-serif;
+  font-family: var(--font-family-sen);
   margin: 0px;
 }
 

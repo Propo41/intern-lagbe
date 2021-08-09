@@ -4,20 +4,42 @@ import {
   Button,
   ClickAwayListener,
   Grow,
-  Divider,
   Paper,
   Popper,
   MenuItem,
   MenuList,
+  Avatar,
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles((theme) => ({
+  userInfoText: {
+    margin: 0,
+    color: "var(--white)",
+    fontFamily: "var(--font-family-poppins)",
+    fontWeight: 200,
+    fontSize: "var(--font-size-content)",
+  },
   logoutButton: {
     backgroundColor: "var(--ash)",
     boxShadow: "var(--card-shadow)",
     borderRadius: "10px",
     padding: "0.4rem 1rem",
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+  menuItemIcon: {
+    marginRight: "5px",
+    color: "var(--darkash)",
+  },
+  logoutContainer: {
+    justifyItems: "center",
+    display: "grid",
+    padding: "0.8rem",
   },
 }));
 
@@ -27,13 +49,14 @@ const LogoutComponent = (props) => {
   const anchorRef = React.useRef(null);
 
   const handleToggle = () => {
+    console.log("Destop vw: dropdown clicked");
     setOpen((prevOpen) => !prevOpen);
   };
 
   const handleClose = (event) => {
     event.stopPropagation();
 
-     localStorage.clear();
+    localStorage.clear();
     window.location.reload();
     console.log("log out");
 
@@ -107,17 +130,53 @@ const LogoutComponent = (props) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                   style={{
-                    backgroundColor: "var(--ash)",
+                    backgroundColor: "var(--white)",
                   }}
                 >
-                  <MenuItem>microapplesoft@micro.com</MenuItem>
-                  <Divider
+                  <div
                     style={{
-                      backgroundColor: "var(--darkash)",
-                      margin: "0 15px",
+                      backgroundColor: "var(--purple)",
+                      borderTopLeftRadius: "10px",
+                      borderTopRightRadius: "10px",
                     }}
-                  />
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  >
+                    <div className={classes.logoutContainer}>
+                      <Avatar
+                        alt="company image"
+                        src={
+                          props.avatar
+                            ? props.avatar
+                            : "/assets/images/company_img_preview.svg"
+                        }
+                        className={classes.large}
+                      />
+                      <h1 className={classes.userInfoText}>{props.name}</h1>
+                      <h1
+                        className={classes.userInfoText}
+                        style={{
+                          fontSize: "var(--font-size-dialog-content",
+                        }}
+                      >
+                        {props.email}
+                      </h1>
+                    </div>
+                  </div>
+                  <MenuItem onClick={handleClose}>
+                    <SettingsIcon className={classes.menuItemIcon} />
+                    CHANGE PASSWORD
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    style={{
+                      color: "#D67979",
+                    }}
+                  >
+                    <ExitToAppIcon
+                      className={classes.menuItemIcon}
+                      style={{ color: "#D67979" }}
+                    />
+                    LOGOUT
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

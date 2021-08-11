@@ -13,6 +13,7 @@ import LoadingAnimation from "../../components/LoadingAnimation";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
+import ErrorPage from "../../components/ErrorPage";
 
 const CompanyPage = (props) => {
   const classes = useStyles();
@@ -67,9 +68,13 @@ const CompanyPage = (props) => {
 
   if (error) {
     return (
-      <div>
-        <p>Failed to load. Try again..</p>
-      </div>
+      <>
+        <ErrorPage
+          title="404"
+          description="The page you requested, could not be found."
+          to="/"
+        />
+      </>
     );
   } else if (loading) {
     return <LoadingAnimation />;

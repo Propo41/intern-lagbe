@@ -255,10 +255,24 @@ const LandingPage = () => {
                   companies.filter((company) => {
                     return filteredLocations.includes(company.district);
                   }).length === 0 && (
-                    <p>
-                      No companies available. Display a picture here as
-                      placeholder
-                    </p>
+                    <div style={{ justifyItems: "center", display: "grid" }}>
+                      <img
+                        src="/assets/images/error_blob.svg"
+                        alt="landing page"
+                        className={classes.image}
+                        style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+                      />
+                      {/* <div
+                        style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+                      > */}
+                      <h1
+                        className="content"
+                        style={{ color: "var(--darkash)" }}
+                      >
+                        No companies available
+                      </h1>
+                      {/* </div> */}
+                    </div>
                   )
               }
 

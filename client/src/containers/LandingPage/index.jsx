@@ -181,12 +181,12 @@ const LandingPage = () => {
                   </h1>
                 </Grid>
                 <Grid item xs={12} sm={7} className={classes.filterContainer}>
-                  <FilterByCategory
+                  {/*   <FilterByCategory
                     categoryList={[...jobCategories, ...companyCategories]}
                     setCategories={setFilteredLocations}
                     categories={filteredLocations}
                     label="CATEGORY"
-                  />
+                  /> */}
                   <FilterByCategory
                     categoryList={districtList}
                     setCategories={setFilteredLocations}

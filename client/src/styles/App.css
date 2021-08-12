@@ -502,6 +502,7 @@ a {
   font-size: var(--font-size-content) !important;
   font-weight: normal !important;
   font-family: "Sen", sans-serif !important;
+  justify-content: start !important;
 }
 .MuiListItemText-root {
   margin: 0 !important;

@@ -81,6 +81,9 @@ const ApplicantCard = (props) => {
               <h1 className="card-location sub-content">
                 {props.applicant.contactPhone}
               </h1>
+              <h1 className="card-location sub-content">
+                Applied for: {props.title}
+              </h1>
             </Grid>
             <Grid
               item

@@ -53,6 +53,15 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "start",
     },
   },
+  image: {
+    justifyContent: "center",
+    width: "50%",
+    height: "50%",
+    [theme.breakpoints.down("lg")]: {
+      width: "60%",
+      height: "60%",
+    },
+  },
 }));
 
 export default useStyles;

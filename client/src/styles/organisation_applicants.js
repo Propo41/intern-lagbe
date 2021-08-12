@@ -43,6 +43,17 @@ const useStyles = makeStyles((theme) => ({
     padding: "var(--button-padding)",
     fontSize: "var(--font-size-button-small)",
   },
+  selectInput: {
+    backgroundColor: "var(--white) !important",
+    color: "var(--black) !important",
+    boxShadow: "var(--card-shadow)",
+    borderRadius: "10px !important",
+    fontStyle: "normal",
+    fontWeight: "700 !important",
+    fontSize: "var(--font-size-sub-content) !important",
+    fontFamily: "var(--font-family-sen)",
+    padding: "0.4rem 0.6rem !important",
+  },
 }));
 
 export default useStyles;

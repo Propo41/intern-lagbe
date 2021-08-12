@@ -145,7 +145,7 @@ const PrivateNavbar = () => {
                   <Link to="/profile">PROFILE</Link>
                 </h1>
               </MenuItem>
-              <MenuItem>
+              <MenuItem style={{ backgroundColor: "#F5FAFF" }}>
                 <SettingsIcon className={classes.menuItemIcon} />
                 CHANGE PASSWORD
               </MenuItem>
@@ -153,6 +153,7 @@ const PrivateNavbar = () => {
                 onClick={onLogoutClick}
                 style={{
                   color: "#D67979",
+                  backgroundColor: "#F5FAFF",
                 }}
               >
                 <ExitToAppIcon

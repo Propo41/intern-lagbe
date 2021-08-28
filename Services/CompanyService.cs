@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace InternFinder.Services
 {
@@ -443,7 +444,21 @@ namespace InternFinder.Services
             try
             {
                 var filter = Builders<Applicant>.Filter.Eq("JobId", jobId);
-                var result = await _applicantCollection.DeleteManyAsync(filter);
+                var result = await _applicantCollection.FindAsync(filter).Result.ToListAsync();
+
+                List<string> applicantFiles = new List<string>();
+                foreach (var item in result)
+                {
+                    applicantFiles.Add(item.ResumeUrl.Split('/')[3]);
+                }
+
+                var res = await DeleteApplicantFiles(applicantFiles);
+                if (res == null)
+                {
+                    Console.WriteLine("batch delete error: Couldn't delete resume files from upload care");
+                }
+
+                await _applicantCollection.DeleteManyAsync(filter);
                 return new Payload { StatusCode = 200, StatusDescription = "Applicants deleted successfully." };
 
             }
@@ -452,6 +467,36 @@ namespace InternFinder.Services
                 Console.WriteLine(e);
                 return null;
             }
+        }
+
+        // https://uploadcare.com/api-refs/rest-api/v0.5.0/#operation/filesDelete    
+        async public Task<String> DeleteApplicantFiles(List<string> applicantFiles)
+        {
+            try
+            {
+                Console.Write("Deleting multiple files: ");
+                string URL = $"https://api.uploadcare.com/files/storage/";
+                HttpClient client = new HttpClient();
+                // the following headers are required for the uploadcare API
+                client.DefaultRequestHeaders.Add("Accept", "application/vnd.uploadcare-v0.5+json");
+                client.DefaultRequestHeaders.Add("Authorization", $"Uploadcare.Simple {uploadCarePubKey}:{uploadCareSecret}");
+
+                // putting the files in the body of the request
+                var serializedParam = JsonConvert.SerializeObject(applicantFiles);
+                var content = new StringContent(serializedParam, Encoding.UTF8, "application/json");
+
+                // batch DELETE request
+                await client.SendAsync(new HttpRequestMessage(HttpMethod.Delete, URL) { Content = content });
+                return "Success";
+            }
+            catch (System.Exception ex)
+            {
+                // TODO
+                Console.WriteLine(ex);
+                return null;
+            }
+
+
         }
 
 

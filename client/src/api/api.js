@@ -1,5 +1,5 @@
 import axios from "axios";
-const apiBaseURL = "https://localhost:5001";
+const apiBaseURL = "https://internlagbe.azurewebsites.net";
 
 /* public queries */
 export const GET = async (url) => {

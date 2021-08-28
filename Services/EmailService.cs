@@ -79,7 +79,7 @@ namespace InternFinder.Services
             // print to console
             Console.WriteLine($"Sending email to {email}");
             Console.WriteLine($"token: {token}");
-            Console.WriteLine($"https://localhost:5001/auth/user/{type}?token={token}&&uid={uid}");
+            Console.WriteLine($"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}");
 
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(emailFromEmail, emailFromName);
@@ -89,7 +89,7 @@ namespace InternFinder.Services
             var dynamicTemplateData = new TemplateData
             {
                 User = email.Split('@')[0],
-                ButtonUrl = $"https://localhost:5000/auth/user/{type}?token={token}&&uid={uid}",
+                ButtonUrl = $"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}",
 
             };
             msg.SetTemplateId("d-b99af81ce9654555a1397cb750c9ba98");

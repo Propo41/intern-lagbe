@@ -96,7 +96,9 @@ const OrganisationProfilePage = () => {
           data.description
             ? setDescription(data.description)
             : setDescription("Enter your company description");
-          setPreviewUrl(data.profilePictureUrl);
+          if (data.profilePictureUrl) {
+            setPreviewUrl(data.profilePictureUrl);
+          }
 
           resolve();
         } catch (e) {
@@ -125,7 +127,7 @@ const OrganisationProfilePage = () => {
     console.log(image ? "image selected" : "no image selected");
     console.log("printing form");
     console.log(form);
-    window.scrollTo(0, 0);
+   // window.scrollTo(0, 0);
 
     setLoadingBar(true);
 
@@ -136,9 +138,13 @@ const OrganisationProfilePage = () => {
       formData.append("description", description);
       formData.append("name", form.name);
       formData.append("officeAddress", form.officeAddress);
-      formData.append("profilePictureUrl", profileInfo.profilePictureUrl);
+      if (profileInfo.profilePictureUrl) {
+        formData.append("profilePictureUrl", profileInfo.profilePictureUrl);
+      }
       formData.append("district", form.district);
-      formData.append("file", image);
+      if (image) {
+        formData.append("profilePicture", image);
+      }
 
       // sending the form input to server along with the image url
       const res = await POST_AUTH(`api/company/profile`, formData);
@@ -298,7 +304,6 @@ const OrganisationProfilePage = () => {
                     fullWidth={true}
                     className={classes.buttonPurple}
                     onClick={onFormSubmit}
-                    disabled={form === profileInfo}
                   >
                     SAVE CHANGES
                   </Button>

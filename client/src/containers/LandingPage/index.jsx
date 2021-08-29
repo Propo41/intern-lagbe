@@ -140,11 +140,11 @@ const LandingPage = () => {
         <div className="content-grid-padding">
           {/* Landing page */}
           <Grid container>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <h1 className="landing-page-title">{landingPage.title}</h1>
               <h1 className="landing-page-subtitle">{landingPage.subtitle}</h1>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <img
                 src="/assets/images/landing_page_image.svg"
                 alt="landing page"
@@ -237,6 +237,7 @@ const LandingPage = () => {
                           id={company.id}
                           company={company.name}
                           address={company.officeAddress}
+                          image={company.profilePictureUrl}
                           disabledButton={
                             company.availableJobCount === 0 ? true : false
                           }
@@ -288,6 +289,7 @@ const LandingPage = () => {
                       disabledButton={
                         company.availableJobCount === 0 ? true : false
                       }
+                      image={company.profilePictureUrl}
                     />
                   );
                 })}
@@ -304,6 +306,9 @@ const LandingPage = () => {
                   fullWidth={true}
                   className={classes.buttonSmallPurple}
                   style={{ marginTop: "var(--margin-item-spacing-lg)" }}
+                  onClick={() => {
+                    window.open("https://resume.io/", "_blank");
+                  }}
                 >
                   CREATE A RESUME
                 </Button>
@@ -312,6 +317,12 @@ const LandingPage = () => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonSmallRed}
+                  onClick={() => {
+                    window.open(
+                      "https://www.indeed.com/career-advice/resumes-cover-letters/10-resume-writing-tips",
+                      "_blank"
+                    );
+                  }}
                 >
                   APPLYING TIPS
                 </Button>

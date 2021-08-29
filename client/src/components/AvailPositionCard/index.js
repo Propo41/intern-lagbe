@@ -18,6 +18,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import ApplyJobModal from "../ApplyJobModal";
 import { Link } from "react-router-dom";
+import MarkdownViewer from "../MarkdownViewer";
 const useStyles = makeStyles((theme) => ({
   flex: {
     display: "flex",
@@ -45,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  jobContainer: {
+    paddingLeft: "0px",
+  },
 }));
 
 const AvailPositionCard = (props) => {
@@ -71,12 +75,7 @@ const AvailPositionCard = (props) => {
       <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8} className={classes.flex}>
-            <Avatar
-              variant="rounded"
-              src="/dummy_logo.png"
-              className={classes.large}
-            />
-            <Container>
+            <Container className={classes.jobContainer}>
               <h1 className="sub-heading">{props.title}</h1>
               <h1 className="card-location sub-content">{props.address}</h1>
             </Container>
@@ -88,7 +87,7 @@ const AvailPositionCard = (props) => {
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {!props.disabledButton ? (
+            {!props.disabledButton && (
               <Button
                 className="circular-button"
                 aria-label="FlagButton"
@@ -97,8 +96,6 @@ const AvailPositionCard = (props) => {
               >
                 <FlagIcon style={{ color: "var(--red)" }} />
               </Button>
-            ) : (
-              ""
             )}
 
             <Button
@@ -148,19 +145,17 @@ const AvailPositionCard = (props) => {
           </Grid>
         </Grid>
       </AccordionSummary>
-      {props.expandable ? (
+      {props.expandable && (
         <AccordionDetails>
           <h1 className="sub-heading">REQUIREMENTS</h1>
-          <h1 className="content">{props.more.requirements}</h1>
+          <MarkdownViewer content={props.more.requirements} />
           <Label text={props.more.contactEmail} icon={"mail"} color={"black"} />
           <Label
-            text={props.more.contactEmail}
+            text={props.more.contactPhone}
             icon={"phone"}
             color={"black"}
           />
         </AccordionDetails>
-      ) : (
-        ""
       )}
     </Accordion>
   );

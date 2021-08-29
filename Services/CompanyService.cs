@@ -23,7 +23,7 @@ namespace InternFinder.Services
 {
     public interface ICompanyService
     {
-        Task<Payload> UpdateCompanyProfile(Company company, IFormFile file);
+        Task<Payload> UpdateCompanyProfile(Company company);
         Company GetCompanyProfile(string companyId);
         Task<Payload> GetProfileConfig(string companyId);
         List<Job> FetchJobPostings(string companyId);
@@ -67,12 +67,12 @@ namespace InternFinder.Services
 
         /* Updates a company instance. Note, the company document is created when the user is created. 
         Also, deletes any current image that is saved previously*/
-        async public Task<Payload> UpdateCompanyProfile(Company company, IFormFile file)
+        async public Task<Payload> UpdateCompanyProfile(Company company)
         {
             try
             {
-                // check if user has any existing images stored in the database
-                if (company.ProfilePictureUrl != null)
+                // check if user has any existing images stored in the database and also if the user has uploaded any new images
+                if (company.ProfilePictureUrl != null && company.ProfilePicture != null)
                 {
                     Console.WriteLine("deleteing old picture");
                     // delete the image from the uploadcare server
@@ -80,26 +80,32 @@ namespace InternFinder.Services
                     string imageUuid = company.ProfilePictureUrl.Split('/')[3];
                     await DeleteFile(imageUuid, uploadCarePubKey, uploadCareSecret);
                 }
-                // save the new image to the uploadcare server
-                var fileUrl = await Util.UploadFile(file, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
-
-                if (fileUrl != null)
+                String fileUrl = null;
+                if (company.ProfilePicture != null)
                 {
-                    var filter = Builders<Company>.Filter.Eq("Id", company.Id);
-                    var update = Builders<Company>.Update.
-                            Set("Name", company.Name).
-                            Set("Description", company.Description).
-                            Set("Contact", company.Contact).
-                            Set("OfficeAddress", company.OfficeAddress).
-                            Set("District", company.District).
-                            Set("Category", company.Category).
-                            Set("ProfilePictureUrl", fileUrl).
-                            Set("IsProfileComplete", true);
-                    var res = _companyCollection.UpdateOne(filter, update);
-                    return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
+                    // save the new image to the uploadcare server
+                    fileUrl = await Util.UploadFile(company.ProfilePicture, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
                 }
 
-                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+                if (fileUrl == null)
+                {
+                    fileUrl = company.ProfilePictureUrl;
+                }
+
+                var filter = Builders<Company>.Filter.Eq("Id", company.Id);
+                var update = Builders<Company>.Update.
+                        Set("Name", company.Name).
+                        Set("Description", company.Description).
+                        Set("Contact", company.Contact).
+                        Set("OfficeAddress", company.OfficeAddress).
+                        Set("District", company.District).
+                        Set("Category", company.Category).
+                        Set("ProfilePictureUrl", fileUrl).
+                        Set("IsProfileComplete", true);
+                var res = _companyCollection.UpdateOne(filter, update);
+                return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
+
+
             }
             catch (Exception e)
             {
@@ -292,11 +298,10 @@ namespace InternFinder.Services
             try
             {
                 var filter = Builders<Job>.Filter.Eq("Id", jobId);
-                var result = _jobCollection.DeleteOne(filter);
-                await DeleteApplicantByJob(jobId);
+                await DeleteApplicantsByJob(jobId);
 
                 var isJobAvailable = await IsJobAvailable(jobId);
-
+                var result = _jobCollection.DeleteOne(filter);
                 // if job is unavailable, then decrementing the available job count of the company will be 
                 // done twice, which will result in an inaccurate count.
                 // since when toggling the job status, we are decrementing the count
@@ -439,7 +444,7 @@ namespace InternFinder.Services
 
         }
 
-        async public Task<Payload> DeleteApplicantByJob(string jobId)
+        async public Task<Payload> DeleteApplicantsByJob(string jobId)
         {
             try
             {
@@ -474,7 +479,7 @@ namespace InternFinder.Services
         {
             try
             {
-                Console.Write("Deleting multiple files: ");
+                Console.WriteLine("Deleting multiple files..");
                 string URL = $"https://api.uploadcare.com/files/storage/";
                 HttpClient client = new HttpClient();
                 // the following headers are required for the uploadcare API
@@ -487,6 +492,8 @@ namespace InternFinder.Services
 
                 // batch DELETE request
                 await client.SendAsync(new HttpRequestMessage(HttpMethod.Delete, URL) { Content = content });
+                Console.WriteLine("Delete success.");
+
                 return "Success";
             }
             catch (System.Exception ex)

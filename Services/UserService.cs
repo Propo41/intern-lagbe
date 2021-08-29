@@ -90,7 +90,7 @@ namespace InternFinder.Services
                     Console.WriteLine(email + " is not verified");
                     // user is not verified
                     // prompt user to verify their account
-                    return new Payload { StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
+                    return new Payload { User = user, StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
                 }
             }
 
@@ -116,9 +116,6 @@ namespace InternFinder.Services
 
             }
             return false;
-
-
-
         }
 
         public Payload VerifyUser(string uid)
@@ -187,10 +184,10 @@ namespace InternFinder.Services
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
             /* @debug remove it */
-            Company company = new Company();
+            // Company company = new Company();
             /* @debug remove it */
-            _companyCollection.InsertOne(company);
-            user.CompanyId = company.Id;
+            // _companyCollection.InsertOne(company);
+            // user.CompanyId = company.Id;
             _userCollection.InsertOne(user);
             return user;
         }

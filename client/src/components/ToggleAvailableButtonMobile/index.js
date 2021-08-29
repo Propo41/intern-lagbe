@@ -57,61 +57,6 @@ const ToggleAvailableButtonMobile = (props) => {
     setAnchorEl(null);
   };
 
-  /* 
-
-  const onDeleteJob = async (e) => {
-    setAnchorEl(null);
-    console.log("deleted");
-    e.stopPropagation();
-    e.preventDefault();
-    var form = new FormData();
-    form.append("id", props.id);
-    try {
-      const { data } = await DELETE_AUTH(`api/company/job`, form);
-      console.log(data);
-      window.location.reload();
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // make it unavailable
-  const onToggleUnavailableClick = async (e) => {
-    e.stopPropagation();
-    console.log("unavailable");
-    let formData = new FormData();
-    formData.append("id", props.id);
-    formData.append("isAvailable", false);
-    try {
-      const { data } = await POST_AUTH(`api/company/job/status`, formData);
-      window.location.reload();
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-      window.location.reload();
-    }
-  };
-
-  // make it available
-  const onToggleAvailableClick = async (e) => {
-    e.stopPropagation();
-    console.log("available");
-    let formData = new FormData();
-    formData.append("id", props.id);
-    formData.append("isAvailable", true);
-
-    try {
-      const { data } = await POST_AUTH(`api/company/job/status`, formData);
-      window.location.reload();
-      // @TODO: add loading animation
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-      window.location.reload();
-    }
-  };
- */
-
   // make it unavailable
   const onToggleUnavailableClick = async (e) => {
     e.stopPropagation();
@@ -169,6 +114,8 @@ const ToggleAvailableButtonMobile = (props) => {
     console.log("deleting..");
     var form = new FormData();
     form.append("id", props.id);
+    props.loadingBar(true);
+
     try {
       const { data } = await DELETE_AUTH(`api/company/job`, form);
       console.log(data);
@@ -178,6 +125,7 @@ const ToggleAvailableButtonMobile = (props) => {
       window.location.reload();
     }
     setToggleType(null);
+    props.loadingBar(false);
   };
 
   // util function to make job available
@@ -185,6 +133,7 @@ const ToggleAvailableButtonMobile = (props) => {
     let formData = new FormData();
     formData.append("id", props.id);
     formData.append("isAvailable", true);
+    props.loadingBar(true);
 
     try {
       const { data } = await POST_AUTH(`api/company/job/status`, formData);
@@ -194,6 +143,7 @@ const ToggleAvailableButtonMobile = (props) => {
       console.log(e);
       window.location.reload();
     }
+    props.loadingBar(false);
     setToggleType(null);
   };
 
@@ -202,6 +152,8 @@ const ToggleAvailableButtonMobile = (props) => {
     let formData = new FormData();
     formData.append("id", props.id);
     formData.append("isAvailable", false);
+    props.loadingBar(true);
+
     try {
       const { data } = await POST_AUTH(`api/company/job/status`, formData);
       console.log(data);
@@ -210,6 +162,7 @@ const ToggleAvailableButtonMobile = (props) => {
       console.log(e);
       window.location.reload();
     }
+    props.loadingBar(false);
     setToggleType(null);
   };
 

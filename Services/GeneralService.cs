@@ -32,7 +32,7 @@ namespace InternFinder.Services
         About GetCompanyCategories();
         About GetJobCategories();
         About GetRemuneration();
-        Task<Payload> ApplyJob(Applicant applicant, IFormFile file);
+        Task<Payload> ApplyJob(Applicant applicant);
         UploadCare GetSignedUrl();
     }
 
@@ -238,20 +238,18 @@ namespace InternFinder.Services
         }
 
 
-        async public Task<Payload> ApplyJob(Applicant applicant, IFormFile file)
+        async public Task<Payload> ApplyJob(Applicant applicant)
         {
             try
             {
                 // first check if the applicant has submitted to the job before
                 bool applicantStatus = await IsApplicantValid(applicant);
-
                 if (!applicantStatus)
                 {
                     return new Payload { StatusCode = 400, StatusDescription = "You have already applied to this job. Please sit tight and wait for your call." };
                 }
 
-                var fileUrl = await Util.UploadFile(file, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
-
+                var fileUrl = await Util.UploadFile(applicant.File, uploadCareSecret, uploadCareExpiry, uploadCarePubKey);
                 if (fileUrl != null)
                 {
                     applicant.ResumeUrl = fileUrl;

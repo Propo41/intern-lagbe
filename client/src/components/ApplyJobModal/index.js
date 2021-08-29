@@ -69,15 +69,15 @@ const ApplyJobModal = (props) => {
     e.preventDefault();
     setLoadingBar(true);
     console.log(formInput);
-    console.log("job id clicked: ", props.jobId);
+    console.log("job id clicked: ", props.jobId); 
 
     try {
       var formData = new FormData();
       formData.append("file", file);
       formData.append("name", formInput.name);
-      formData.append("email", formInput.email);
-      formData.append("contact", formInput.contact);
-      formData.append("ip", ip.toString());
+      formData.append("contactEmail", formInput.email);
+      formData.append("contactPhone", formInput.contact);
+     /*  formData.append("ip", ip.toString()); */
       formData.append("jobId", props.jobId);
       formData.append("companyId", props.companyId);
 
@@ -155,7 +155,7 @@ const ApplyJobModal = (props) => {
       </div>
       <div style={{ marginTop: "var(--margin-item-spacing)" }}>
         <input
-          accept=".pdf,.doc,.docx"
+          accept=".pdf"
           className={classes.input}
           id="contained-button-file"
           required

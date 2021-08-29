@@ -105,35 +105,15 @@ namespace InternFinder.Controllers
         // POST api/landingpage/company/job/apply
         [HttpPost]
         [Route("company/job/apply")]
-        async public Task<ActionResult> ApplyJob(IFormCollection form)
+        async public Task<ActionResult> ApplyJob([FromForm] Applicant applicant)
         {
+            if (applicant.File.Length > 5000000)
+                return new BadRequestObjectResult(new ErrorResult("Validation Error", 400, "File size must be less than 5MB"));
 
-            Applicant applicant = new Applicant
-            {
-                ContactEmail = form["email"],
-                Name = form["name"],
-                ContactPhone = form["contact"],
-                IPAddress = form["ip"],
-                JobId = form["jobId"],
-                CompanyId = form["companyId"]
-            };
-            if (!TryValidateModel(applicant, nameof(Applicant)))
-            {
-                Console.WriteLine("model is invalid");
-                return new BadRequestObjectResult(new ErrorResult("Invalid inputs", 400, "Please make sure you have entered correct values."));
-
-            }
-
-            List<IFormFile> files = form.Files.ToList();
-            if (files.Count == 0)
-                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "You must provide a resume file before applying"));
-
-            if (files[0].Length > 5000000)
-                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Resume file size must be less than 5MB"));
-
-            IFormFile file = files[0];
-
-            Payload res = await _generalService.ApplyJob(applicant, file);
+            if (applicant.File.ContentType != "application/pdf")
+                return new BadRequestObjectResult(new ErrorResult("Validation Error", 400, "Please submit a Pdf file"));
+          
+            Payload res = await _generalService.ApplyJob(applicant);
             return res.StatusCode == 200 ? Ok(new { status = res.StatusCode, description = res.StatusDescription }) :
                         new BadRequestObjectResult(new ErrorResult("Couldn't process your request", res.StatusCode, res.StatusDescription));
 

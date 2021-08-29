@@ -14,6 +14,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
 import ErrorPage from "../../components/ErrorPage";
+import MarkdownViewer from "../../components/MarkdownViewer";
+import { Hidden } from "@material-ui/core";
 
 const CompanyPage = (props) => {
   const classes = useStyles();
@@ -85,9 +87,9 @@ const CompanyPage = (props) => {
         <div className="content-grid-padding">
           {/* Landing page */}
           <Grid container>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <h1 className="title">{companyInfo.name}</h1>
-              <h1 className="content">{companyInfo.description}</h1>
+              <MarkdownViewer content={companyInfo.description} />
               <div
                 style={{
                   marginTop: "35px",
@@ -100,12 +102,14 @@ const CompanyPage = (props) => {
                 />
               </div>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <img
-                src="/assets/images/circular_blob.svg"
-                alt="landing page"
-                className={classes.landingImage}
-              />
+            <Grid item xs={12} md={6}>
+              <Hidden smDown>
+                <img
+                  src="/assets/images/circular_blob.svg"
+                  alt="landing page"
+                  className={classes.landingImage}
+                />
+              </Hidden>
             </Grid>
           </Grid>
           {/* Landing page body */}
@@ -169,6 +173,9 @@ const CompanyPage = (props) => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonSmallPurple}
+                  onClick={() => {
+                    window.open("https://resume.io/", "_blank");
+                  }}
                 >
                   CREATE A RESUME
                 </Button>
@@ -177,6 +184,12 @@ const CompanyPage = (props) => {
                   variant="contained"
                   fullWidth={true}
                   className={classes.buttonSmallRed}
+                  onClick={() => {
+                    window.open(
+                      "https://www.indeed.com/career-advice/resumes-cover-letters/10-resume-writing-tips",
+                      "_blank"
+                    );
+                  }}
                 >
                   APPLYING TIPS
                 </Button>

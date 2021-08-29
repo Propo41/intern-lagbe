@@ -55,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
   },
   socialButton: {
     color: "white",
-    backgroundColor: "#FFB4C4",
+    backgroundColor: "#0B83ED",
     cursor: "pointer",
     marginLeft: "10px",
     marginRight: "10px",
     "&:hover": {
-      backgroundColor: "var(--darkash)",
+      backgroundColor: "#3283FF",
     },
   },
 }));

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -32,8 +33,12 @@ namespace InternFinder.Models
 
         [Url]
         public string ResumeUrl { get; set; }
-        [Required]
+
+        [BsonIgnore]
         public string IPAddress { get; set; }
+
+        [BsonIgnore]
+        public IFormFile File { get; set; }
 
     }
 }

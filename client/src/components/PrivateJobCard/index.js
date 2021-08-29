@@ -24,11 +24,16 @@ const PrivateJobCard = (props) => {
             </Grid>
             <Grid item xs={5} className="vertical-align">
               {mobileViewBreakpoint ? (
-                <ToggleAvailableButton status={props.status} id={props.id} />
+                <ToggleAvailableButton
+                  status={props.status}
+                  id={props.id}
+                  loadingBar={props.loadingBar}
+                />
               ) : (
                 <ToggleAvailableButtonMobile
                   status={props.status}
                   id={props.id}
+                  loadingBar={props.loadingBar}
                 />
               )}
             </Grid>

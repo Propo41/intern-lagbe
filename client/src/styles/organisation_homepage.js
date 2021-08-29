@@ -41,16 +41,20 @@ const useStyles = makeStyles((theme) => ({
   },
 
   image: {
-    width: "80%",
-    height: "80%",
+    width: "70%",
+    height: "70%",
     position: "relative",
     top: "50%",
     transform: "translateY(-85%)",
   },
 
   imagePlaceholder: {
-    width: "50%",
-    height: "50%",
+    width: "40%",
+    height: "40%",
+    [theme.breakpoints.up("md")]: {
+      width: "20%",
+      height: "20%",
+    },
   },
 
   buttonPurple: {

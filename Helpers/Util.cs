@@ -62,6 +62,8 @@ namespace InternFinder.Helpers
 
         public static bool isDomainValid(string email)
         {
+            // for now, accept all types of emails
+            return true;
             int indexOfAt = email.IndexOf('@');
             //You do need to check the index is within the string
             if (indexOfAt >= 0 && indexOfAt < email.Length - 1)

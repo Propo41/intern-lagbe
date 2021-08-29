@@ -3,6 +3,10 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   landingImage: {
     marginLeft: 50,
+    [theme.breakpoints.down("md")]: {
+      marginLeft: 0,
+      marginTop: 15,
+    },
     width: "90%",
     height: "90%",
   },

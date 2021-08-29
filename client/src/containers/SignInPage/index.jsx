@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PublicNavbar from "../../components/PublicNavbar/PublicNavbar";
@@ -21,7 +21,19 @@ const SignInPage = () => {
   //const [snackbar, setSnackbar] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
 
-  const history = useHistory(); 
+  const history = useHistory();
+
+  useEffect(() => {
+    const listener = (event) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   const onInput = (event) => {
     const { value, name } = event.target;
@@ -32,7 +44,7 @@ const SignInPage = () => {
   };
 
   const onSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     console.log(form);
     setLoadingBar(true);
     try {
@@ -102,7 +114,9 @@ const SignInPage = () => {
                   fullWidth={true}
                   className={classes.buttonPurple}
                   onClick={onSubmit}
-                  disabled={form === null || Object.keys(form).length < 2}
+                  disabled={
+                    form === null || Object.keys(form).length < 2 || loadingBar
+                  }
                 >
                   SIGN IN
                 </Button>
@@ -141,6 +155,7 @@ const SignInPage = () => {
                 onClick={() => {
                   history.push("/register");
                 }}
+                disabled={loadingBar}
                 style={{ marginTop: "var(--margin-item-spacing)" }}
               >
                 REGISTER

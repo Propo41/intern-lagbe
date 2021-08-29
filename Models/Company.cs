@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -33,6 +34,7 @@ namespace InternFinder.Models
         [Range(0, 20)]
         [BsonDefaultValue(0)]
         public int AvailableJobCount { get; set; }
+        public IFormFile ProfilePicture { get; set; }
 
     }
 }

@@ -32,12 +32,15 @@ namespace InternFinder.Services
         private readonly string apiKey;
         private readonly string emailFromName;
         private readonly string emailFromEmail;
+        private readonly string templateIdConfirmation;
 
         public EmailService(IConfiguration config)
         {
             apiKey = config["EmailService:SENDGRID_API_KEY"];
             emailFromName = config["EmailService:SENDGRID_FROM_NAME"];
             emailFromEmail = config["EmailService:SENDGRID_FROM_EMAIL"];
+            templateIdConfirmation = config["EmailService:SENDGRID_CONFIRMATION_TEMPLATE"];
+
         }
 
         public Payload Service(string email, string uid, string type)
@@ -46,7 +49,7 @@ namespace InternFinder.Services
             {
                 try
                 {
-                    SendEmail(email, Util.GenerateUidToken(), uid, "verify", "Email Confirmation",
+                    SendEmail(email, Util.GenerateUidToken(), uid, "verify-email", "Email Confirmation",
                          "Verify your email address to get started with our website.").Wait();
                     return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
@@ -81,20 +84,23 @@ namespace InternFinder.Services
             Console.WriteLine($"token: {token}");
             Console.WriteLine($"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}");
 
+            Console.WriteLine(apiKey);
+            Console.WriteLine(emailFromEmail);
+
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(emailFromEmail, emailFromName);
             var to = new EmailAddress(email, email.Split('@')[0]);
             var htmlContent = plainTextContent;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
             var dynamicTemplateData = new TemplateData
             {
                 User = email.Split('@')[0],
                 ButtonUrl = $"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}",
 
             };
-            msg.SetTemplateId("d-b99af81ce9654555a1397cb750c9ba98");
+            msg.SetTemplateId(templateIdConfirmation);
             msg.SetTemplateData(dynamicTemplateData);
-
 
             var response = await client.SendEmailAsync(msg);
         }

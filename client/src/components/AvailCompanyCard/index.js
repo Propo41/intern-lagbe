@@ -61,7 +61,7 @@ const AvailCompanyCard = (props) => {
           <Grid item xs={12} sm={8} className={classes.flex}>
             <Avatar
               variant="rounded"
-              src="/dummy_logo.png"
+              src={props.image}
               className={classes.large}
             />
             <Container>
@@ -106,7 +106,7 @@ const AvailCompanyCard = (props) => {
                   pathname: `/company/${props.id}`,
                 }}
               >
-                APPLY
+                VIEW
               </Link>
             </Button>
           </Grid>

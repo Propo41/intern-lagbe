@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -19,6 +19,18 @@ const ForgotPassword = () => {
   const [email, setEmail] = React.useState(null);
   const [alert, setAlert] = React.useState(null);
   const [emailSent, setEmailSent] = React.useState(false);
+
+  useEffect(() => {
+    const listener = (event) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   const onInputChange = (event) => {
     const { value } = event.target;

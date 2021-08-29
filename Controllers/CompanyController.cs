@@ -40,37 +40,17 @@ namespace InternFinder.Controllers
         // updates user profile and set value of profileCompletion to true
         [HttpPost]
         [Route("profile")]
-        async public Task<ActionResult> UpdateProfile(IFormCollection form)
+        async public Task<ActionResult> UpdateProfile([FromForm] Company company)
         {
-            Company company = new Company
-            {
-                Name = form["name"],
-                Contact = form["contact"],
-                OfficeAddress = form["officeAddress"],
-                District = form["district"],
-                Description = form["description"],
-                Category = form["category"],
-                ProfilePictureUrl = form["profilePictureUrl"],
-            };
-            // re-running form validation
-            if (!TryValidateModel(company, nameof(Company)))
-            {
-                Console.WriteLine("model is invalid");
-                return new BadRequestObjectResult(new ErrorResult("Invalid inputs", 400, "Please make sure you have entered correct values."));
 
-            }
+            if (company.ProfilePicture == null && company.ProfilePictureUrl == null)
+                return new BadRequestObjectResult(new ErrorResult("Validation Error", 400, "You must provide a company logo or image"));
 
-            List<IFormFile> files = form.Files.ToList();
-            if (files.Count == 0)
-                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "You must provide a company logo or image"));
-
-            if (files[0].Length > 5000000)
-                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Image file size must be less than 5MB"));
-
-            IFormFile file = files[0];
+            if (company.ProfilePicture != null && company.ProfilePicture.Length > 5000000)
+                return new BadRequestObjectResult(new ErrorResult("Validation Error", 400, "Image file size must be less than 5MB"));
 
             company.Id = _authUser.CompanyId;
-            Payload res = await _companyService.UpdateCompanyProfile(company, file);
+            Payload res = await _companyService.UpdateCompanyProfile(company);
             return Ok(res);
         }
 

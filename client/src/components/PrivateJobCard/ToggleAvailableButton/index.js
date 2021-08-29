@@ -100,6 +100,8 @@ const ToggleAvailableButton = (props) => {
     console.log("deleting..");
     var form = new FormData();
     form.append("id", props.id);
+    props.loadingBar(true);
+
     try {
       const { data } = await DELETE_AUTH(`api/company/job`, form);
       console.log(data);
@@ -109,6 +111,7 @@ const ToggleAvailableButton = (props) => {
       window.location.reload();
     }
     setToggleType(null);
+    props.loadingBar(false);
   };
 
   // util function to make job available
@@ -116,6 +119,7 @@ const ToggleAvailableButton = (props) => {
     let formData = new FormData();
     formData.append("id", props.id);
     formData.append("isAvailable", true);
+    props.loadingBar(true);
 
     try {
       const { data } = await POST_AUTH(`api/company/job/status`, formData);
@@ -126,6 +130,7 @@ const ToggleAvailableButton = (props) => {
       window.location.reload();
     }
     setToggleType(null);
+    props.loadingBar(false);
   };
 
   // util function to make job unavailable
@@ -133,6 +138,8 @@ const ToggleAvailableButton = (props) => {
     let formData = new FormData();
     formData.append("id", props.id);
     formData.append("isAvailable", false);
+    props.loadingBar(true);
+
     try {
       const { data } = await POST_AUTH(`api/company/job/status`, formData);
       console.log(data);
@@ -141,6 +148,8 @@ const ToggleAvailableButton = (props) => {
       console.log(e);
       window.location.reload();
     }
+    props.loadingBar(false);
+
     setToggleType(null);
   };
 

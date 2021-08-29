@@ -241,11 +241,6 @@ const OrganisationCreateJob = () => {
                     fullWidth={true}
                     className={classes.buttonPurple}
                     onClick={submitForm}
-                    disabled={
-                      form === null ||
-                      Object.keys(form).length < 5 ||
-                      description === null
-                    }
                   >
                     CREATE NEW LISTING
                   </Button>

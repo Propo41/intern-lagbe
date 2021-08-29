@@ -12,6 +12,7 @@ import useStyles from "../../styles/organisation_homepage";
 import { Link, useHistory } from "react-router-dom";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import { LinearProgress } from "@material-ui/core";
 
 const OrganisationHomepage = () => {
   const classes = useStyles();
@@ -21,6 +22,7 @@ const OrganisationHomepage = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const history = useHistory();
+  const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {
     // fetch all jobs posted
@@ -80,6 +82,8 @@ const OrganisationHomepage = () => {
   return (
     <>
       <PrivateNavbar />
+      {loadingBar && <LinearProgress />}
+
       <Collapse in={!profileStatus}>
         <Alert
           severity="warning"
@@ -125,6 +129,7 @@ const OrganisationHomepage = () => {
                           location={job.address}
                           status={job.isAvailable}
                           id={job.id}
+                          loadingBar={setLoadingBar}
                         />
                       </div>
                     );

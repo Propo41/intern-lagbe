@@ -10,6 +10,16 @@ $ cd ..
 $ dotnet watch run
 ```
 
+### Packages used
+To install a package using the dotnet CLI:  `dotnet add package <package-name>`
+- `MongoDB.Driver`
+- `Microsoft.AspNetCore.Authentication`
+- `Microsoft.AspNetCore.Authentication.JwtBearer`
+- `System.IdentityModel.Tokens.Jwt`
+- `SendGrid`
+- `BCrypt.Net-Next --version 4.0.2`
+- `Newtonsoft.Json --version 13.0.1`
+
 # IMPORTANT FOR PRODUCTION
 - all comments with @debug initials, remove them during production
 
@@ -31,16 +41,6 @@ Check <a href="https://docs.google.com/spreadsheets/d/1Ift-x7HbfvzpTGgtjdmNcCYQP
 
 References:
 - "https://stackoverflow.com/a/60800516/7570616"
-
-### Packages used
-To install a package using the dotnet CLI:  `dotnet add package <package-name>`
-- `MongoDB.Driver`
-- `Microsoft.AspNetCore.Authentication`
-- `Microsoft.AspNetCore.Authentication.JwtBearer`
-- `System.IdentityModel.Tokens.Jwt`
-- `SendGrid`
-- `BCrypt.Net-Next --version 4.0.2`
-- `Newtonsoft.Json --version 13.0.1`
 
 ### Stuff learned
 - learned the concept of <a href="https://deviq.com/principles/dependency-inversion-principle"><b>inverse dependency injection</b></a> by abstracting the service class implementations using interfaces to enable a less tightly coupled system. 

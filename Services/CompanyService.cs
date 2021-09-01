@@ -25,7 +25,7 @@ namespace InternFinder.Services
     {
         Task<Payload> UpdateCompanyProfile(Company company);
         Company GetCompanyProfile(string companyId);
-        Task<Payload> GetProfileConfig(string companyId);
+        Task<Company> GetProfileConfig(string companyId);
         List<Job> FetchJobPostings(string companyId);
         Task<Job> CreateJobPosting(Job job);
         Task<Payload> UpdateJobStatus(string jobId, bool status, string companyId);
@@ -46,7 +46,6 @@ namespace InternFinder.Services
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
-        private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
         private readonly IMongoCollection<About> _aboutCollection;
 
 
@@ -147,7 +146,7 @@ namespace InternFinder.Services
         @Data2 = ProfilePictureUrl
         @Data3 = Name
         */
-        async public Task<Payload> GetProfileConfig(string companyId)
+        async public Task<Company> GetProfileConfig(string companyId)
         {
             try
             {
@@ -155,6 +154,9 @@ namespace InternFinder.Services
                 var projection = Builders<Company>.Projection.
                     Include("IsProfileComplete").
                     Include("ProfilePictureUrl").
+                    Include("District").
+                    Include("OfficeAddress").
+                    Include("Contact").
                     Include("Name").
                     Include("Id");
                 var options = new FindOptions<Company> { Projection = projection };
@@ -164,7 +166,7 @@ namespace InternFinder.Services
                 Console.Write("profileStatus: ");
                 Console.WriteLine(company.IsProfileComplete);
 
-                return new Payload { Data1 = company.IsProfileComplete, Data2 = company.ProfilePictureUrl, Data3 = company.Name };
+                return company;
 
             }
             catch (Exception e)
@@ -205,9 +207,9 @@ namespace InternFinder.Services
         async public Task<Job> CreateJobPosting(Job job)
         {
             // only allow user to create a job iff profile is complete
-            Payload payload = await GetProfileConfig(job.CompanyId);
+            Company company = await GetProfileConfig(job.CompanyId);
 
-            if (!payload.Data1)
+            if (!company.IsProfileComplete)
             {
                 Console.WriteLine("Couldn't create a job post. User needs to create a profile first");
                 return null;

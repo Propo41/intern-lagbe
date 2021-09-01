@@ -183,6 +183,7 @@ namespace InternFinder.Services
         public User Create(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
+            user.IsVerified = false; // potential fix for non-reproducing bug, refer issue#61
             /* @debug remove it */
             // Company company = new Company();
             /* @debug remove it */

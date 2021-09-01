@@ -13,6 +13,10 @@
 
 ### Credentials
 Check <a href="https://docs.google.com/document/d/15o92_bAJAjbDGLN3EiKJ3iPX76xrkUo67c9FoZofb4Y/edit?usp=sharing">here</a>
+
+### API List
+Check <a href="https://docs.google.com/spreadsheets/d/1Ift-x7HbfvzpTGgtjdmNcCYQPpZp9vUTZ0ohPxVUz8Y/edit?usp=sharing">here</a>
+
 ### Note
 - When sending payloads to the server, consider 2 cases:
 

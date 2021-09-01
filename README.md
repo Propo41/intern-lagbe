@@ -1,15 +1,21 @@
 # InternFinder
 
-### To run
-- clone the repo
-- `dotnet watch run` or `dotnet run`
+### Getting Started
+
+First clone the repository. Then open a new terminal.
+```bash 
+$ cd .\ClientApp\ 
+$ npm install
+$ cd ..
+$ dotnet watch run
+```
 
 # IMPORTANT FOR PRODUCTION
 - all comments with @debug initials, remove them during production
 
 ### Potential Errors
 - When running the program, an error `Microsoft.AspNetCore.SpaServices[0]: internal/modules/cjs/loader.js:883"` might pop up. Simply remove the node_modules folder and package-lock.json file
-- You need the files appsettings.json and appsettings.Development.json for the program to run
+- You need the file `appsettings.json` for the program to run.
 
 ### Credentials
 Check <a href="https://docs.google.com/document/d/15o92_bAJAjbDGLN3EiKJ3iPX76xrkUo67c9FoZofb4Y/edit?usp=sharing">here</a>
@@ -33,7 +39,8 @@ To install a package using the dotnet CLI:  `dotnet add package <package-name>`
 - `Microsoft.AspNetCore.Authentication.JwtBearer`
 - `System.IdentityModel.Tokens.Jwt`
 - `SendGrid`
-- `BCrypt.Net-Next`
+- `BCrypt.Net-Next --version 4.0.2`
+- `Newtonsoft.Json --version 13.0.1`
 
 ### Stuff learned
 - learned the concept of <a href="https://deviq.com/principles/dependency-inversion-principle"><b>inverse dependency injection</b></a> by abstracting the service class implementations using interfaces to enable a less tightly coupled system. 

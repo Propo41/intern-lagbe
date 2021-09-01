@@ -14,6 +14,7 @@ namespace InternFinder.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        [StringLength(300, ErrorMessage = "Please enter a proper description of your company", MinimumLength = 10)]
         public string Description { get; set; }
 
         [RegularExpression(@"(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$", ErrorMessage = "Enter a correct Bangladeshi phone number")]

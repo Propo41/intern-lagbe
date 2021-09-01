@@ -51,7 +51,7 @@ namespace server
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "./Client/build";
+                configuration.RootPath = "./ClientApp/build";
             });
 
             // Adding Authentication  
@@ -109,7 +109,7 @@ namespace server
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "./Client";
+                spa.Options.SourcePath = "./ClientApp";
 
                 if (env.IsDevelopment())
                 {

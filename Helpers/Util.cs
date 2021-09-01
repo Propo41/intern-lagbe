@@ -64,19 +64,19 @@ namespace InternFinder.Helpers
         {
             // for now, accept all types of emails
             return true;
-            int indexOfAt = email.IndexOf('@');
-            //You do need to check the index is within the string
-            if (indexOfAt >= 0 && indexOfAt < email.Length - 1)
-            {
-                string host = email.Substring(indexOfAt + 1);
-                // if host is not a common email provider, then return true
-                if (!(host == "gmail.com" || host == "hotmail.com" || host == "live.com" || host == "outlook.com" || host == "yahoo.com" || host == "msn.com"))
-                {
-                    return true;
-                }
-                return false;
-            }
-            return false;
+            /*   int indexOfAt = email.IndexOf('@');
+              //You do need to check the index is within the string
+              if (indexOfAt >= 0 && indexOfAt < email.Length - 1)
+              {
+                  string host = email.Substring(indexOfAt + 1);
+                  // if host is not a common email provider, then return true
+                  if (!(host == "gmail.com" || host == "hotmail.com" || host == "live.com" || host == "outlook.com" || host == "yahoo.com" || host == "msn.com"))
+                  {
+                      return true;
+                  }
+                  return false;
+              }
+              return false; */
         }
 
         public static string GenerateToken(User user, string secret, string role, int expiryTime)

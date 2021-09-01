@@ -81,8 +81,8 @@ namespace InternFinder.Controllers
         {
             Console.Write("auth user companyid: ");
             Console.WriteLine(_authUser.CompanyId);
-            Payload res = await _companyService.GetProfileConfig(_authUser.CompanyId);
-            return Ok(new { status = res.Data1, profilePictureUrl = res.Data2, name = res.Data3, email = _authUser.Email });
+            Company res = await _companyService.GetProfileConfig(_authUser.CompanyId);
+            return Ok(new { companyInfo = res, email = _authUser.Email });
         }
 
         // POST api/company/job/status

@@ -24,7 +24,7 @@ namespace InternFinder.Services
     public interface IEmailService
     {
         Payload Service(string email, string uid, string type);
-        Task SendEmail(string email, string token, string uid, string type, string subject, string content);
+        Task SendEmail(string email, string token, string uid, string type, string subject, string content, string templateId);
     }
 
     public class EmailService : IEmailService
@@ -33,6 +33,8 @@ namespace InternFinder.Services
         private readonly string emailFromName;
         private readonly string emailFromEmail;
         private readonly string templateIdConfirmation;
+        private readonly string templateIdResetPassword;
+
 
         public EmailService(IConfiguration config)
         {
@@ -40,6 +42,7 @@ namespace InternFinder.Services
             emailFromName = config["EmailService:SENDGRID_FROM_NAME"];
             emailFromEmail = config["EmailService:SENDGRID_FROM_EMAIL"];
             templateIdConfirmation = config["EmailService:SENDGRID_CONFIRMATION_TEMPLATE"];
+            templateIdResetPassword = config["EmailService:SENDGRID_RESET_PASSWORD_TEMPLATE"];
 
         }
 
@@ -49,8 +52,8 @@ namespace InternFinder.Services
             {
                 try
                 {
-                    SendEmail(email, Util.GenerateUidToken(), uid, "verify-email", "Email Confirmation",
-                         "Verify your email address to get started with our website.").Wait();
+                    SendEmail(email, Util.GenerateUidToken(), uid, "verify", "Email Confirmation",
+                         "Verify your email address to get started with our website.", templateIdConfirmation).Wait();
                     return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
                 catch (Exception e)
@@ -64,7 +67,7 @@ namespace InternFinder.Services
                 try
                 {
                     SendEmail(email, Util.GenerateUidToken(), uid, "change-password", "Reset your Password",
-                        "Please click on the link to change your password. Note that the link will be expired in 8 minutes.").Wait();
+                        "Please click on the link to change your password. Note that the link will be expired in 8 minutes.", templateIdResetPassword).Wait();
                     return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
                 catch (Exception e)
@@ -77,7 +80,7 @@ namespace InternFinder.Services
 
         }
 
-        public async Task SendEmail(string email, string token, string uid, string type, string subject, string plainTextContent)
+        public async Task SendEmail(string email, string token, string uid, string type, string subject, string plainTextContent, string templateId)
         {
             // print to console
             Console.WriteLine($"Sending email to {email}");
@@ -99,7 +102,7 @@ namespace InternFinder.Services
                 ButtonUrl = $"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}",
 
             };
-            msg.SetTemplateId(templateIdConfirmation);
+            msg.SetTemplateId(templateId);
             msg.SetTemplateData(dynamicTemplateData);
 
             var response = await client.SendEmailAsync(msg);

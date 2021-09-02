@@ -3,8 +3,6 @@ import windowsFilled from '@iconify/icons-ant-design/windows-filled';
 // material
 import { alpha, styled } from '@material-ui/core/styles';
 import { Card, Typography } from '@material-ui/core';
-// utils
-import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +40,7 @@ export default function AppItemOrders() {
       <IconWrapperStyle>
         <Icon icon={windowsFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{TOTAL}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Item Orders
       </Typography>

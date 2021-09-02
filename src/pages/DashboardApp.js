@@ -6,9 +6,7 @@ import {
   AppNewUsers,
   AppBugReports,
   AppItemOrders,
-  AppWeeklySales,
-  AppCurrentVisits,
-  AppWebsiteVisits
+  AppWeeklySales
 } from '../components/_dashboard/app';
 
 // ----------------------------------------------------------------------
@@ -33,15 +31,6 @@ export default function DashboardApp() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppBugReports />
-          </Grid>
-          {/* END top 4 boxes */}
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppWebsiteVisits />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentVisits />
           </Grid>
         </Grid>
       </Container>

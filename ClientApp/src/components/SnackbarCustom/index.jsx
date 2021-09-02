@@ -22,8 +22,8 @@ function Alert(props) {
 const SnackbarCustom = (props) => {
   const classes = useStyles();
 
-  const vertical = "top";
-  const horizontal = "bottom";
+  const vertical = "bottom";
+  const horizontal = "center";
 
   const handleClose = (event) => {
     props.setSnackbar({ open: false });

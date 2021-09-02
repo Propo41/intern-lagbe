@@ -1,8 +1,8 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import DashboardLayout from './layouts/dashboard';
-import DashboardApp from './pages/DashboardApp';
-import User from './pages/User';
+import DashboardLayout from './components/admin/layouts/index';
+import DashboardApp from './containers/DashboardApp';
+import User from './containers/User';
 
 export default function Router() {
   return useRoutes([

@@ -54,6 +54,17 @@ body {
   background-color: var(--body-color);
   font-family: var(--font-family-sen);
   margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#footer {
+  margin-top: auto;
 }
 
 h1 {

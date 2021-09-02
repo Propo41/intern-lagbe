@@ -120,7 +120,6 @@ const OrganisationJobPost = (props) => {
                     />
                   </div>
 
-
                   <div style={{ marginTop: "var(--margin-item-spacing)" }}>
                     <TextInputLayout
                       icon="phone"
@@ -172,13 +171,13 @@ const OrganisationJobPost = (props) => {
             </Paper>
           </div>
         </div>
-        <div
+        {/* <div
           style={{
             marginTop: "var(--margin-footer-spacing)",
           }}
         >
           <Footer />
-        </div>
+        </div> */}
       </>
     );
   }

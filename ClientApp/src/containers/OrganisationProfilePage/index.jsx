@@ -127,7 +127,7 @@ const OrganisationProfilePage = () => {
     console.log(image ? "image selected" : "no image selected");
     console.log("printing form");
     console.log(form);
-   // window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
 
     setLoadingBar(true);
 
@@ -331,13 +331,13 @@ const OrganisationProfilePage = () => {
           </Paper>
         </div>
       </div>
-      <div
+      {/* <div
         style={{
           marginTop: "var(--margin-footer-spacing)",
         }}
       >
         <Footer />
-      </div>
+      </div> */}
     </>
   );
 };

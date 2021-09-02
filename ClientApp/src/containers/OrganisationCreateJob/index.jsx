@@ -312,13 +312,13 @@ const OrganisationCreateJob = () => {
           </Paper>
         </div>
       </div>
-      <div
+      {/* <div
         style={{
           marginTop: "var(--margin-footer-spacing)",
         }}
       >
         <Footer />
-      </div>
+      </div> */}
     </>
   );
 };

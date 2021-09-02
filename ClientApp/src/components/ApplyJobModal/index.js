@@ -124,6 +124,17 @@ const ApplyJobModal = (props) => {
       setFile(null);
       setFilename(null);
     }
+
+    if (file && file.name.split(".").pop() !== "pdf") {
+      setAlert({
+        status: true,
+        title: "Wrong file!",
+        message: ["You've selected the wrong file. Please check again"],
+        severity: "error",
+      });
+    } else {
+      setAlert(null);
+    }
   };
 
   return (
@@ -188,7 +199,8 @@ const ApplyJobModal = (props) => {
           disabled={
             formInput === null ||
             Object.keys(formInput).length < 3 ||
-            file === null
+            file === null ||
+            filename.split(".").pop() !== "pdf"
           }
         >
           APPLY

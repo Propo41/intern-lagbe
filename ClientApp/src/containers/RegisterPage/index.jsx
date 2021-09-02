@@ -145,7 +145,7 @@ const RegisterPage = () => {
         </Grid>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

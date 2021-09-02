@@ -214,13 +214,13 @@ const OrganisationHomepage = () => {
         </div>
       )}
 
-      <div
+      {/* <div
         style={{
           marginTop: "var(--margin-footer-spacing)",
         }}
       >
         <Footer />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -9,6 +9,7 @@ import {
   CardContent,
   Container,
   Grid,
+  useMediaQuery,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AvailCompanyCard = (props) => {
   const classes = useStyles();
+  const mobileViewBreakpoint = useMediaQuery("(max-width: 599px)");
 
   const onApplyClick = (event) => {
     event.preventDefault();
@@ -74,7 +76,10 @@ const AvailCompanyCard = (props) => {
             xs={12}
             sm={4}
             className="vertical-align"
-            style={{ display: "flex", justifyContent: "flex-end" }}
+            style={{
+              display: "flex",
+              justifyContent: mobileViewBreakpoint ? "flex-start" : "flex-end",
+            }}
           >
             {/* {!props.disabledButton ? (
               <Button
@@ -100,6 +105,9 @@ const AvailCompanyCard = (props) => {
                   ? classes.disabledButton
                   : classes.enabledButton
               }
+              style={{
+                marginLeft: mobileViewBreakpoint ? "0" : "10px",
+              }}
             >
               <Link
                 to={{

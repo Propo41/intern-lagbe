@@ -9,6 +9,7 @@ import {
   Button,
   Container,
   Grid,
+  useMediaQuery,
 } from "@material-ui/core";
 
 import Label from "../Label";
@@ -33,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
   disabledButton: {
     backgroundColor: "var(--light-purple)",
     color: "white",
-    marginLeft: "10px",
   },
   enabledButton: {
     backgroundColor: "var(--purple)",
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AvailPositionCard = (props) => {
   const classes = useStyles();
+  const mobileViewBreakpoint = useMediaQuery("(max-width: 599px)");
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
   const [openReportModal, setOpenReportModal] = React.useState(false);
 
@@ -92,7 +93,10 @@ const AvailPositionCard = (props) => {
             xs={12}
             sm={4}
             className="vertical-align"
-            style={{ display: "flex", justifyContent: "flex-end" }}
+            style={{
+              display: "flex",
+              justifyContent: mobileViewBreakpoint ? "flex-start" : "flex-end",
+            }}
           >
             {!props.disabledButton && (
               <Button

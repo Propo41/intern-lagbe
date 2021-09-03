@@ -34,6 +34,8 @@ namespace InternFinder.Services
         About GetRemuneration();
         Task<Payload> ApplyJob(Applicant applicant);
         UploadCare GetSignedUrl();
+        Payload isSubscriberExist(string email);
+        Subscriber SubscribeNewsletter(Subscriber subscriber);
     }
 
     public class GeneralService : IGeneralService
@@ -44,6 +46,7 @@ namespace InternFinder.Services
         private readonly IMongoCollection<About> _aboutCollection;
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Applicant> _applicantCollection;
+        private readonly IMongoCollection<Subscriber> _subscriberCollection;
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
@@ -63,6 +66,7 @@ namespace InternFinder.Services
             _usersCollection = db.GetCollection<User>("Users");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _applicantCollection = db.GetCollection<Applicant>("Applicants");
+            _subscriberCollection = db.GetCollection<Subscriber>("Subscribers");
         }
 
         public List<Company> GetAllCompanies()
@@ -267,5 +271,18 @@ namespace InternFinder.Services
             }
         }
 
+        // checks if subscriber has already subscribed
+        public Payload isSubscriberExist(string email)
+        {
+            var filter = Builders<Subscriber>.Filter.Eq("Email", email);
+            var doc = _subscriberCollection.Find(filter).FirstOrDefaultAsync();
+            return new Payload { Subscriber = doc.Result };
+        }
+
+        public Subscriber SubscribeNewsletter(Subscriber subscriber)
+        {
+            _subscriberCollection.InsertOne(subscriber);
+            return subscriber;
+        }  
     }
 }

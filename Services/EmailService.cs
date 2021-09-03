@@ -76,6 +76,20 @@ namespace InternFinder.Services
                     return new Payload { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
                 }
             }
+            else if (type == "subscription")
+            {
+                try
+                {
+                    SendSubscriptionEmail(email, uid, "subscription-to-newsletter", "InternLagbe Newsletter",
+                        "THANK YOU JOINING OUR NEWSLETTER", templateIdConfirmation).Wait();
+                    return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return new Payload { StatusCode = 500, StatusDescription = "Email couldn't be sent" };
+                }
+            }
             return null;
 
         }
@@ -108,6 +122,30 @@ namespace InternFinder.Services
             var response = await client.SendEmailAsync(msg);
         }
 
+        public async Task SendSubscriptionEmail(string email, string uid, string type, string subject, string plainTextContent, string templateId)
+        {
+            // print to console
+            Console.WriteLine($"Sending email to {email}");
+
+            Console.WriteLine(apiKey);
+            Console.WriteLine(emailFromEmail);
+
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress(emailFromEmail, emailFromName);
+            var to = new EmailAddress(email, email.Split('@')[0]);
+            var htmlContent = plainTextContent;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+            var dynamicTemplateData = new TemplateData
+            {
+                User = email.Split('@')[0],
+
+            };
+            msg.SetTemplateId(templateId);
+            msg.SetTemplateData(dynamicTemplateData);
+
+            var response = await client.SendEmailAsync(msg);
+        }
 
     }
 

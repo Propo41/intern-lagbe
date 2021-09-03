@@ -101,7 +101,6 @@ namespace InternFinder.Controllers
             return Ok(_generalService.GetRemuneration());
         }
 
-
         // POST api/landingpage/company/job/apply
         [HttpPost]
         [Route("company/job/apply")]
@@ -119,5 +118,23 @@ namespace InternFinder.Controllers
 
         }
 
+        // POST api/landingpage/subscribe
+        [HttpPost]
+        [Route("subscribe")]
+        public ActionResult SubscribeNewsletter(Subscriber subscriber)
+        {
+            Payload res = _generalService.isSubscriberExist(subscriber.Email);
+            if (res.Subscriber == null)
+            {
+                _generalService.SubscribeNewsletter(subscriber);
+                Payload responseStatus = _emailService.Service(subscriber.Email, subscriber.Id, "subscription");
+                return Ok(new { responseStatus });
+            }
+            else
+            {
+                return new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 403, "You already subscribed with this email address before!"));
+            }
+
+        }
     }
 }

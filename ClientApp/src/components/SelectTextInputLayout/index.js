@@ -35,7 +35,7 @@ const SelectTextInputLayout = (props) => {
       return;
     }
 
-     setOpen(false);
+    setOpen(false);
   };
 
   function handleListKeyDown(event) {
@@ -67,7 +67,7 @@ const SelectTextInputLayout = (props) => {
       >
         {iconMapper(props.icon, "darkash", "textinputlayout")}
         {value}
-        <KeyboardArrowDownIcon />
+        <KeyboardArrowDownIcon style={{ marginLeft: "auto" }} />
       </Button>
 
       <Popper

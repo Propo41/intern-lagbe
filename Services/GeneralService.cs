@@ -36,6 +36,7 @@ namespace InternFinder.Services
         UploadCare GetSignedUrl();
         Payload isSubscriberExist(string email);
         Subscriber SubscribeNewsletter(Subscriber subscriber);
+        Task<Payload> ReportJob(Report report);
     }
 
     public class GeneralService : IGeneralService
@@ -47,6 +48,7 @@ namespace InternFinder.Services
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Applicant> _applicantCollection;
         private readonly IMongoCollection<Subscriber> _subscriberCollection;
+        private readonly IMongoCollection<Report> _reportCollection;
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
@@ -67,6 +69,7 @@ namespace InternFinder.Services
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _applicantCollection = db.GetCollection<Applicant>("Applicants");
             _subscriberCollection = db.GetCollection<Subscriber>("Subscribers");
+            _reportCollection = db.GetCollection<Report>("Reports");
         }
 
         public List<Company> GetAllCompanies()
@@ -241,7 +244,6 @@ namespace InternFinder.Services
             return true;
         }
 
-
         async public Task<Payload> ApplyJob(Applicant applicant)
         {
             try
@@ -283,6 +285,21 @@ namespace InternFinder.Services
         {
             _subscriberCollection.InsertOne(subscriber);
             return subscriber;
-        }  
+        }
+
+        async public Task<Payload> ReportJob(Report report)
+        {
+            try
+            {
+                _reportCollection.InsertOne(report);
+                    return new Payload { StatusCode = 200, StatusDescription = "Your report has been submitted." };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 400, StatusDescription = e.Message };
+
+            }
+        }
     }
 }

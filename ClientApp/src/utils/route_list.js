@@ -15,8 +15,6 @@ import AboutPage from "../containers/AboutPage";
 import StatusPage from "../containers/StatusPage";
 import NotFoundPage from "../containers/NotFoundPage";
 
-//                 ButtonUrl = $"https://internlagbe.azurewebsites.net/auth/user/{type}?token={token}&&uid={uid}",
-
 const routerList = {
   public: [
     { path: "/", component: LandingPage },

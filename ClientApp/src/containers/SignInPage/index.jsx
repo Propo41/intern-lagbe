@@ -21,7 +21,7 @@ const SignInPage = () => {
   const [snackbar, setSnackbar] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
 
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const listener = (event) => {
@@ -80,14 +80,14 @@ const SignInPage = () => {
     <>
       <PublicNavbar />
       {loadingBar && <LinearProgress />}
-      {snackbar && snackbar.open && (
+     {/*  {snackbar && snackbar.open && (
         <Snackbar
           severity={snackbar.severity}
           open={snackbar.open}
           message={snackbar.message}
           setSnackbar={setSnackbar}
         />
-      )}
+      )} */}
 
       <div className="content-grid-padding">
         <Grid container spacing={5} className={classes.root}>
@@ -131,7 +131,7 @@ const SignInPage = () => {
                   className="text-button"
                   style={{ display: "flex", justifyContent: "flex-end" }}
                   onClick={() => {
-                    history.push("/forgot-password");
+                    navigate("/forgot-password", { replace: true });
                   }}
                 >
                   FORGOT PASSWORD?
@@ -158,7 +158,7 @@ const SignInPage = () => {
                 fullWidth={true}
                 className={classes.buttonRed}
                 onClick={() => {
-                  history.push("/register");
+                  navigate.push("/register");
                 }}
                 disabled={loadingBar}
                 style={{ marginTop: "var(--margin-item-spacing)" }}

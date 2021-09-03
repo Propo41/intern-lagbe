@@ -24,7 +24,7 @@ const ChangePassword = (props) => {
   const [error, setError] = React.useState(false);
   const [alert, setAlert] = React.useState(null);
 
-  const history = useNavigate();
+  const navigate = useNavigate();
   let query = useQuery();
 
   console.log(query.get("token"));
@@ -78,7 +78,7 @@ const ChangePassword = (props) => {
 
       if (data.statusCode === 200) {
         setLoadingBar(false);
-        history.push("/verification-success");
+        navigate("/verification-success", { replace: true });
       }
     } catch (e) {
       console.log(e);

@@ -20,7 +20,7 @@ import errorHandling from "../../utils/error_handling";
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
-  const history = useNavigate();
+  const navigate = useNavigate();
   const { jobId } = useParams();
   const [job, setJob] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -112,7 +112,7 @@ const OrganisationJobPostEdit = (props) => {
         ...formInput,
       });
       console.log(res.data);
-      history.push(`/job/${jobId}`);
+      navigate(`/job/${jobId}`, { replace: true });
     } catch (e) {
       if (e) {
         setAlert(errorHandling(e));

@@ -43,7 +43,7 @@ const PublicNavbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,7 +57,7 @@ const PublicNavbar = () => {
   const handlePostJob = (e) => {
     e.stopPropagation();
     setAnchorEl(null);
-    history.push("/sign-in");
+    navigate("/sign-in", { replace: true });
   };
 
   return (
@@ -99,12 +99,18 @@ const PublicNavbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar" onClick={() => history.push("/")}>
+                <h1
+                  className="navbar"
+                  onClick={() => navigate("/", { replace: true })}
+                >
                   HOME
                 </h1>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <h1 className="navbar" onClick={() => history.push("/about")}>
+                <h1
+                  className="navbar"
+                  onClick={() => navigate("/about", { replace: true })}
+                >
                   ABOUT
                 </h1>
               </MenuItem>

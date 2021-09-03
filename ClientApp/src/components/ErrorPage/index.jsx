@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const ErrorPage = (props) => {
   const classes = useStyles();
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="content-grid-padding">
@@ -34,7 +34,7 @@ const ErrorPage = (props) => {
                 fullWidth={true}
                 className={classes.buttonPurple}
                 onClick={() => {
-                  history.push(`${props.to}`);
+                  navigate(`${props.to}`, { replace: true });
                 }}
               >
                 Redirect

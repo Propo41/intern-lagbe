@@ -183,7 +183,7 @@ const LandingPage = () => {
       <>
         {/* Place Toolbar Here */}
         <PublicNavbar />
-        {snackbar && snackbar.open && (
+       {/*  {snackbar && snackbar.open && (
           <Snackbar
             severity={snackbar.severity}
             open={snackbar.open}
@@ -191,7 +191,7 @@ const LandingPage = () => {
             setSnackbar={setSnackbar}
             duration={snackbar.duration}
           />
-        )}
+        )} */}
         <div className="content-grid-padding">
           {/* Landing page */}
           <Grid container>

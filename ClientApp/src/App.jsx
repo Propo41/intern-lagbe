@@ -1,72 +1,38 @@
 import "./styles/App.css";
-import { BrowserRouter as Router, Routes, Route, useRoutes, Navigate} from "react-router-dom";
-import routerList from "./utils/route_list";
-import ChangePassword from "./containers/ChangePassword";
-import ThemeConfig from './styles/admin';
-import AdminRouter from './routes';
-import GeneralRouter from './general-routes';
+import AdminTheme from "./styles/admin";
+import ThemeConfig from "./styles/general";
+import AdminRouter from "./utils/admin_routes";
+import PublicRouter from "./utils/public_routes";
+import PrivateRouter from "./utils/private_routes";
 
-import LandingPage from "./containers/LandingPage";
-
+// @todo
+const getPayload = (token) => {
+  return "user";
+};
 
 function App() {
   console.log(window.location);
   console.log(localStorage);
 
-/*   return (  
-  <ThemeConfig>
-    <AdminRouter />
-  </ThemeConfig>
-  ); 
-*/
-
-return (  
-  <ThemeConfig>
-    <GeneralRouter />
-  </ThemeConfig>
-  ); 
-
-
-
   if (localStorage.getItem("token") !== null) {
-    return (
-      <div className="App">
-        <Router>
-          <Routes>
-            {/* private pages */}
-            {routerList.private.map((route, i) => {
-              return (
-                <Route
-                  key={i}
-                  exact
-                  path={route.path}
-                  component={route.component}
-                />
-              );
-            })}
-          </Routes>
-        </Router>
-      </div>
-    );
+    if (getPayload("token") === "admin") {
+      return (
+        <AdminTheme>
+          <AdminRouter />
+        </AdminTheme>
+      );
+    } else {
+      return (
+        <ThemeConfig>
+          <PrivateRouter />
+        </ThemeConfig>
+      );
+    }
   } else {
     return (
-      <div className="App">
-        <Router>
-          <Routes>
-            {/* public pages */}
-            {routerList.public.map((route, i) => {
-              return (
-                <Route
-                  key={i}
-                  exact
-                  path={route.path}
-                  component={route.component}
-                />
-              );
-            })}
-          </Routes>
-        </Router>
-      </div>
+      <ThemeConfig>
+        <PublicRouter />
+      </ThemeConfig>
     );
   }
 }

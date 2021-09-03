@@ -21,7 +21,7 @@ const OrganisationHomepage = () => {
   const [jobsPosted, setJobsPosted] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const OrganisationHomepage = () => {
                       className={classes.buttonPurple}
                       disabled={profileStatus ? false : true}
                       onClick={() => {
-                        history.push("/create-job");
+                        navigate("/create-job", { replace: true });
                       }}
                     >
                       POST MORE JOBS
@@ -187,7 +187,7 @@ const OrganisationHomepage = () => {
                     <span
                       className="text-button-lg"
                       onClick={() => {
-                        history.push("/create-job");
+                        navigate("/create-job", { replace: true });
                       }}
                     >
                       {" "}
@@ -200,7 +200,7 @@ const OrganisationHomepage = () => {
                     <span
                       className="text-button-lg"
                       onClick={() => {
-                        history.push("/profile");
+                        navigate("/profile", { replace: true });
                       }}
                     >
                       {" "}

@@ -10,9 +10,12 @@ import TextInputLayout from "../../components/TextInputLayout";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/landing_page";
 import { useEffect } from "react";
-import { GET } from "../../api/api.js";
+import { GET, POST } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
-import { Avatar, Chip, Hidden } from "@material-ui/core";
+import { Avatar, Chip, Hidden, LinearProgress } from "@material-ui/core";
+import Snackbar from "../../components/SnackbarCustom";
+import Alert from "../../components/AlertCustom";
+import errorHandling from "../../utils/error_handling";
 
 //https://material-ui.com/components/chips/  use chips after selecting locations
 
@@ -26,6 +29,10 @@ const LandingPage = () => {
   const [districtList, setDistrictList] = React.useState(null);
   const [jobCategories, setJobCategories] = React.useState(null);
   const [companyCategories, setCompanyCategories] = React.useState(null);
+  const [form, setForm] = React.useState(null);
+  const [alert, setAlert] = React.useState(null);
+  const [snackbar, setSnackbar] = React.useState(null);
+  const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {
     const promise1 = new Promise((resolve, reject) => {
@@ -124,6 +131,45 @@ const LandingPage = () => {
       });
   }, []);
 
+  const onInputChange = (event) => {
+    const { value, name } = event.target;
+    setForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const onSubscribeSubmit = async (e) => {
+    e.preventDefault();
+    console.log(form);
+    setLoadingBar(true);
+
+    try {
+      const { data } = await POST("api/landingpage/subscribe", {
+        email: form.email,
+      });
+      console.log(data);
+      if (data.responseStatus.statusCode === 200) {
+        setAlert(null);
+
+        setSnackbar({
+          open: true,
+          message: "You are all set! Thank you for subscribing.",
+          severity: "success",
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1600);
+      }
+    } catch (e) {
+      setLoadingBar(false);
+      if (e.response) {
+        setAlert(errorHandling(e));
+      }
+    }
+  };
+
   if (error) {
     return (
       <div>
@@ -137,6 +183,15 @@ const LandingPage = () => {
       <>
         {/* Place Toolbar Here */}
         <PublicNavbar />
+        {snackbar && snackbar.open && (
+          <Snackbar
+            severity={snackbar.severity}
+            open={snackbar.open}
+            message={snackbar.message}
+            setSnackbar={setSnackbar}
+            duration={snackbar.duration}
+          />
+        )}
         <div className="content-grid-padding">
           {/* Landing page */}
           <Grid container>
@@ -336,17 +391,33 @@ const LandingPage = () => {
                   <TextInputLayout
                     icon="mail"
                     placeholder="Enter your email"
-                    type="mail"
+                    type="email"
+                    name="email"
+                    onInputChange={onInputChange}
                   />
                 </div>
                 <Button
                   variant="contained"
                   fullWidth={true}
+                  onClick={onSubscribeSubmit}
+                  disabled={form === null || loadingBar}
                   className={classes.buttonSmallPurple}
                   style={{ marginTop: "var(--margin-item-spacing-lg)" }}
                 >
                   SUBSCRIBE
                 </Button>
+                {alert && alert.status && (
+                  <Alert
+                    severity={alert.severity}
+                    title={alert.title}
+                    message={alert.message}
+                  />
+                )}
+                {loadingBar && (
+                  <div style={{ marginTop: "var(--margin-item-spacing)" }}>
+                    <LinearProgress />
+                  </div>
+                )}
               </Paper>
             </Grid>
           </Grid>

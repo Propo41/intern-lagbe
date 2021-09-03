@@ -6,7 +6,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Button,
   Container,
   Grid,
@@ -17,7 +16,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import ApplyJobModal from "../ApplyJobModal";
-import { Link } from "react-router-dom";
+import ReportModal from "../ReportModal";
 import MarkdownViewer from "../MarkdownViewer";
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -53,16 +52,24 @@ const useStyles = makeStyles((theme) => ({
 
 const AvailPositionCard = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [openApplyModal, setOpenApplyModal] = React.useState(false);
+  const [openReportModal, setOpenReportModal] = React.useState(false);
 
   const onApplyClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    props.expandable && setOpen(true);
+    props.expandable && setOpenApplyModal(true);
+  };
+
+  const onReportClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    props.expandable && setOpenReportModal(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenApplyModal(false);
+    setOpenReportModal(false);
   };
 
   return (
@@ -91,7 +98,7 @@ const AvailPositionCard = (props) => {
               <Button
                 className="circular-button"
                 aria-label="FlagButton"
-                onClick={(event) => event.stopPropagation()}
+                onClick={onReportClick}
                 onFocus={(event) => event.stopPropagation()}
               >
                 <FlagIcon style={{ color: "var(--red)" }} />
@@ -110,20 +117,13 @@ const AvailPositionCard = (props) => {
                   : classes.enabledButton
               }
             >
-              {/* <Link
-                to={{
-                  pathname: `/company/${props.id}`,
-                }}
-              >
-                APPLY
-              </Link> */}
               APPLY
             </Button>
             <Modal
               aria-labelledby="transition-modal-title"
               aria-describedby="transition-modal-description"
               className={classes.modal}
-              open={open}
+              open={openApplyModal}
               onClose={handleClose}
               onClick={(event) => event.stopPropagation()}
               onFocus={(event) => event.stopPropagation()}
@@ -134,9 +134,34 @@ const AvailPositionCard = (props) => {
                 timeout: 500,
               }}
             >
-              <Fade in={open}>
+              <Fade in={openApplyModal}>
                 <>
                   <ApplyJobModal
+                    jobId={props.id}
+                    companyId={props.companyId}
+                    title={props.title}
+                  />
+                </>
+              </Fade>
+            </Modal>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={classes.modal}
+              open={openReportModal}
+              onClose={handleClose}
+              onClick={(event) => event.stopPropagation()}
+              onFocus={(event) => event.stopPropagation()}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              hideBackdrop={false}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={openReportModal}>
+                <>
+                  <ReportModal
                     jobId={props.id}
                     companyId={props.companyId}
                     title={props.title}

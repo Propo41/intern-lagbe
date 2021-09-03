@@ -136,5 +136,16 @@ namespace InternFinder.Controllers
             }
 
         }
+
+        // POST api/landingpage/company/job/report
+        [HttpPost]
+        [Route("company/job/report")]
+        async public Task<ActionResult> ReportJob([FromForm] Report report)
+        { 
+            Payload res = await _generalService.ReportJob(report);
+            return res.StatusCode == 200 ? Ok(new { status = res.StatusCode, description = res.StatusDescription }) :
+                        new BadRequestObjectResult(new ErrorResult("Couldn't process your request", res.StatusCode, res.StatusDescription));
+
+        }
     }
 }

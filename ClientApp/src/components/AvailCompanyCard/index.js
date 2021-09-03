@@ -76,7 +76,7 @@ const AvailCompanyCard = (props) => {
             className="vertical-align"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {!props.disabledButton ? (
+            {/* {!props.disabledButton ? (
               <Button
                 className="circular-button"
                 aria-label="FlagButton"
@@ -87,7 +87,7 @@ const AvailCompanyCard = (props) => {
               </Button>
             ) : (
               ""
-            )}
+            )} */}
 
             <Button
               variant="contained"

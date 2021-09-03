@@ -4,14 +4,14 @@ import {
   Checkbox,
   ClickAwayListener,
   Grow,
-  makeStyles,
   MenuItem,
   MenuList,
   Paper,
   Popper,
-  StylesProvider,
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+
+import {makeStyles} from "@material-ui/styles";
 
 const FilterByCategory = (props) => {
   const [open, setOpen] = React.useState(false);

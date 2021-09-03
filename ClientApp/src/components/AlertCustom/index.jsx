@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 /**

@@ -7,7 +7,7 @@ import TextInputLayout from "../../components/TextInputLayout";
 import { LinearProgress, useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/signin_page";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { POST } from "../../api/api.js";
 import errorHandling from "../../utils/error_handling.js";
 import Snackbar from "../../components/SnackbarCustom";
@@ -21,7 +21,7 @@ const SignInPage = () => {
   const [snackbar, setSnackbar] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
 
-  const history = useHistory();
+  const history = useNavigate();
 
   useEffect(() => {
     const listener = (event) => {

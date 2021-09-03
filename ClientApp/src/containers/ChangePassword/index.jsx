@@ -12,7 +12,7 @@ import { GET, POST } from "../../api/api";
 import { useEffect } from "react";
 import useQuery from "../../utils/util";
 import errorHandling from "../../utils/error_handling";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Alert from "../../components/AlertCustom";
 
 const ChangePassword = (props) => {
@@ -24,7 +24,7 @@ const ChangePassword = (props) => {
   const [error, setError] = React.useState(false);
   const [alert, setAlert] = React.useState(null);
 
-  const history = useHistory();
+  const history = useNavigate();
   let query = useQuery();
 
   console.log(query.get("token"));

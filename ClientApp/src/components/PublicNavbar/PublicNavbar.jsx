@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +43,7 @@ const PublicNavbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const history = useHistory();
+  const history = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

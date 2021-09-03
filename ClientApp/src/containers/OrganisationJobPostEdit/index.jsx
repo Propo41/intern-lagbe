@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { GET, GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import Alert from "../../components/AlertCustom";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
@@ -20,7 +20,7 @@ import errorHandling from "../../utils/error_handling";
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
   const mobileViewBreakpoint = useMediaQuery("(min-width: 1280px)");
-  const history = useHistory();
+  const history = useNavigate();
   const { jobId } = useParams();
   const [job, setJob] = React.useState(null);
   const [loading, setLoading] = React.useState(true);

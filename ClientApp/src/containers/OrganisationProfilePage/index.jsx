@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import PrivateNavBar from "../../components/PrivateNavbar/PrivateNavbar";

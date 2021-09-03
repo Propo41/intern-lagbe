@@ -1,11 +1,11 @@
 import React from "react";
 import { Paper, Grid, Button, Hidden } from "@material-ui/core";
 import useStyles from "../../styles/error_page";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const ErrorPage = (props) => {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
 
   return (
     <div className="content-grid-padding">

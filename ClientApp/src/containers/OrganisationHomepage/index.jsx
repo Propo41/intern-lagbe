@@ -9,7 +9,7 @@ import PrivateJobCard from "../../components/PrivateJobCard";
 import Footer from "../../components/Footer";
 import PrivateNavbar from "../../components/PrivateNavbar/PrivateNavbar";
 import useStyles from "../../styles/organisation_homepage";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { LinearProgress } from "@material-ui/core";
@@ -21,7 +21,7 @@ const OrganisationHomepage = () => {
   const [jobsPosted, setJobsPosted] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
-  const history = useHistory();
+  const history = useNavigate();
   const [loadingBar, setLoadingBar] = React.useState(false);
 
   useEffect(() => {

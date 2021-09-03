@@ -1,6 +1,6 @@
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
   text: {

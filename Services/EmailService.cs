@@ -34,6 +34,7 @@ namespace InternFinder.Services
         private readonly string emailFromEmail;
         private readonly string templateIdConfirmation;
         private readonly string templateIdResetPassword;
+        private readonly string templateIdNewsletterSubscription;
 
 
         public EmailService(IConfiguration config)
@@ -43,6 +44,7 @@ namespace InternFinder.Services
             emailFromEmail = config["EmailService:SENDGRID_FROM_EMAIL"];
             templateIdConfirmation = config["EmailService:SENDGRID_CONFIRMATION_TEMPLATE"];
             templateIdResetPassword = config["EmailService:SENDGRID_RESET_PASSWORD_TEMPLATE"];
+            templateIdNewsletterSubscription = config["EmailService:SENDGRID_NEWSLETTER_SUBSCRIPTION"];
 
         }
 
@@ -80,8 +82,8 @@ namespace InternFinder.Services
             {
                 try
                 {
-                    SendSubscriptionEmail(email, uid, "subscription-to-newsletter", "InternLagbe Newsletter",
-                        "THANK YOU JOINING OUR NEWSLETTER", templateIdConfirmation).Wait();
+                    SendSubscriptionEmail(email, uid, "subscription-to-newsletter", "Newsletter Subscription",
+                        "Thank you for joining our newsletter", templateIdNewsletterSubscription).Wait();
                     return new Payload { StatusCode = 200, StatusDescription = "Email sent" };
                 }
                 catch (Exception e)

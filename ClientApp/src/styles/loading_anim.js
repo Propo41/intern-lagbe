@@ -4,6 +4,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     backgroundColor: "var(--purple)",
     height: "100vh",
+    position: "absolute",
+    width: "-webkit-fill-available",
+    zIndex: 1,
   },
   loadingAnimationIcon: {
     width: "20%",

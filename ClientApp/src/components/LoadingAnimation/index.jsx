@@ -2,6 +2,7 @@ import useStyles from "../../styles/loading_anim";
 
 const LoadingAnimation = () => {
   const classes = useStyles();
+  window.scrollTo(0, 0);
 
   return (
     <div className={classes.loadingAnimationContainer}>

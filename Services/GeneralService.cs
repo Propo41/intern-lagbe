@@ -52,14 +52,13 @@ namespace InternFinder.Services
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
-
         private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
 
 
-        public GeneralService(IConfiguration config)
+        public GeneralService(IConfiguration config, IMongoClient client)
         {
-            var client = new MongoClient(config.GetConnectionString("HyphenDb"));
-            var db = client.GetDatabase("HyphenDb");
+            var databaseName = config["ConnectionStrings:DatabaseName"];
+            var db = client.GetDatabase(databaseName);
             uploadCarePubKey = config["UploadCare:PubKey"];
             uploadCareSecret = config["UploadCare:Secret"];
             uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);
@@ -292,7 +291,7 @@ namespace InternFinder.Services
             try
             {
                 _reportCollection.InsertOne(report);
-                    return new Payload { StatusCode = 200, StatusDescription = "Your report has been submitted." };
+                return new Payload { StatusCode = 200, StatusDescription = "Your report has been submitted." };
             }
             catch (Exception e)
             {

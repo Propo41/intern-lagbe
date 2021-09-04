@@ -1,4 +1,3 @@
-using InternFinder.Database;
 using InternFinder.Models;
 using InternFinder.Services;
 using Microsoft.AspNetCore.Http;

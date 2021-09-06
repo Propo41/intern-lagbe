@@ -82,7 +82,7 @@ namespace InternFinder.Services
                 {
                     Console.WriteLine(email + " is  verified");
                     // create token
-                    string token = Util.GenerateToken(user, _secretKey, "Company", _tokenExpiryTime);
+                    string token = Util.GenerateToken(user, _secretKey, user.Role, _tokenExpiryTime);
                     return new Payload { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = token };
                 }
                 else
@@ -184,11 +184,7 @@ namespace InternFinder.Services
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
             user.IsVerified = false; // potential fix for non-reproducing bug, refer issue#61
-            /* @debug remove it */
-            // Company company = new Company();
-            /* @debug remove it */
-            // _companyCollection.InsertOne(company);
-            // user.CompanyId = company.Id;
+            user.Role = "Company";
             _userCollection.InsertOne(user);
             return user;
         }

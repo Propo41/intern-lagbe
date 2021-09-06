@@ -33,5 +33,8 @@ namespace InternFinder.Models
 
         public string Token { get; set; }
 
+        [BsonDefaultValue("Company")]
+        public string Role { get; set; }
+
     }
 }

@@ -8,7 +8,7 @@ export const GET = async (url) => {
 };
 
 export const POST = async (url, payload) => {
-  return await axios.post(`${apiBaseURL}/${url}`, payload); 
+  return await axios.post(`${apiBaseURL}/${url}`, payload);
 };
 
 /* private queries */

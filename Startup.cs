@@ -7,16 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.Options;
-using InternFinder.Database;
 using InternFinder.Services;
 using InternFinder.Helpers;
 using Microsoft.AspNetCore.Http;
+using MongoDB.Driver;
 
 namespace server
 {
@@ -39,7 +36,12 @@ namespace server
             });
 
             // dependency injections
-            services.AddSingleton<IDatabaseSettings>(db => db.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            // injecting the mongodb client
+            services.AddSingleton<IMongoClient, MongoClient>(s =>
+            {
+                var connectionUri = s.GetRequiredService<IConfiguration>()["ConnectionStrings:HyphenDb"];
+                return new MongoClient(connectionUri);
+            });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // used for injecting the HttpContext into the controllers
 
             // configure Dependency Injection for the following application services

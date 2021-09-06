@@ -35,10 +35,10 @@ namespace InternFinder.Services
         private readonly string _secretKey;
         private readonly int _tokenExpiryTime;
 
-        public UserService(IConfiguration config)
+        public UserService(IConfiguration config, IMongoClient client)
         {
-            var client = new MongoClient(config.GetConnectionString("HyphenDb"));
-            var db = client.GetDatabase("HyphenDb");
+            var databaseName = config["ConnectionStrings:DatabaseName"];
+            var db = client.GetDatabase(databaseName);
             _userCollection = db.GetCollection<User>("Users");
             _companyCollection = db.GetCollection<Company>("Company");
             _secretKey = config["JWT:Secret"];

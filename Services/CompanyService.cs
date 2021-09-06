@@ -49,10 +49,10 @@ namespace InternFinder.Services
         private readonly IMongoCollection<About> _aboutCollection;
 
 
-        public CompanyService(IConfiguration config)
+        public CompanyService(IConfiguration config, IMongoClient client)
         {
-            var client = new MongoClient(config.GetConnectionString("HyphenDb"));
-            var db = client.GetDatabase("HyphenDb");
+            var databaseName = config["ConnectionStrings:DatabaseName"];
+            var db = client.GetDatabase(databaseName);
             uploadCarePubKey = config["UploadCare:PubKey"];
             uploadCareSecret = config["UploadCare:Secret"];
             uploadCareExpiry = int.Parse(config["UploadCare:Expiry"]);

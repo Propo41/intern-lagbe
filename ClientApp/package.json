@@ -24,6 +24,7 @@
     "dotenv": "^8.2.0",
     "easymde": "^2.15.0",
     "faker": "^5.5.3",
+    "formik": "^2.2.9",
     "history": "^5.0.1",
     "lodash": "^4.17.21",
     "prop-types": "^15.7.2",

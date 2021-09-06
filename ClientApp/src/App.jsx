@@ -1,12 +1,22 @@
 import ThemeConfig from "./styles";
 import AdminRouter from "./utils/admin_routes";
+import AuthRouter from "./utils/authentication_route";
 
 function App() {
-  return (
-    <ThemeConfig>
-      <AdminRouter />
-    </ThemeConfig>
-  );
+  console.log(localStorage);
+  if (localStorage.getItem("token") !== null) {
+    return (
+      <ThemeConfig>
+        <AdminRouter />
+      </ThemeConfig>
+    );
+  } else {
+    return (
+      <ThemeConfig>
+        <AuthRouter />
+      </ThemeConfig>
+    );
+  }
 }
 
 export default App;

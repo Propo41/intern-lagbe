@@ -61,6 +61,7 @@ namespace InternFinder.Services
         public Payload Authenticate(string email, string password)
         {
             var user = _userCollection.Find(u => u.Email == email).FirstOrDefault();
+            Console.WriteLine(user.Role);
             // user doesn't exist
             if (user == null)
             {
@@ -81,8 +82,12 @@ namespace InternFinder.Services
                 if (user.IsVerified)
                 {
                     Console.WriteLine(email + " is  verified");
+                    if (user.Role != "Admin")
+                    {
+                        return new Payload { StatusCode = 403, StatusDescription = "You don't have admin privileges." };
+                    }
                     // create token
-                    string token = Util.GenerateToken(user, _secretKey, "Company", _tokenExpiryTime);
+                    string token = Util.GenerateToken(user, _secretKey, user.Role, _tokenExpiryTime);
                     return new Payload { StatusCode = 200, StatusDescription = "User is verified. Logging in", Token = token };
                 }
                 else
@@ -90,7 +95,7 @@ namespace InternFinder.Services
                     Console.WriteLine(email + " is not verified");
                     // user is not verified
                     // prompt user to verify their account
-                    return new Payload { User = user, StatusCode = 403, StatusDescription = "You have not verified your account yet. Please check your email for a verification process." };
+                    return new Payload { User = user, StatusCode = 403, StatusDescription = "You have not verified your account yet. Please contact administrator to verify your account." };
                 }
             }
 

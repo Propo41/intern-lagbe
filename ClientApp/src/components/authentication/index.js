@@ -16,12 +16,16 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { LoadingButton } from "@material-ui/lab";
+import { POST } from "../../api/api";
+import errorHandling from "../../utils/error_handling";
+import Alert from "../AlertCustom";
 
 // ----------------------------------------------------------------------
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState(null);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -47,6 +51,28 @@ const LoginForm = () => {
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formik.values);
+    try {
+      const { data } = await POST("auth/user/login", {
+        email: formik.values.email,
+        password: formik.values.password,
+      });
+      console.log(data);
+      if (data.statusCode === 200) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+      }
+    } catch (e) {
+      if (e.response) {
+        setAlert(errorHandling(e));
+      } else {
+        console.log("server didnt respond");
+      }
+    }
   };
 
   return (
@@ -88,21 +114,7 @@ const LoginForm = () => {
           alignItems="center"
           justifyContent="space-between"
           sx={{ my: 2 }}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                {...getFieldProps("remember")}
-                checked={values.remember}
-              />
-            }
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" to="#">
-            Forgot password?
-          </Link>
-        </Stack>
+        ></Stack>
 
         <LoadingButton
           fullWidth
@@ -110,9 +122,17 @@ const LoginForm = () => {
           type="submit"
           variant="contained"
           loading={isSubmitting}
+          onClick={onSubmit}
         >
           Login
         </LoadingButton>
+        {alert && alert.status && (
+          <Alert
+            severity={alert.severity}
+            title={alert.title}
+            message={alert.message}
+          />
+        )}
       </Form>
     </FormikProvider>
   );

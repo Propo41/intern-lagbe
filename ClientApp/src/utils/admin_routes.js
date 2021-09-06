@@ -2,7 +2,6 @@ import { Navigate, useRoutes } from "react-router-dom";
 
 import DashboardLayout from "../components/layouts/index";
 import DashboardApp from "../containers/DashboardApp";
-import Login from "../containers/Login";
 import User from "../containers/User";
 
 export default function Router() {
@@ -20,6 +19,9 @@ export default function Router() {
         { path: "reports", element: <User /> },
       ],
     },
-    { path: "/login", element: <Login /> },
+    {
+      path: "*",
+      element: <Navigate to="/dashboard" replace />,
+    },
   ]);
 }

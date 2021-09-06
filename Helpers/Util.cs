@@ -79,6 +79,7 @@ namespace InternFinder.Helpers
               return false; */
         }
 
+        // role = admin
         public static string GenerateToken(User user, string secret, string role, int expiryTime)
         {
             // generate token that is valid for 7 days
@@ -87,7 +88,7 @@ namespace InternFinder.Helpers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("role", role) }),
-                Expires = DateTime.UtcNow.AddYears(expiryTime),
+                Expires = DateTime.UtcNow.AddHours(expiryTime), // 12hours
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

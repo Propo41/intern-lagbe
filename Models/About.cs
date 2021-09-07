@@ -18,6 +18,12 @@ namespace InternFinder.Models
         public List<string> JobCategories { get; set; }
         public List<string> CompanyCategories { get; set; }
         public List<string> Remuneration { get; set; }
+
+        public long TotalReports { get; set; }
+        public long TotalUsers { get; set; }
+        public long TotalCompanies { get; set; }
+        public long TotalJobsPosted { get; set; }
+        public long TotalApplicants { get; set; }
     }
 
 }

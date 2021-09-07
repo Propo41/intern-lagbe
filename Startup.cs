@@ -49,6 +49,8 @@ namespace server
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IGeneralService, GeneralService>();
+            services.AddScoped<IAdminService, AdminService>();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

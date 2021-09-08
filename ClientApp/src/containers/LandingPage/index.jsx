@@ -16,6 +16,7 @@ import { Avatar, Chip, Hidden, LinearProgress } from "@material-ui/core";
 import Snackbar from "../../components/SnackbarCustom";
 import Alert from "../../components/AlertCustom";
 import errorHandling from "../../utils/error_handling";
+import { Helmet } from "react-helmet";
 
 //https://material-ui.com/components/chips/  use chips after selecting locations
 
@@ -181,6 +182,10 @@ const LandingPage = () => {
   } else {
     return (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Intern Lagbe</title>
+        </Helmet>
         {/* Place Toolbar Here */}
         <PublicNavbar />
         {snackbar && snackbar.open && (

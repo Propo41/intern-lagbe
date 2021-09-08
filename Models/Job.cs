@@ -27,7 +27,7 @@ namespace InternFinder.Models
 
         public bool IsAvailable { get; set; } = true;
 
-        [StringLength(3500, ErrorMessage = "Please write a meaningful description with a minimum characters of 450", MinimumLength = 450)]
+        [StringLength(3500, ErrorMessage = "Please write a meaningful description with a minimum characters of 300", MinimumLength = 300)]
         [Required(ErrorMessage = "Requirements is required")]
         public string Requirements { get; set; }
 

@@ -8,6 +8,7 @@ import useStyles from "../../styles/verify_yourself";
 import { GET } from "../../api/api.js";
 import { useEffect } from "react";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import { Helmet } from "react-helmet";
 
 const AboutPage = () => {
   const classes = useStyles();
@@ -34,6 +35,10 @@ const AboutPage = () => {
   } else {
     return (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>About</title>
+        </Helmet>
         <PublicNavbar />
         <div className="content-grid-padding">
           <Grid container spacing={5} className={classes.root}>

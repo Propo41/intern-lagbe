@@ -12,6 +12,7 @@ import { POST } from "../../api/api.js";
 import errorHandling from "../../utils/error_handling.js";
 import Snackbar from "../../components/SnackbarCustom";
 import Alert from "../../components/AlertCustom";
+import { Helmet } from "react-helmet";
 
 const SignInPage = () => {
   const classes = useStyles();
@@ -78,6 +79,10 @@ const SignInPage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Sign In</title>
+      </Helmet>
       <PublicNavbar />
       {loadingBar && <LinearProgress />}
       {snackbar && snackbar.open && (

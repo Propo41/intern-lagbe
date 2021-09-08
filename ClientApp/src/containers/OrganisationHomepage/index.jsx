@@ -13,6 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import { GET_AUTH, POST_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { LinearProgress } from "@material-ui/core";
+import { Helmet } from "react-helmet";
 
 const OrganisationHomepage = () => {
   const classes = useStyles();
@@ -82,6 +83,10 @@ const OrganisationHomepage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Homepage</title>
+      </Helmet>
       <PrivateNavbar />
       {loadingBar && <LinearProgress />}
 

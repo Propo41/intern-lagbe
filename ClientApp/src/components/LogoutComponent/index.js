@@ -74,7 +74,7 @@ const LogoutComponent = (props) => {
     event.stopPropagation();
 
     localStorage.clear();
-    window.location.reload();
+    window.location.href = "/";
     console.log("log out");
 
     if (anchorRef.current && anchorRef.current.contains(event.target)) {

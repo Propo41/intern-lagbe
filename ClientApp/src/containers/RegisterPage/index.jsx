@@ -11,6 +11,7 @@ import { POST } from "../../api/api.js";
 import errorHandling from "../../utils/error_handling.js";
 import Alert from "../../components/AlertCustom";
 import Snackbar from "../../components/SnackbarCustom";
+import { Helmet } from "react-helmet";
 
 const RegisterPage = () => {
   const classes = useStyles();
@@ -61,6 +62,10 @@ const RegisterPage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Sign Up</title>
+      </Helmet>
       <PublicNavbar />
       {loadingBar && <LinearProgress />}
       {snackbar && snackbar.open && (

@@ -16,6 +16,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import ErrorPage from "../../components/ErrorPage";
 import MarkdownViewer from "../../components/MarkdownViewer";
 import { Hidden } from "@material-ui/core";
+import { Helmet } from "react-helmet";
 
 const CompanyPage = (props) => {
   const classes = useStyles();
@@ -83,6 +84,10 @@ const CompanyPage = (props) => {
   } else {
     return (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{companyInfo.name}</title>
+        </Helmet>
         <PublicNavbar />
         <div className="content-grid-padding">
           {/* Landing page */}

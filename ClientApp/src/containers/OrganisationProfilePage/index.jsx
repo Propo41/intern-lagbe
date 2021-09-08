@@ -24,6 +24,7 @@ import "easymde/dist/easymde.min.css";
 import ReactDOMServer from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import FilterDropdown from "../../components/FilterDropdown";
+import { Helmet } from "react-helmet";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
 
 const OrganisationProfilePage = () => {
@@ -184,9 +185,12 @@ const OrganisationProfilePage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{profileInfo.name}</title>
+      </Helmet>
       <PrivateNavBar />
       {loadingBar && <LinearProgress />}
-
       <div className="content-grid-padding">
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">

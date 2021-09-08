@@ -16,6 +16,7 @@ import MarkdownEditor from "../../components/MarkdownEditor";
 import Alert from "../../components/AlertCustom";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
 import errorHandling from "../../utils/error_handling";
+import { Helmet } from "react-helmet";
 
 const OrganisationJobPostEdit = (props) => {
   const classes = useStyles();
@@ -107,6 +108,9 @@ const OrganisationJobPostEdit = (props) => {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
+    formInput.requirements = description;
+    console.log(formInput);
+
     try {
       // sending the form input to server
       const res = await POST_AUTH(`api/company/job/edit`, {
@@ -140,6 +144,10 @@ const OrganisationJobPostEdit = (props) => {
   } else {
     return (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{job.title}</title>
+        </Helmet>
         <PrivateNavbar />
         <div className="content-grid-padding">
           <div className={classes.root}>
@@ -230,6 +238,8 @@ const OrganisationJobPostEdit = (props) => {
                     <MarkdownEditor
                       description={description}
                       setDescription={setDescription}
+                      placeholder="Enter your job requirements"
+                      disabled={false}
                     />
                   </div>
 
@@ -238,7 +248,6 @@ const OrganisationJobPostEdit = (props) => {
                       variant="contained"
                       fullWidth={true}
                       className={classes.buttonPurple}
-                      disabled={formInput === job}
                       onClick={onFormSubmit}
                     >
                       SAVE CHANGES

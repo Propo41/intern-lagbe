@@ -18,6 +18,7 @@ import MarkdownEditor from "../../components/MarkdownEditor";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
 import Snackbar from "../../components/SnackbarCustom";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import { Helmet } from "react-helmet";
 
 const OrganisationCreateJob = () => {
   const classes = useStyles();
@@ -123,7 +124,6 @@ const OrganisationCreateJob = () => {
       .catch((error) => {
         console.log("error", error);
         setLoadingBar(false);
-        
       });
   }, []);
 
@@ -175,6 +175,10 @@ const OrganisationCreateJob = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Create Job</title>
+      </Helmet>
       <PrivateNavbar />
       {loadingBar && <LinearProgress />}
       {snackbar && snackbar.open && (

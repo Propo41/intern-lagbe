@@ -10,11 +10,16 @@ const MarkdownEditor = (props) => {
     };
   }, []);
 
+  const onInputChange = (e) => {
+    console.log(e);
+    props.setDescription(e);
+  };
+
   return (
     <SimpleMDE
       options={autofocusNoSpellcheckerOptions}
       value={props.description}
-      onChange={props.setDescription}
+      onChange={onInputChange}
       className="markdown-area-style"
       placeholder={props.placeholder}
     />

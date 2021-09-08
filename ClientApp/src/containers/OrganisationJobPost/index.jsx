@@ -15,6 +15,7 @@ import LoadingAnimation from "../../components/LoadingAnimation";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
+import { Helmet } from "react-helmet";
 
 const OrganisationJobPost = (props) => {
   const classes = useStyles();
@@ -66,6 +67,10 @@ const OrganisationJobPost = (props) => {
   } else {
     return (
       <>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{job.title}</title>
+        </Helmet>
         <PrivateNavbar />
         <div className="content-grid-padding">
           <div className={classes.root}>

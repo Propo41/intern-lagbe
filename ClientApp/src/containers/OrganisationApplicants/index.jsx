@@ -10,6 +10,7 @@ import { GET_AUTH } from "../../api/api.js";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { Alert } from "@material-ui/lab";
 import { Select, MenuItem } from "@material-ui/core";
+import { Helmet } from "react-helmet";
 
 const OrganisationApplicants = () => {
   const classes = useStyles();
@@ -83,6 +84,10 @@ const OrganisationApplicants = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Applicants</title>
+      </Helmet>
       <PrivateNavbar />
       <div className="content-grid-padding">
         <div className={classes.root}>

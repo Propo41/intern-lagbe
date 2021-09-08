@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { useMediaQuery } from "@material-ui/core";
 import Footer from "../../components/Footer";
 import useStyles from "../../styles/verify_yourself";
+import { Helmet } from "react-helmet";
 
 /**
  * @param: data: {statusCode: string, statusDescription: string}}
@@ -16,6 +17,10 @@ const NotFoundPage = ({ data }) => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>404 Not Found</title>
+      </Helmet>
       <PublicNavbar />
       <div className="content-grid-padding">
         <Grid container spacing={5} className={classes.root}>

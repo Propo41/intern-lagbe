@@ -57,7 +57,7 @@ const PrivateNavbar = () => {
     setAnchorEl(null);
     console.log("log out");
     localStorage.clear();
-    window.location.reload();
+    window.location.href = "/";
   };
 
   return (

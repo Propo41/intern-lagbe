@@ -32,15 +32,13 @@ import {
 } from "../components/user";
 
 import USERS from "../_mocks_/user";
-import { GET } from "../api/api";
+import { DELETE_AUTH, GET, GET_AUTH } from "../api/api";
 
 const TABLE_HEAD = [
   { id: "email", label: "Email", alignRight: false },
   { id: "company", label: "Company", alignRight: false },
   { id: "role", label: "Role", alignRight: false },
   { id: "isVerified", label: "Verified", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "" },
 ];
 
 // ----------------------------------------------------------------------
@@ -71,7 +69,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.email.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -81,27 +79,24 @@ export default function User() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("name");
+  const [orderBy, setOrderBy] = useState("email");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [editUser, setEditUser] = useState(false);
 
   useEffect(() => {
-    // let isMounted = true;
+    let isMounted = true;
     const exe = async () => {
       try {
-        const { data } = await GET(`admin/users`);
-        // if (isMounted) {
-        //setUsers(data);
-        console.log("all promises resolved");
-        console.log(data);
-        setLoading(false);
-        //}
-
-        // return () => {
-        //   isMounted = false;
-        //  };
+        const { data } = await GET_AUTH(`admin/users`);
+        if (isMounted) {
+          setUsers(data);
+          console.log("all promises resolved");
+          console.log(data);
+          setLoading(false);
+        }
       } catch (e) {
         console.log(e);
         console.log("error", e);
@@ -109,9 +104,9 @@ export default function User() {
       }
     };
     exe();
-    /*  return () => {
+    return () => {
       isMounted = false;
-    }; // cleanup toggles value, if unmounted */
+    }; // cleanup toggles value, if unmounted
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -122,7 +117,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.email);
       setSelected(newSelecteds);
       return;
     }
@@ -171,8 +166,35 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const onDeleteClick = async (id) => {
+    console.log(id);
+    console.log("on delete click");
+
+    try {
+      var formData = new FormData();
+      formData.append("id", id);
+      const { data } = await DELETE_AUTH(`admin/user`, formData);
+      console.log(data);
+      // setLoading(false);
+    } catch (e) {
+      console.log(e);
+      console.log("error", e);
+      // setLoading(false);
+    }
+  };
+
+  const onEditClick = async (id) => {
+    console.log("on edit click");
+    console.log(id);
+    setEditUser(true);
+  };
+
   if (loading) {
     return <h>Loading</h>;
+  }
+
+  if (editUser) {
+    return <h>Edit user</h>;
   }
 
   return (
@@ -220,16 +242,8 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const {
-                        id,
-                        name,
-                        role,
-                        status,
-                        company,
-                        avatarUrl,
-                        isVerified,
-                      } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, email, role, companyId, isVerified } = row;
+                      const isItemSelected = selected.indexOf(email) !== -1;
 
                       return (
                         <TableRow
@@ -240,42 +254,40 @@ export default function User() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
                               direction="row"
                               alignItems="center"
                               spacing={2}
                             >
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
+                              <Typography
+                                variant="subtitle2"
+                                noWrap
+                                style={{ marginLeft: "15px" }}
+                              >
+                                {email}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
+                          <TableCell align="left">{companyId}</TableCell>
                           <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">
-                            {isVerified ? "Yes" : "No"}
-                          </TableCell>
                           <TableCell align="left">
                             <Label
                               variant="ghost"
                               color={
-                                (status === "banned" && "error") || "success"
+                                (isVerified === false && "error") || "success"
                               }
                             >
-                              {sentenceCase(status)}
+                              {sentenceCase(isVerified === true ? "Yes" : "No")}
                             </Label>
                           </TableCell>
-
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu
+                              onDeleteClick={onDeleteClick}
+                              onEditClick={onEditClick}
+                              id={id}
+                            />
                           </TableCell>
                         </TableRow>
                       );

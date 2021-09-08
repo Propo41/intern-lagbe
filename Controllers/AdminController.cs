@@ -4,6 +4,7 @@ using InternFinder.Models;
 using InternFinder.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace InternFinder.Controllers
 {
@@ -70,6 +71,19 @@ namespace InternFinder.Controllers
             var companyId = form["companyId"];
 
             return await _adminService.DeleteJob(id, companyId);
+        }
+
+
+        // @param: id, companyId
+        // delete job post
+        [Route("user")]
+        [HttpDelete]
+        public string DeleteUser(IFormCollection form)
+        {
+            var id = form["id"]; // user id
+            Console.WriteLine(id);
+
+            return "todo";
         }
 
     }

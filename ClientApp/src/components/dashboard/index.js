@@ -1,4 +1,4 @@
-export { default as AppBugReports } from './AppBugReports';
-export { default as AppItemOrders } from './AppItemOrders';
-export { default as AppNewUsers } from './AppNewUsers';
-export { default as AppWeeklySales } from './AppWeeklySales';
+export { default as AppApplicants } from './AppApplicants';
+export { default as AppJobsPosted } from './AppJobsPosted';
+export { default as AppTotalReports } from './AppTotalReports';
+export { default as AppCompanies } from './AppCompanies';

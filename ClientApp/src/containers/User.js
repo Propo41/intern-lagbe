@@ -1,7 +1,7 @@
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { sentenceCase } from "change-case";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 import { Link as RouterLink } from "react-router-dom";
 // material
@@ -31,7 +31,8 @@ import {
   UserMoreMenu,
 } from "../components/user";
 
-import USERLIST from "../_mocks_/user";
+import USERS from "../_mocks_/user";
+import { GET } from "../api/api";
 
 const TABLE_HEAD = [
   { id: "email", label: "Email", alignRight: false },
@@ -83,6 +84,35 @@ export default function User() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // let isMounted = true;
+    const exe = async () => {
+      try {
+        const { data } = await GET(`admin/users`);
+        // if (isMounted) {
+        //setUsers(data);
+        console.log("all promises resolved");
+        console.log(data);
+        setLoading(false);
+        //}
+
+        // return () => {
+        //   isMounted = false;
+        //  };
+      } catch (e) {
+        console.log(e);
+        console.log("error", e);
+        setLoading(false);
+      }
+    };
+    exe();
+    /*  return () => {
+      isMounted = false;
+    }; // cleanup toggles value, if unmounted */
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -92,7 +122,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -131,15 +161,19 @@ export default function User() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
   const filteredUsers = applySortFilter(
-    USERLIST,
+    users,
     getComparator(order, orderBy),
     filterName
   );
 
   const isUserNotFound = filteredUsers.length === 0;
+
+  if (loading) {
+    return <h>Loading</h>;
+  }
 
   return (
     <Page title="User | Admin">
@@ -177,7 +211,7 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={users.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -268,7 +302,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={users.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

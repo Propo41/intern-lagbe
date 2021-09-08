@@ -51,6 +51,7 @@ const OrganisationJobPost = (props) => {
       .catch((error) => {
         console.log("error", error);
         setError(true);
+        setLoading(false);
       });
   }, [jobId]);
 

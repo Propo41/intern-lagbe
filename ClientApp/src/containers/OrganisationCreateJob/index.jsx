@@ -123,6 +123,7 @@ const OrganisationCreateJob = () => {
       .catch((error) => {
         console.log("error", error);
         setLoadingBar(false);
+        
       });
   }, []);
 

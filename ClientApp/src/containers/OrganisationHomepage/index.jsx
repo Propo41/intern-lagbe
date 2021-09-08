@@ -32,10 +32,10 @@ const OrganisationHomepage = () => {
           const { data } = await GET_AUTH(`api/company`);
           setJobsPosted(data);
           console.log(data);
-          resolve();
+          resolve(data);
         } catch (e) {
           console.log(e);
-          reject();
+          reject(e);
         }
       };
       exe();
@@ -48,10 +48,10 @@ const OrganisationHomepage = () => {
           const { data } = await GET_AUTH(`api/company/profile-config`);
           console.log(data);
           setProfileStatus(data.companyInfo.isProfileComplete);
-          resolve();
+          resolve(data);
         } catch (e) {
           console.log(e);
-          reject();
+          reject(e);
         }
       };
       exe();
@@ -65,6 +65,7 @@ const OrganisationHomepage = () => {
       .catch((error) => {
         console.log("error", error);
         setError(true);
+        setLoading(false);
       });
   }, []);
 

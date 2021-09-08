@@ -66,6 +66,7 @@ const OrganisationApplicants = () => {
       .catch((error) => {
         console.log("error", error);
         setError(true);
+        setLoading(false);
       });
   }, []);
 

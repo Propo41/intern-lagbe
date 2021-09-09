@@ -13,7 +13,7 @@ namespace InternFinder.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string CompanyId { get; set; }
 
-        [StringLength(80, ErrorMessage = "Please enter a meaningful title", MinimumLength = 25)]
+        [StringLength(150, ErrorMessage = "Please enter a meaningful title", MinimumLength = 10)]
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
 

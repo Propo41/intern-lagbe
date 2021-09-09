@@ -67,6 +67,7 @@ const OrganisationHomepage = () => {
         console.log("error", error);
         setError(true);
         setLoading(false);
+        localStorage.clear();
       });
   }, []);
 

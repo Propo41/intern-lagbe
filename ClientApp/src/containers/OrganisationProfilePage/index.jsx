@@ -26,6 +26,7 @@ import ReactMarkdown from "react-markdown";
 import FilterDropdown from "../../components/FilterDropdown";
 import { Helmet } from "react-helmet";
 import SelectTextInputLayout from "../../components/SelectTextInputLayout";
+import SnackbarCustom from "../../components/SnackbarCustom";
 
 const OrganisationProfilePage = () => {
   const classes = useStyles();
@@ -43,6 +44,7 @@ const OrganisationProfilePage = () => {
   const [districtList, setDistrictList] = React.useState(null);
   const [categoryList, setCategoryList] = React.useState(null);
   const [loadingBar, setLoadingBar] = React.useState(false);
+  const [snackbar, setSnackbar] = React.useState(null);
 
   useEffect(() => {
     setLoadingBar(true);
@@ -128,8 +130,6 @@ const OrganisationProfilePage = () => {
     console.log(image ? "image selected" : "no image selected");
     console.log("printing form");
     console.log(form);
-    // window.scrollTo(0, 0);
-
     setLoadingBar(true);
 
     try {
@@ -152,7 +152,15 @@ const OrganisationProfilePage = () => {
       setAlert(null);
       setLoadingBar(false);
       console.log(res.data);
+      window.scrollTo(0, 0);
       window.location.reload();
+
+      setSnackbar({
+        open: true,
+        message: "Profile updated successfully!",
+        severity: "success",
+        duration: 3000,
+      });
     } catch (error) {
       setLoading(false);
       setLoadingBar(false);
@@ -191,6 +199,15 @@ const OrganisationProfilePage = () => {
       </Helmet>
       <PrivateNavBar />
       {loadingBar && <LinearProgress />}
+      {snackbar && snackbar.open && (
+        <SnackbarCustom
+          severity={snackbar.severity}
+          open={snackbar.open}
+          message={snackbar.message}
+          setSnackbar={setSnackbar}
+          duration={snackbar.duration}
+        />
+      )}
       <div className="content-grid-padding">
         <div className={classes.root}>
           <Paper elevation={5} className="semi-rounded-card">

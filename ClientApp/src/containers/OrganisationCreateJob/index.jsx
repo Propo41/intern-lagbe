@@ -150,6 +150,8 @@ const OrganisationCreateJob = () => {
       setAlert(null);
       console.log(data);
 
+      window.scrollTo(0, 0);
+
       setSnackbar({
         open: true,
         message: "Job created successfully!",

@@ -31,7 +31,8 @@ namespace InternFinder.Models
         [BsonDefaultValue(false)]
         public bool IsVerified { get; set; }
 
-        public string Token { get; set; }
+        [BsonIgnoreIfNull]
+        public string Token { get; set; } // used to track if the user previously used this token to verify their email
 
         [BsonDefaultValue("Company")]
         public string Role { get; set; }

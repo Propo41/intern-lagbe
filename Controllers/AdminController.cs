@@ -5,9 +5,11 @@ using InternFinder.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
+using InternFinder.Helpers;
 
 namespace InternFinder.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class AdminController : Controller
@@ -84,6 +86,56 @@ namespace InternFinder.Controllers
             Console.WriteLine(id);
 
             return "todo";
+        }
+
+        // @param: list<string>
+        // add job categories
+        [Route("job-category")]
+        [HttpPut]
+        public Payload AddJobCategory(About about)
+        {
+            return _adminService.AddJobCategories(about);
+
+        }
+
+        // @param: list<string>
+        // add company categories
+        [Route("company-category")]
+        [HttpPut]
+        public Payload AddCompanyCategory(About about)
+        {
+            return _adminService.AddCompanyCategories(about);
+
+        }
+
+        // @param: list<string>
+        // add districts
+        [Route("districts")]
+        [HttpPut]
+        public Payload AddDistricts(About about)
+        {
+            return _adminService.AddDistricts(about);
+
+        }
+
+        // @param: list<string>
+        // add remuneration
+        [Route("remuneration")]
+        [HttpPut]
+        public Payload AddRemuneration(About about)
+        {
+            return _adminService.AddRemuneration(about);
+
+        }
+
+        // @param: list<string>
+        // add remuneration
+        [Route("landingpage")]
+        [HttpPut]
+        public Payload AddLandingPageContent(About about)
+        {
+            return _adminService.UpdateLandingPageContent(about);
+
         }
 
     }

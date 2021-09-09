@@ -29,7 +29,12 @@ namespace InternFinder.Services
         List<Job> GetJobPosts();
         Payload EditJob(Job job);
         Task<Payload> DeleteJob(string id, string companyId);
-
+        // about
+        Payload UpdateLandingPageContent(About about);
+        Payload AddJobCategories(About about);
+        Payload AddCompanyCategories(About about);
+        Payload AddRemuneration(About about);
+        Payload AddDistricts(About about);
     }
 
 
@@ -40,12 +45,15 @@ namespace InternFinder.Services
         private readonly IMongoCollection<Job> _jobCollection;
         private readonly IMongoCollection<Report> _reportCollection;
         private readonly IMongoCollection<Applicant> _applicationCollection;
+        private readonly IMongoCollection<About> _aboutCollection;
 
         private readonly string _secretKey;
         private readonly int _tokenExpiryTime;
         private readonly string uploadCareSecret;
         private readonly string uploadCarePubKey;
         private readonly int uploadCareExpiry;
+        private readonly string _landingPageId = "61014b844108b9c6fe0468ac";
+
 
         public AdminService(IConfiguration config, IMongoClient client)
         {
@@ -55,6 +63,7 @@ namespace InternFinder.Services
             _companyCollection = db.GetCollection<Company>("Company");
             _jobCollection = db.GetCollection<Job>("Job_Postings");
             _reportCollection = db.GetCollection<Report>("Reports");
+            _aboutCollection = db.GetCollection<About>("About");
             _applicationCollection = db.GetCollection<Applicant>("Applicants");
             _tokenExpiryTime = Int32.Parse(config["JWT:ExpiresIn"]);
 
@@ -310,6 +319,109 @@ namespace InternFinder.Services
                 throw new Exception("Couldn't update the job count", e);
             }
         }
+
+
+        public Payload AddCompanyCategories(About about)
+        {
+
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("CompanyCategories", about.CompanyCategories);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Categories updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+
+
+        }
+
+        public Payload AddJobCategories(About about)
+        {
+
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("JobCategories", about.JobCategories);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Categories updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+
+
+        }
+
+
+        public Payload AddDistricts(About about)
+        {
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("Districts", about.Districts);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Districts updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+        }
+
+
+        public Payload AddRemuneration(About about)
+        {
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("Remuneration", about.Remuneration);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Remuneration updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+        }
+
+        public Payload UpdateLandingPageContent(About about)
+        {
+
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("Title", about.Title).
+                    Set("Subtitle", about.Subtitle).
+                    Set("AboutUs", about.AboutUs);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "Landing page content updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+        }
+
 
     }
 }

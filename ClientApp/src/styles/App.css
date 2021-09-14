@@ -1,0 +1,59 @@
+:root {
+  /* Color codes */
+  --ash: #f3f3f3;
+  --black: #484848;
+  --white: #ffffff;
+  --darkash: #969696;
+  --body-color: #f5faff;
+  --purple: #54499e;
+  --green: #04c900;
+  --red: #d67979;
+  --light-purple: #bcb2ff;
+  /* Margin dimens */
+  --content-margin-start: 15%;
+  --content-margin-end: 15%;
+  --content-margin-top: 55px;
+  /* font sizes */
+  --font-size-navbar: 0.938rem;
+  --font-size-landing-page-title: 4rem;
+  --font-size-landing-page-subtitle: 1.3rem;
+  --font-size-section-heading: 1.3rem;
+  --font-size-sub-heading: 1.15rem;
+  --font-size-textinput-hint: 0.938rem;
+  --font-size-title: 1.6rem;
+  --font-size-title-large: 3.75rem;
+  --font-size-content: 1.15rem;
+  --font-size-content-small: 0.8rem;
+  --font-size-sub-content: 0.875rem;
+  --font-size-button-large: 1.563rem; /* dont use */
+  --font-size-button-medium: 1.25rem; /* dont use */
+  --font-size-button-small: 0.938rem;
+  --font-size-dialog-title: 1.5rem;
+  --font-size-dialog-content: 1rem;
+
+  --font-family-poppins: "Poppins", sans-serif;
+  --font-family-sen: "Sen", sans-serif;
+
+  /* button dimens */
+  --button-padding: 10px;
+  /* text input dimens */
+  --text-input-padding: 8px;
+  /* Card shadow */
+  --card-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
+  /* item spacings */
+  --margin-item-spacing: 15px;
+  --margin-item-spacing-lg: 30px;
+  --margin-item-spacing-xlg: 50px;
+
+  --margin-footer-spacing: 0px;
+  /* paper radius */
+  --radius-paper: 10px;
+}
+
+body {
+  background-color: var(--body-color);
+}
+
+.simplebar-placeholder {
+  background-color: var(--body-color) !important;
+}

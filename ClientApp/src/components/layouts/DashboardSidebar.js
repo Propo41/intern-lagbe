@@ -65,11 +65,16 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          backgroundColor: "var(--body-color)",
         },
       }}
     >
       <Box sx={{ px: 2.5, py: 3 }}>
-        <Box component={RouterLink} to="/" sx={{ display: "inline-flex" }}>
+        <Box
+          component={RouterLink}
+          to="/"
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
           <Logo />
         </Box>
       </Box>

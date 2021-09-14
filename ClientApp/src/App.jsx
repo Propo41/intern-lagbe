@@ -1,4 +1,5 @@
 import ThemeConfig from "./styles";
+import "./styles/App.css";
 import AdminRouter from "./utils/admin_routes";
 import AuthRouter from "./utils/authentication_route";
 

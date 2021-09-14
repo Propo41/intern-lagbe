@@ -138,5 +138,26 @@ namespace InternFinder.Controllers
 
         }
 
+        // get all reports
+        [Route("reports")]
+        [HttpGet]
+        public List<Report> GetReports()
+        {
+            return _adminService.GetReports();
+        }
+
+        /* DELETES a report  */
+        [HttpDelete]
+        [Route("report/delete")]
+        async public Task<ActionResult> DeleteReport(IFormCollection form)
+        {
+            string id = form["id"];
+            Console.WriteLine("Deleting report: ", id);
+            Payload res = await _adminService.DeleteReport(id);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+
+        }
+
     }
 }

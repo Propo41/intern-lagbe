@@ -35,6 +35,8 @@ namespace InternFinder.Services
         Payload AddCompanyCategories(About about);
         Payload AddRemuneration(About about);
         Payload AddDistricts(About about);
+        List<Report> GetReports();
+        Task<Payload> DeleteReport(string id);
     }
 
 
@@ -419,6 +421,39 @@ namespace InternFinder.Services
             {
                 Console.WriteLine(e);
                 return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+        }
+
+        public List<Report> GetReports()
+        {
+            var projection = Builders<Report>.Projection.
+                Include("Id").
+                Include("JobId").
+                Include("CompanyId").
+                Include("ContactEmail").
+                Include("Reason");
+            var result = _reportCollection.Find(x => true).Project(projection).ToListAsync().Result;
+            List<Report> reports = new List<Report>();
+
+            foreach (var item in result)
+                reports.Add(BsonSerializer.Deserialize<Report>(item));
+
+            return reports;
+        }
+
+        async public Task<Payload> DeleteReport(string id)
+        {
+            try
+            {
+                var filter = Builders<Report>.Filter.Eq("Id", id);
+                var result = _reportCollection.DeleteOne(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Report deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
             }
         }
 

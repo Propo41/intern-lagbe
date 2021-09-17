@@ -41,7 +41,7 @@ namespace InternFinder.Controllers
         [HttpPost]
         [Route("profile")]
         async public Task<ActionResult> UpdateProfile([FromForm] Company company)
-        {
+        { 
 
             if (company.ProfilePicture == null && company.ProfilePictureUrl == null)
                 return new BadRequestObjectResult(new ErrorResult("Validation Error", 400, "You must provide a company logo or image"));

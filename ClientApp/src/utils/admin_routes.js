@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 import DashboardLayout from "../components/layouts/index";
 import DashboardApp from "../containers/DashboardApp";
 import User from "../containers/User";
+import Applicant from "../containers/Applicant";
 import Report from "../containers/Report";
 
 export default function Router() {
@@ -16,7 +17,7 @@ export default function Router() {
         { path: "users", element: <User /> },
         { path: "companies", element: <User /> },
         { path: "job-posts", element: <User /> },
-        { path: "applicants", element: <User /> },
+        { path: "applicants", element: <Applicant /> },
         { path: "reports", element: <Report /> },
       ],
     },

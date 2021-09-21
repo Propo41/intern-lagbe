@@ -1,5 +1,5 @@
 import axios from "axios";
-//const apiBaseURL = "https://internlagbe.azurewebsites.net";
+// const apiBaseURL = "https://internlagbe.azurewebsites.net";
 const apiBaseURL = "https://localhost:5001";
 
 /* public queries */

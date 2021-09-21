@@ -37,6 +37,8 @@ namespace InternFinder.Services
         Payload AddDistricts(About about);
         List<Report> GetReports();
         Task<Payload> DeleteReport(string id);
+        List<Applicant> GetApplicants();
+        Task<Payload> DeleteApplicant(string applicantId);
     }
 
 
@@ -448,6 +450,76 @@ namespace InternFinder.Services
                 var filter = Builders<Report>.Filter.Eq("Id", id);
                 var result = _reportCollection.DeleteOne(filter);
                 return new Payload { StatusCode = 200, StatusDescription = "Report deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        public List<Applicant> GetApplicants()
+        {
+            var projection = Builders<Applicant>.Projection.
+                Include("JobId").
+                Include("CompanyId").
+                Include("Name").
+                Include("ContactEmail").
+                Include("ContactPhone").
+                Include("ResumeUrl");
+            var result = _applicationCollection.Find(x => true).Project(projection).ToListAsync().Result;
+            List<Applicant> applicants = new List<Applicant>();
+
+            foreach (var item in result)
+                applicants.Add(BsonSerializer.Deserialize<Applicant>(item));
+
+            return applicants;
+        }
+
+        public static async Task DeleteFile(string uuid, string publicKey, string secretKey)
+        {
+            Console.Write("Deleting file: ");
+            Console.WriteLine(uuid);
+            string URL = $"https://api.uploadcare.com/files/{uuid}/storage/";
+            HttpClient client = new HttpClient();
+            // the following headers are required for the uploadcare API
+            client.DefaultRequestHeaders.Add("Accept", "application/vnd.uploadcare-v0.5+json");
+            client.DefaultRequestHeaders.Add("Authorization", $"Uploadcare.Simple {publicKey}:{secretKey}");
+
+            // DELETE request
+            var response = await client.DeleteAsync(URL);
+        }
+
+        /* return the applicant resume url stored in the database.
+        returns null if no file found */
+        private string GetApplicantResume(string applicantId)
+        {
+            var filter = Builders<Applicant>.Filter.Eq("Id", applicantId);
+            var projection = Builders<Applicant>.Projection.Include("ResumeUrl");
+            var result = _applicationCollection.Find(filter).Project(projection).FirstOrDefault();
+            Applicant applicant = BsonSerializer.Deserialize<Applicant>(result);
+            return applicant.ResumeUrl;
+
+        }
+
+        async public Task<Payload> DeleteApplicant(string applicantId)
+        {
+            try
+            {
+                string url = GetApplicantResume(applicantId);
+                if (url != null)
+                {
+                    Console.WriteLine("deleteing file");
+                    // delete the file from the uploadcare server
+                    // extracting the uid from the url
+                    string fileUuid = url.Split('/')[3];
+                    await DeleteFile(fileUuid, uploadCarePubKey, uploadCareSecret);
+                }
+
+                var filter = Builders<Applicant>.Filter.Eq("Id", applicantId);
+                var result = _applicationCollection.DeleteOne(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Applicant deleted successfully." };
 
             }
             catch (Exception e)

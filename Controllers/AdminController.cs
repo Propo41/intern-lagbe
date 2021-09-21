@@ -156,8 +156,30 @@ namespace InternFinder.Controllers
             Payload res = await _adminService.DeleteReport(id);
             return res != null ? Ok(res) :
                     new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+        }
+
+        // get all applicants
+        [Route("applicants")]
+        [HttpGet]
+        public List<Applicant> GetApplicants()
+        {
+            return _adminService.GetApplicants();
+        }
+
+        /* DELETES an applicant  */
+        [HttpDelete]
+        [Route("applicant/delete")]
+        async public Task<ActionResult> DeleteApplicant(IFormCollection form)
+        {
+            string id = form["id"];
+            Console.WriteLine("Deleting: ", id);
+            Payload res = await _adminService.DeleteApplicant(id);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
 
         }
+        
+
 
     }
 }

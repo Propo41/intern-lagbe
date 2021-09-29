@@ -24,6 +24,9 @@ namespace InternFinder.Services
     public interface IAdminService
     {
         Task<About> GetDashboardInfo();
+        About GetDynamicContent();
+        About GetDistricts();
+        About GetCompanyCategories();
         List<User> GetUsers();
         Payload EditUser(User user);
         List<Job> GetJobPosts();
@@ -31,6 +34,7 @@ namespace InternFinder.Services
         Task<Payload> DeleteJob(string id, string companyId);
         // about
         Payload UpdateLandingPageContent(About about);
+        Payload UpdateAboutUs(About about);
         Payload AddJobCategories(About about);
         Payload AddCompanyCategories(About about);
         Payload AddRemuneration(About about);
@@ -39,6 +43,9 @@ namespace InternFinder.Services
         Task<Payload> DeleteReport(string id);
         List<Applicant> GetApplicants();
         Task<Payload> DeleteApplicant(string applicantId);
+        List<Company> GetAllCompanies();
+        Task<Payload> DeleteCompany(string companyId);
+        Task<Payload> UpdateCompanyProfile(Company company);
     }
 
 
@@ -92,6 +99,31 @@ namespace InternFinder.Services
                 TotalUsers = usersCount,
                 TotalApplicants = applicantCount
             };
+        }
+
+        public About GetDynamicContent()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+        }
+
+        public About GetDistricts()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("Districts").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+        }
+
+        public About GetCompanyCategories()
+        {
+            var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+            var projection = Builders<About>.Projection.Include("CompanyCategories").Exclude("Id");
+            var result = _aboutCollection.Find<About>(filter).Project(projection).FirstOrDefault();
+            return BsonSerializer.Deserialize<About>(result);
+
         }
 
         public List<User> GetUsers()
@@ -407,16 +439,32 @@ namespace InternFinder.Services
 
         public Payload UpdateLandingPageContent(About about)
         {
-
             try
             {
                 var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
                 var update = Builders<About>.Update.
                     Set("Title", about.Title).
-                    Set("Subtitle", about.Subtitle).
-                    Set("AboutUs", about.AboutUs);
+                    Set("Subtitle", about.Subtitle);
                 var res = _aboutCollection.UpdateOneAsync(filter, update);
                 return new Payload { StatusCode = 200, StatusDescription = "Landing page content updated successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
+            }
+        }
+
+        public Payload UpdateAboutUs(About about)
+        {
+            try
+            {
+                var filter = Builders<About>.Filter.Eq("Id", _landingPageId);
+                var update = Builders<About>.Update.
+                    Set("AboutUs", about.AboutUs);
+                var res = _aboutCollection.UpdateOneAsync(filter, update);
+                return new Payload { StatusCode = 200, StatusDescription = "About us page content updated successfully." };
 
             }
             catch (Exception e)
@@ -526,6 +574,92 @@ namespace InternFinder.Services
             {
                 Console.WriteLine(e);
                 return null;
+            }
+        }
+
+        public List<Company> GetAllCompanies()
+        {
+            var projection = Builders<Company>.Projection.
+                Include("Id").
+                Include("Name").
+                Include("OfficeAddress").
+                Include("Description").
+                Include("Contact").
+                Include("District").
+                Include("ProfilePictureUrl").
+                Include("AvailableJobCount").
+                Include("Category").
+                Include("IsProfileComplete");
+            var result = _companyCollection.Find(x => true).Project(projection).ToListAsync().Result;
+            // deserialize all items of result
+            List<Company> companies = new List<Company>();
+            foreach (var item in result)
+                companies.Add(BsonSerializer.Deserialize<Company>(item));
+            return companies;
+        }
+
+        async public Task<Payload> DeleteCompany(string companyId)
+        {
+            try
+            {
+                var filter = Builders<Company>.Filter.Eq("Id", companyId);
+                await DeleteJobsByCompany(companyId);
+
+                var result = _companyCollection.DeleteOne(filter);
+
+                return new Payload { StatusCode = 200, StatusDescription = "Job deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        async public Task<Payload> DeleteJobsByCompany(string companyId)
+        {
+            try
+            {
+                var filter = Builders<Job>.Filter.Eq("CompanyId", companyId);
+                var result = await _jobCollection.FindAsync(filter).Result.ToListAsync();
+
+                foreach (var item in result)
+                {
+                  await DeleteApplicantsByJob(item.Id);
+                }
+
+                await _jobCollection.DeleteManyAsync(filter);
+                return new Payload { StatusCode = 200, StatusDescription = "Jobs deleted successfully." };
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
+        // Updates a company instance. Note, the company document is created when the user is created. 
+        async public Task<Payload> UpdateCompanyProfile(Company company)
+        {
+            try
+            {
+                var filter = Builders<Company>.Filter.Eq("Id", company.Id);
+                var update = Builders<Company>.Update.
+                        Set("Name", company.Name).
+                        Set("Description", company.Description).
+                        Set("Contact", company.Contact).
+                        Set("OfficeAddress", company.OfficeAddress).
+                        Set("District", company.District).
+                        Set("Category", company.Category);
+                var res = _companyCollection.UpdateOne(filter, update);
+                return new Payload { StatusCode = 201, StatusDescription = "Company profile updated successfully." };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new Payload { StatusCode = 500, StatusDescription = "Internal Server Error" };
             }
         }
 

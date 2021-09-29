@@ -75,7 +75,7 @@ const SelectTextInputLayout = (props) => {
         anchorEl={anchorRef.current}
         role={undefined}
         transition
-        style={{ zIndex: 5, width: "30%" }}
+        style={{ zIndex: 3000, width: "30%" }}
       >
         {({ TransitionProps, placement }) => (
           <Grow

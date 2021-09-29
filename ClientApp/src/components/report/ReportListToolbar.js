@@ -67,7 +67,7 @@ export default function ReportListToolbar({
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Search report..."
           startAdornment={
             <InputAdornment position="start">
               <Box

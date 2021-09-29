@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import windowsFilled from "@iconify/icons-ant-design/windows-filled";
+import WorkIcon from "@material-ui/icons/Work";
 // material
 import { alpha, styled } from "@material-ui/core/styles";
 import { Card, Typography } from "@material-ui/core";
@@ -36,7 +36,7 @@ export default function AppJobsPosted(props) {
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={windowsFilled} width={24} height={24} />
+        <WorkIcon />
       </IconWrapperStyle>
       <Typography variant="h3">{props.value}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>

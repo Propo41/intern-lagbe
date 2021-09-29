@@ -31,6 +31,28 @@ namespace InternFinder.Controllers
             return await _adminService.GetDashboardInfo();
         }
 
+        // fetch landing page and about us content
+        [Route("dynamic-content")]
+        [HttpGet]
+        public ActionResult GetDynamicContent() 
+        {
+            return Ok(_adminService.GetDynamicContent());
+        }
+
+        // GET district list
+        [HttpGet("districts")]
+        public ActionResult GetDistricts()
+        {
+            return Ok(_adminService.GetDistricts());
+        }
+
+        // GET company-categories
+        [HttpGet("company-categories")]
+        public ActionResult GetCompanyCategories()
+        {
+            return Ok(_adminService.GetCompanyCategories());
+        }
+
         // get all users
         [Route("users")]
         [HttpGet]
@@ -131,10 +153,18 @@ namespace InternFinder.Controllers
         // @param: list<string>
         // add remuneration
         [Route("landingpage")]
-        [HttpPut]
-        public Payload AddLandingPageContent(About about)
+        [HttpPost]
+        public Payload AddLandingPageContent([FromForm] About about)
         {
             return _adminService.UpdateLandingPageContent(about);
+
+        }
+
+        [Route("about-us")]
+        [HttpPost]
+        public Payload AddAboutUs([FromForm] About about)
+        {
+            return _adminService.UpdateAboutUs(about);
 
         }
 
@@ -178,8 +208,38 @@ namespace InternFinder.Controllers
                     new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
 
         }
-        
 
+        // get all companies
+        [Route("companies")]
+        [HttpGet]
+        public List<Company> GetAllCompanies()
+        {
+            return _adminService.GetAllCompanies();
+        }
+
+        /* DELETES a company along with it's job and applicants  */
+        [HttpDelete]
+        [Route("company/delete")]
+        async public Task<ActionResult> DeleteCompany(IFormCollection form)
+        {
+            string id = form["id"];
+            Console.WriteLine("Deleting company: ", id);
+            Payload res = await _adminService.DeleteCompany(id);
+            return res != null ? Ok(res) :
+                    new BadRequestObjectResult(new ErrorResult("Couldn't process your request", 400, "Internal server error"));
+
+        }
+
+        // updates user profile and set value of profileCompletion to true
+        [HttpPost]
+        [Route("company/profile")]
+        async public Task<ActionResult> UpdateProfile([FromForm] Company company)
+        {
+
+            // company.Id = _authUser.CompanyId;
+            Payload res = await _adminService.UpdateCompanyProfile(company);
+            return Ok(res);
+        }
 
     }
 }

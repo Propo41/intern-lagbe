@@ -39,13 +39,13 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-ApplicantListToolbar.propTypes = {
+CompanyListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-export default function ApplicantListToolbar({
+export default function CompanyListToolbar({
   numSelected,
   filterName,
   onFilterName,
@@ -67,7 +67,7 @@ export default function ApplicantListToolbar({
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search applicant..."
+          placeholder="Search company..."
           startAdornment={
             <InputAdornment position="start">
               <Box

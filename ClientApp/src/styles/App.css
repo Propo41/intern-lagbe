@@ -57,3 +57,11 @@ body {
 .simplebar-placeholder {
   background-color: var(--body-color) !important;
 }
+
+.rounded-card {
+  border-radius: 10px !important;
+  box-shadow: var(--card-shadow) !important;
+  /* text-align: center; */
+  margin: 2.5rem;
+  padding: 2rem 4rem 3rem;
+}

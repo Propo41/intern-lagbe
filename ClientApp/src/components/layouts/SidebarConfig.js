@@ -26,11 +26,11 @@ const sidebarConfig = [
     path: "/companies",
     icon: getIcon(shoppingBagFill),
   },
-  {
-    title: "job posts",
-    path: "/job-posts",
-    icon: getIcon(fileTextFill),
-  },
+  // {
+  //   title: "job posts",
+  //   path: "/job-posts",
+  //   icon: getIcon(fileTextFill),
+  // },
   {
     title: "applicants",
     path: "/applicants",

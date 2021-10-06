@@ -9,6 +9,7 @@ $ npm install
 $ cd ..
 $ dotnet watch run
 ```
+**Note**: you need to have access to the `appsettings.json` file contents to properly run the webapp.
 
 ### Packages used
 To install a package using the dotnet CLI:  `dotnet add package <package-name>`
